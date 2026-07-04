@@ -106,10 +106,7 @@ export default function CallingManager({
   const outgoingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Automated background incoming calls setting
-  const [autoIncomingActive, setAutoIncomingActive] = useState(() => {
-    const saved = localStorage.getItem('calling_auto_incoming_active');
-    return saved !== null ? saved === 'true' : true;
-  });
+  const [autoIncomingActive, setAutoIncomingActive] = useState(false);
 
   // End of transcript reference for automatic scroll
   const transcriptEndRef = useRef<HTMLDivElement | null>(null);
@@ -292,6 +289,14 @@ export default function CallingManager({
 
       setMicPermission('prompting');
       
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        console.warn("navigator.mediaDevices or getUserMedia is undefined, falling back to dynamic simulated wave.");
+        setMicPermission('denied');
+        setRealVoiceConnected(false);
+        startSimulatedWave();
+        return;
+      }
+      
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       mediaStreamRef.current = stream;
       setMicPermission('granted');
@@ -468,7 +473,12 @@ export default function CallingManager({
   const [quickContacts, setQuickContacts] = useState<{ name: string; phone: string; company: string }[]>(() => {
     const saved = localStorage.getItem('calling_quick_contacts');
     if (saved) return JSON.parse(saved);
-    return [];
+    return [
+      { name: "John Doe", phone: "9876543210", company: "Bluestone Biotech" },
+      { name: "Preeti Sharma", phone: "9123456789", company: "Apex Retail" },
+      { name: "David Miller", phone: "8765432109", company: "Quantum Tech Inc" },
+      { name: "Amit Patel", phone: "9456712390", company: "Hindustan Logistics" }
+    ];
   });
 
   useEffect(() => {
@@ -507,6 +517,9 @@ export default function CallingManager({
       setGatewayConfig(prev => ({ ...prev, channelStatus: 'Active' }));
     }
 
+    // Auto switch to Dialer workspace view so call console is displayed
+    setActiveTab('dialer');
+
     setDialNumber(targetNum);
     setDialName(nameFound);
     setCallDirection('Outgoing');
@@ -538,6 +551,9 @@ export default function CallingManager({
       setGatewayConfig(prev => ({ ...prev, channelStatus: 'Active' }));
     }
 
+    // Auto switch to Dialer workspace view so incoming call HUD/console displays
+    setActiveTab('dialer');
+
     setDialNumber(randomCon.phone);
     setDialName(randomCon.name);
     setCallDirection('Incoming');
@@ -558,6 +574,7 @@ export default function CallingManager({
   const handleAnswerCall = () => {
     if (activeCallStatus !== 'ringing') return;
     stopActiveRingers();
+    setActiveTab('dialer');
     setActiveCallStatus('connected');
     playSystemSound('connect');
     startRealVoiceCapture();
@@ -1236,7 +1253,7 @@ export default function CallingManager({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-3.5">
           
           {/* Active Call Dialer Terminal */}
-          <div className="bg-slate-950 text-slate-100 p-3 rounded border border-slate-900 lg:col-span-4 flex flex-col justify-between h-[450px] relative overflow-hidden">
+          <div className="bg-slate-950 text-slate-100 p-3 rounded border border-slate-900 lg:col-span-4 flex flex-col justify-between min-h-[580px] lg:min-h-[640px] relative overflow-y-auto">
             <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/20 rounded-full blur-3xl"></div>
             
             <div className="flex justify-between items-center z-15">

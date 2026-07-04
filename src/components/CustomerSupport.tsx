@@ -893,14 +893,22 @@ export default function CustomerSupport({
                       </div>
 
                       <div className="space-y-2">
-                        <div className="flex items-center gap-2 bg-slate-50 p-2 rounded-lg border border-slate-150 text-[11px]">
-                          <Phone className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                        <button 
+                          onClick={() => {
+                            if ((window as any).__triggerGlobalDial) {
+                              (window as any).__triggerGlobalDial(selectedCustomer.phone, selectedCustomer.name);
+                            }
+                          }}
+                          className="flex items-center text-left gap-2 bg-slate-50 p-2 rounded-lg border border-slate-150 hover:bg-slate-100 hover:border-indigo-200 text-[11px] w-full transition cursor-pointer"
+                          title="Click to dial customer via gateway"
+                        >
+                          <Phone className="w-3.5 h-3.5 text-indigo-500 shrink-0 animate-pulse" />
                           <div className="truncate">
-                            <span className="text-slate-400 block text-[9px] uppercase font-medium leading-none">Direct Call Number</span>
-                            <strong>{selectedCustomer.phone}</strong>
+                            <span className="text-slate-400 block text-[9px] uppercase font-medium leading-none">Direct Call Number (Click to Dial)</span>
+                            <strong className="text-indigo-600 hover:underline font-bold">{selectedCustomer.phone}</strong>
                             <span className="text-slate-400 block text-[9px] italic font-mono">{selectedCustomer.skypeExtension}</span>
                           </div>
-                        </div>
+                        </button>
                         <div className="flex items-center gap-2 bg-slate-50 p-2 rounded-lg border border-slate-150 text-[11px]">
                           <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                           <div className="truncate">
