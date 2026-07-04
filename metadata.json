@@ -1,0 +1,6 @@
+{
+  "name": "Expert CRM",
+  "description": "A high-performance CRM with intelligent AI client insights, contact segmentations, task management, sales pipelines, and full-history activity logs.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
