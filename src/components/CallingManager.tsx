@@ -1891,7 +1891,7 @@ export default function CallingManager({
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100 font-sans">
-                    {filteredLogs.reverse().map(log => {
+                    {filteredLogs.map(log => {
                       const meta = enrichedMeta[log.id];
                       const direction = meta?.direction || 'Outgoing';
                       const recordSaved = meta?.recorded || false;

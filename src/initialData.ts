@@ -85,7 +85,48 @@ export const INITIAL_LEADS: Lead[] = [
   }
 ];
 
-export const INITIAL_CALL_LOGS: CallLog[] = [];
+export const INITIAL_CALL_LOGS: CallLog[] = [
+  {
+    id: 'CALL-501',
+    clientName: 'John Doe',
+    clientPhone: '9876543210',
+    time: '2 hours ago',
+    duration: '2m 15s',
+    type: 'Answered',
+    notes: 'Inquired about multi-license integrations and custom API gateways. Follow-up task scheduled.',
+    agentName: 'Aman Varma'
+  },
+  {
+    id: 'CALL-502',
+    clientName: 'Preeti Sharma',
+    clientPhone: '9123456789',
+    time: '4 hours ago',
+    duration: '0m 0s',
+    type: 'Missed',
+    notes: 'Inbound ring timed out after 25s. System flagged as VIP priority follow-up.',
+    agentName: 'Deepa Rao'
+  },
+  {
+    id: 'CALL-503',
+    clientName: 'David Miller',
+    clientPhone: '8765432109',
+    time: 'Yesterday',
+    duration: '5m 40s',
+    type: 'Answered',
+    notes: 'Discussed cloud scaling, database residency rules, and security clearance criteria.',
+    agentName: 'Siddharth Sen'
+  },
+  {
+    id: 'CALL-504',
+    clientName: 'Amit Patel',
+    clientPhone: '9456712390',
+    time: '2 days ago',
+    duration: '12m 10s',
+    type: 'Answered',
+    notes: 'Conducted live system-wide CRM walkthrough including billing and payroll modules.',
+    agentName: 'Ketan Patel'
+  }
+];
 
 export const INITIAL_TICKETS: SupportTicket[] = [
   {

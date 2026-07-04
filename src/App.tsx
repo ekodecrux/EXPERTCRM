@@ -99,7 +99,15 @@ export default function App() {
 
   const [callLogs, setCallLogs] = useState<CallLog[]>(() => {
     const saved = localStorage.getItem('crm_call_logs');
-    return saved ? JSON.parse(saved) : INITIAL_CALL_LOGS;
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
+        }
+      } catch (e) {}
+    }
+    return INITIAL_CALL_LOGS;
   });
 
   const [supportTickets, setSupportTickets] = useState<SupportTicket[]>(() => {
