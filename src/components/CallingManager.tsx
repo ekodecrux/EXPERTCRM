@@ -527,17 +527,22 @@ export default function CallingManager({
     setCallDuration(0);
     setRecordingActive(false);
     setRecordingDur(0);
-    setLiveTranscript(["[System Dial] Signaling terminal...", "[System Dial] Caller-ID spoof verification completed."]);
+    setLiveTranscript([
+      "[System Dial] Signaling terminal...", 
+      "[System Dial] Caller-ID spoof verification completed.",
+      "[System Dial] Ringing peer... Tap ANSWERED below to simulate customer picking up."
+    ]);
 
     playSystemSound('ringing_dial');
 
     if (outgoingTimeoutRef.current) clearTimeout(outgoingTimeoutRef.current);
     outgoingTimeoutRef.current = setTimeout(() => {
+      stopActiveRingers();
       setActiveCallStatus('connected');
       playSystemSound('connect');
       startRealVoiceCapture();
-      setLiveTranscript(l => [...l, "[System Call] Line connected. Encryption active."]);
-    }, 1500); // Accelerated from 4000ms to 1500ms for high responsiveness
+      setLiveTranscript(l => [...l, "[System Call] Line connected automatically. Encryption active."]);
+    }, 12000); // Prolonged to 12 seconds to give the user time to interact with manual answer options
   };
 
   // Simulate Inbound VIP Call
@@ -1529,12 +1534,80 @@ export default function CallingManager({
                         </button>
                       </div>
                     ) : (
-                      <button 
-                        onClick={handleDeclineCall}
-                        className="w-full py-1.5 bg-red-650 hover:bg-red-700 text-white rounded text-[11px] font-bold uppercase tracking-wider flex items-center justify-center gap-1 border border-red-700"
-                      >
-                        <PhoneOff className="w-3.5 h-3.5" /> Cancel Dial
-                      </button>
+                      <div className="space-y-2 w-full">
+                        <div className="bg-slate-900 p-2 rounded border border-slate-850 space-y-1.5">
+                          <span className="text-[8.5px] uppercase font-black text-indigo-400 block tracking-widest text-center">Simulate Customer Action</span>
+                          <div className="grid grid-cols-2 gap-1.5">
+                            <button 
+                              onClick={() => {
+                                if (outgoingTimeoutRef.current) clearTimeout(outgoingTimeoutRef.current);
+                                stopActiveRingers();
+                                setActiveCallStatus('connected');
+                                playSystemSound('connect');
+                                startRealVoiceCapture();
+                                setLiveTranscript(l => [
+                                  ...l, 
+                                  "[System Call] Line connected. Customer picked up.",
+                                  "Customer: Hello! Yes, this is " + dialName + " speaking. How can I help you today?"
+                                ]);
+                              }}
+                              className="py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-[10px] font-bold uppercase tracking-wide flex items-center justify-center gap-1 border border-emerald-500 animate-pulse cursor-pointer"
+                            >
+                              <Phone className="w-3 h-3 animate-bounce" /> Answered
+                            </button>
+                            <button 
+                              onClick={() => {
+                                if (outgoingTimeoutRef.current) clearTimeout(outgoingTimeoutRef.current);
+                                stopActiveRingers();
+                                playSystemSound('hangup');
+                                
+                                // Auto-log busy/decline attempt
+                                onLogCall({
+                                  clientName: dialName,
+                                  clientPhone: dialNumber,
+                                  time: 'Just Now',
+                                  duration: '00:00',
+                                  type: 'Missed',
+                                  notes: `Outgoing call to ${dialName} returned busy/rejected signal.`,
+                                  agentName: 'Agent System'
+                                });
+                                
+                                setActiveCallStatus('idle');
+                              }}
+                              className="py-1 bg-amber-600 hover:bg-amber-700 text-white rounded text-[10px] font-bold uppercase tracking-wide flex items-center justify-center gap-1 border border-amber-500 cursor-pointer"
+                            >
+                              <PhoneOff className="w-3 h-3" /> Busy / Reject
+                            </button>
+                          </div>
+                          
+                          <button 
+                            onClick={() => {
+                              if (outgoingTimeoutRef.current) clearTimeout(outgoingTimeoutRef.current);
+                              stopActiveRingers();
+                              playSystemSound('connect');
+                              setActiveCallStatus('connected');
+                              startRealVoiceCapture();
+                              setLiveTranscript(l => [
+                                ...l, 
+                                "[System Call] Call forwarded to Digital Voice Mailbox.",
+                                "Voicemail: The subscriber you are trying to reach is unavailable. Please leave a message after the tone. [BEEP]"
+                              ]);
+                              setRecordingActive(true);
+                              setRecordingDur(0);
+                            }}
+                            className="w-full py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded text-[10px] font-bold uppercase tracking-wide flex items-center justify-center gap-1 border border-indigo-500 cursor-pointer"
+                          >
+                            <Mic className="w-3 h-3" /> Route to Voicemail
+                          </button>
+                        </div>
+
+                        <button 
+                          onClick={handleDeclineCall}
+                          className="w-full py-1.5 bg-red-650 hover:bg-red-700 text-white rounded text-[11px] font-bold uppercase tracking-wider flex items-center justify-center gap-1 border border-red-700 cursor-pointer"
+                        >
+                          <PhoneOff className="w-3.5 h-3.5" /> Cancel Dial
+                        </button>
+                      </div>
                     )
                   ) : (
                     <button 
