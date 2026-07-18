@@ -180,6 +180,92 @@ Expert Support Desk`;
     }
   });
 
+  // 4. Generate custom role and permissions using AI or rules
+  app.post("/api/generate-role", async (req, res) => {
+    const { prompt, customName } = req.body;
+
+    const client = getGeminiClient();
+    if (!client) {
+      // Robust client/server rule-based engine if Gemini key is not present
+      const pLower = (prompt || "").toLowerCase();
+      const resolvedName = customName?.trim() || "Custom Specialist";
+      const permissions = {
+        viewDashboard: true, // always default to true
+        manageLeads: pLower.includes("lead") || pLower.includes("sale") || pLower.includes("pipeline") || pLower.includes("market"),
+        manageCalls: pLower.includes("call") || pLower.includes("dial") || pLower.includes("phone") || pLower.includes("voice") || pLower.includes("talk"),
+        manageSupport: pLower.includes("support") || pLower.includes("ticket") || pLower.includes("client") || pLower.includes("customer"),
+        manageStaff: pLower.includes("staff") || pLower.includes("field") || pLower.includes("dispatch") || pLower.includes("coordinate"),
+        manageTasks: pLower.includes("task") || pLower.includes("project") || pLower.includes("todo") || !pLower.includes("guest"),
+        manageHR: pLower.includes("hr") || pLower.includes("payroll") || pLower.includes("salary") || pLower.includes("employee") || pLower.includes("money"),
+        manageComms: pLower.includes("comm") || pLower.includes("email") || pLower.includes("newsletter") || pLower.includes("message") || pLower.includes("write"),
+        manageSecurity: pLower.includes("security") || pLower.includes("admin") || pLower.includes("credentials") || pLower.includes("lock") || pLower.includes("shield")
+      };
+
+      return res.json({
+        roleName: resolvedName,
+        permissions,
+        justification: `Generated role '${resolvedName}' using keyword analysis. Matched permissions based on keyword terms in your description prompt.`,
+        isMock: true
+      });
+    }
+
+    try {
+      const geminiPrompt = `
+        You are an expert cybersecurity officer and systems administrator. 
+        Your task is to generate a custom system Access Role and define its exact 9 boolean permission flags based on a user's description.
+        
+        The 9 permissions are:
+        - viewDashboard (Access Central Dashboard view)
+        - manageLeads (Modify Sales Leads & Pipeline stages)
+        - manageCalls (Log Voice calls & trigger outbound dials)
+        - manageSupport (Resolve client support tickets)
+        - manageStaff (Dispatch Field and staff coordinators)
+        - manageTasks (Add or complete tasks)
+        - manageHR (Access HR metrics & disburse salaries)
+        - manageComms (Compose automated newsletters with AI)
+        - manageSecurity (Manage access roles & adjust credentials)
+
+        User prompt/description of the role: "${prompt}"
+        User suggested role name: "${customName || ""}"
+
+        Respond with ONLY a valid, parseable JSON object. Do not include markdown code block characters (\`\`\`json or \`\`\`), no extra text, no notes.
+        The JSON structure MUST be:
+        {
+          "roleName": "A concise, capitalized role title (e.g. 'Social Media Intern' or 'Billing Auditor'). If a user suggested a name, polish and use it.",
+          "permissions": {
+            "viewDashboard": boolean,
+            "manageLeads": boolean,
+            "manageCalls": boolean,
+            "manageSupport": boolean,
+            "manageStaff": boolean,
+            "manageTasks": boolean,
+            "manageHR": boolean,
+            "manageComms": boolean,
+            "manageSecurity": boolean
+          },
+          "justification": "A brief 1-2 sentence explanation of why this permission set was assigned based on cybersecurity best-practices and the user request."
+        }
+      `;
+
+      const aiResponse = await client.models.generateContent({
+        model: "gemini-2.5-flash",
+        contents: geminiPrompt,
+      });
+
+      const responseText = aiResponse.text || "{}";
+      const cleanedJson = responseText
+        .replace(/```json/i, "")
+        .replace(/```/g, "")
+        .trim();
+
+      const parsedRole = JSON.parse(cleanedJson);
+      res.json(parsedRole);
+    } catch (error: any) {
+      console.error("Gemini Role Generation Fail:", error);
+      res.status(500).json({ error: "Failed to generate dynamic role.", details: error.message });
+    }
+  });
+
   // Vite Integration & Resource distribution
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({

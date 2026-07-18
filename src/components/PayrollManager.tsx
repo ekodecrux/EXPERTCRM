@@ -176,6 +176,12 @@ export default function PayrollManager({
   const [isNewEmpOpen, setIsNewEmpOpen] = useState(false);
   const [isEditEmpOpen, setIsEditEmpOpen] = useState(false);
   const [isPayslipOpen, setIsPayslipOpen] = useState(false);
+  const [payslipMonth, setPayslipMonth] = useState<string>(() => {
+    return new Date().toLocaleString('en-US', { month: 'long' });
+  });
+  const [payslipYear, setPayslipYear] = useState<string>(() => {
+    return new Date().getFullYear().toString();
+  });
   const [isLeaveRequestOpen, setIsLeaveRequestOpen] = useState(false);
   const [isExpenseClaimOpen, setIsExpenseClaimOpen] = useState(false);
 
@@ -792,6 +798,13 @@ export default function PayrollManager({
                           <td className="p-3 text-right" onClick={(e) => e.stopPropagation()}>
                             <div className="flex items-center justify-end gap-1">
                               <button 
+                                onClick={() => { setSelectedEmpId(emp.id); setIsPayslipOpen(true); }}
+                                className="p-1.5 bg-indigo-50 text-indigo-600 rounded-lg border border-indigo-150 hover:bg-indigo-100 hover:text-indigo-900"
+                                title="View & Print Payslip"
+                              >
+                                <Printer className="w-3.5 h-3.5" />
+                              </button>
+                              <button 
                                 onClick={() => { setSelectedEmpId(emp.id); setIsEditEmpOpen(true); }}
                                 className="p-1.5 bg-slate-50 text-slate-600 rounded-lg border border-slate-200 hover:bg-slate-100 hover:text-slate-900"
                                 title="Edit employee baseline parameters"
@@ -1173,6 +1186,7 @@ export default function PayrollManager({
                       <th className="p-3">TDS Tax ({tdsRate}%)</th>
                       <th className="p-3 font-semibold text-slate-900 text-right">Net Payout</th>
                       <th className="p-3 text-center">Status</th>
+                      <th className="p-3 text-right">Payslip</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100 font-medium">
@@ -1201,6 +1215,19 @@ export default function PayrollManager({
                             }`}>
                               {emp.paidStatus}
                             </span>
+                          </td>
+                          <td className="p-3 text-right" onClick={(e) => e.stopPropagation()}>
+                            <button
+                              onClick={() => {
+                                setSelectedEmpId(emp.id);
+                                setIsPayslipOpen(true);
+                              }}
+                              className="px-2.5 py-1 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-[10.5px] font-bold inline-flex items-center gap-1 shadow-sm transition"
+                              title="Print Statement"
+                            >
+                              <Printer className="w-3.5 h-3.5" />
+                              <span>Print</span>
+                            </button>
                           </td>
                         </tr>
                       );
@@ -1697,12 +1724,38 @@ export default function PayrollManager({
               </button>
             </div>
 
+            {/* Payslip selectors (Hidden during print) */}
+            <div className="print:hidden flex flex-wrap items-center justify-between gap-3 bg-slate-50 p-3.5 rounded-2xl border border-slate-200 my-3 text-xs">
+              <div className="flex items-center gap-2">
+                <span className="font-extrabold text-slate-700 uppercase text-[9.5px]">Select Cycle:</span>
+                <select
+                  value={payslipMonth}
+                  onChange={(e) => setPayslipMonth(e.target.value)}
+                  className="bg-white border border-slate-200 rounded-lg p-1.5 font-bold text-slate-800 focus:outline-none"
+                >
+                  {['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].map(m => (
+                    <option key={m} value={m}>{m}</option>
+                  ))}
+                </select>
+                <select
+                  value={payslipYear}
+                  onChange={(e) => setPayslipYear(e.target.value)}
+                  className="bg-white border border-slate-200 rounded-lg p-1.5 font-bold text-slate-800 focus:outline-none"
+                >
+                  {['2025', '2026', '2027', '2028'].map(y => (
+                    <option key={y} value={y}>{y}</option>
+                  ))}
+                </select>
+              </div>
+              <p className="text-[10px] text-slate-400 font-medium">Select month/year to dynamically regenerate details.</p>
+            </div>
+
             {/* Print Slip markup */}
-            <div id="print-slip-document" className="pt-4 space-y-4 font-sans text-xs text-slate-800">
+            <div id="print-slip-document" className="pt-2 space-y-4 font-sans text-xs text-slate-800">
               
               <div className="text-center space-y-1 py-1 bg-slate-50 rounded-xl border border-slate-150">
                 <h4 className="font-extrabold text-slate-900 uppercase text-xs">Salary Statement Circular</h4>
-                <p className="text-[10px] text-slate-400 font-bold">Billing Cycle: {new Date().toLocaleString('en-US', { month: 'long', year: 'numeric' })} &bull; Issued securely via NACH API</p>
+                <p className="text-[10px] text-slate-400 font-bold">Billing Cycle: {payslipMonth} {payslipYear} &bull; Issued securely via NACH API</p>
               </div>
 
               {/* Grid elements */}
@@ -1820,13 +1873,15 @@ export default function PayrollManager({
                           esi: selectBreakdown.esiDeduction,
                           tds: selectBreakdown.tdsDeduction,
                           profTax: selectBreakdown.profTax,
+                          billingMonth: payslipMonth,
+                          billingYear: payslipYear,
                         }
                       );
                     } else {
                       window.print();
                     }
                   }}
-                  className="px-4 py-2 bg-indigo-650 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl flex items-center gap-1.5 shadow-sm transition"
+                  className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl flex items-center gap-1.5 shadow-sm transition cursor-pointer"
                 >
                   <Printer className="w-4 h-4" /> Print Statement
                 </button>

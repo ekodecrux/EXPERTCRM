@@ -81,18 +81,43 @@ export default function PrintAndExportCenter({ isOpen, onClose, document, userEm
         break;
       }
       case 'payroll_slip': {
-        const emp = data as Employee;
-        text += `Employee ID:    ${emp.id || 'N/A'}\n`;
-        text += `Name:           ${emp.name || 'N/A'}\n`;
-        text += `Role / Dept:    ${emp.role || 'N/A'} - ${emp.department || 'N/A'}\n`;
-        text += `Attendance Rt:  ${emp.attendance || 'N/A'}\n`;
+        const emp = data as any;
+        const basic = emp.basic !== undefined ? emp.basic : emp.salary;
+        const hra = emp.hra || 0;
+        const specialAllowance = emp.specialAllowance || 0;
+        const allowance = emp.allowance || 0;
+        const grossEarnings = emp.grossEarnings !== undefined ? emp.grossEarnings : (basic + allowance);
+        
+        const epf = emp.epf || 0;
+        const esi = emp.esi || 0;
+        const tds = emp.tds || 0;
+        const profTax = emp.profTax || 0;
+        const totalDeductions = emp.totalDeductions !== undefined ? emp.totalDeductions : (epf + esi + tds + profTax);
+        
+        const netPay = emp.calculatedNet !== undefined ? emp.calculatedNet : emp.netPay;
+        const cycle = `${emp.billingMonth || 'Current'} ${emp.billingYear || ''}`.trim() || 'Current';
+
+        text += `Employee ID:          ${emp.employeeId || emp.id || 'N/A'}\n`;
+        text += `Name:                 ${emp.name || 'N/A'}\n`;
+        text += `Role / Dept:          ${emp.role || 'N/A'} - ${emp.department || 'N/A'}\n`;
+        text += `Billing Cycle:        ${cycle}\n`;
         text += `--------------------------------------------------\n`;
-        text += `Basic Salary:   INR ${emp.salary?.toLocaleString('en-IN') || '0'}\n`;
-        text += `Allowances (+):  INR ${emp.allowance?.toLocaleString('en-IN') || '0'}\n`;
-        text += `Deductions (-):  INR ${emp.deduction?.toLocaleString('en-IN') || '0'}\n`;
+        text += `COMPONENT EARNINGS:\n`;
+        text += `  Basic Salary (50% baseline):       INR ${basic?.toLocaleString('en-IN') || '0'}\n`;
+        text += `  House Rent allowance (HRA) (25%):  INR ${hra?.toLocaleString('en-IN') || '0'}\n`;
+        text += `  Special Allowance (25%):           INR ${specialAllowance?.toLocaleString('en-IN') || '0'}\n`;
+        text += `  Ground Expenses Allowances (+):    INR ${allowance?.toLocaleString('en-IN') || '0'}\n`;
+        text += `  GROSS EARNINGS SUM:                INR ${grossEarnings?.toLocaleString('en-IN') || '0'}\n`;
         text += `--------------------------------------------------\n`;
-        text += `NET DISBURSED:  INR ${emp.netPay?.toLocaleString('en-IN') || '0'}\n`;
-        text += `Payout Status:  ${emp.paidStatus.toUpperCase()} (NACH Electronic Transfer)\n`;
+        text += `STATUTORY DEDUCTIONS:\n`;
+        text += `  Employee Provident Fund (12%):     INR -${epf?.toLocaleString('en-IN') || '0'}\n`;
+        text += `  Employee State Insurance (0.75%):  INR -${esi?.toLocaleString('en-IN') || '0'}\n`;
+        text += `  Tax Withheld / TDS (10%):          INR -${tds?.toLocaleString('en-IN') || '0'}\n`;
+        text += `  Professional Tax (PT Rate):        INR -${profTax?.toLocaleString('en-IN') || '0'}\n`;
+        text += `  GROSS DEDUCTIONS:                  INR -${totalDeductions?.toLocaleString('en-IN') || '0'}\n`;
+        text += `--------------------------------------------------\n`;
+        text += `NET SETTLED SALARY:                  INR ${netPay?.toLocaleString('en-IN') || '0'}\n`;
+        text += `Payout Status:        ${(emp.paidStatus || 'Paid').toUpperCase()} (Certified Secure Bank Wire)\n`;
         break;
       }
       case 'lead_profile': {
@@ -276,23 +301,132 @@ export default function PrintAndExportCenter({ isOpen, onClose, document, userEm
         break;
       }
       case 'payroll_slip': {
-        const emp = data as Employee;
+        const emp = data as any;
+        const basic = emp.basic !== undefined ? emp.basic : emp.salary;
+        const hra = emp.hra || 0;
+        const specialAllowance = emp.specialAllowance || 0;
+        const allowance = emp.allowance || 0;
+        const grossEarnings = emp.grossEarnings !== undefined ? emp.grossEarnings : (basic + allowance);
+        
+        const epf = emp.epf || 0;
+        const esi = emp.esi || 0;
+        const tds = emp.tds || 0;
+        const profTax = emp.profTax || 0;
+        const totalDeductions = emp.totalDeductions !== undefined ? emp.totalDeductions : (epf + esi + tds + profTax);
+        
+        const netPay = emp.calculatedNet !== undefined ? emp.calculatedNet : emp.netPay;
+        const cycle = `${emp.billingMonth || 'Current'} ${emp.billingYear || ''}`.trim() || 'Current';
+
         html += `
-          <div style="background: #ecfdf5; padding: 12px; border-radius: 6px; border: 1px solid #a7f3d0; margin-bottom: 15px;">
-            <table style="width: 100%; font-size: 12px;">
-              <tr><td><strong>Staff Name:</strong></td><td><strong>${emp.name || 'N/A'}</strong> (ID: ${emp.id || 'N/A'})</td></tr>
-              <tr><td><strong>Role Status:</strong></td><td>${emp.role || 'N/A'} (${emp.department || 'N/A'})</td></tr>
-              <tr><td><strong>Attendance Track:</strong></td><td>${emp.attendance || 'N/A'} Roster</td></tr>
+          <div style="text-align: center; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px; background: #f8fafc; margin-bottom: 20px;">
+            <h4 style="font-size: 14px; font-weight: 800; text-transform: uppercase; margin: 0; color: #0f172a;">Salary Statement Circular</h4>
+            <div style="font-size: 11px; color: #64748b; font-weight: bold; margin-top: 4px;">Billing Cycle: ${cycle} • Issued securely via NACH API</div>
+          </div>
+
+          <table style="width: 100%; border-collapse: collapse; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px; margin-bottom: 20px;">
+            <tr>
+              <td style="width: 50%; vertical-align: top; padding-right: 15px;">
+                <span style="font-size: 9px; font-weight: 800; text-transform: uppercase; color: #94a3b8; display: block; margin-bottom: 4px;">Recipient Worker Detail:</span>
+                <strong style="font-size: 14px; color: #0f172a; display: block;">${emp.name || 'N/A'}</strong>
+                <span style="font-size: 11px; color: #64748b; display: block; margin-top: 2px;">${emp.role || 'N/A'}</span>
+                <span style="font-size: 11px; color: #64748b; display: block;">Department: ${emp.department || 'N/A'}</span>
+              </td>
+              <td style="width: 50%; vertical-align: top; text-align: right; padding-left: 15px;">
+                <span style="font-size: 9px; font-weight: 800; text-transform: uppercase; color: #94a3b8; display: block; margin-bottom: 4px;">Payment Coordinates:</span>
+                <strong style="font-size: 11px; font-family: monospace; color: #0f172a; display: block; margin-top: 2px;">Reference ID: ${emp.employeeId || emp.id || 'N/A'}-CY9</strong>
+                <span style="font-size: 11px; color: #64748b; display: block; margin-top: 2px;">Method: Instant IMPS NEFT Transfer</span>
+                <span style="font-size: 10px; font-weight: 900; color: #059669; text-transform: uppercase; display: block; margin-top: 4px;">Status: Reconciled & Paid</span>
+              </td>
+            </tr>
+          </table>
+
+          <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+            <tr>
+              <!-- Component Earnings Column -->
+              <td style="width: 50%; vertical-align: top; padding-right: 12px;">
+                <div style="font-size: 10px; font-weight: 900; text-transform: uppercase; color: #94a3b8; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; margin-bottom: 10px; letter-spacing: 0.5px;">Component Earnings</div>
+                
+                <table style="width: 100%; font-size: 11px; border-collapse: collapse;">
+                  <tr>
+                    <td style="padding: 5px 0; color: #334155;">Basic Salary (50% baseline)</td>
+                    <td style="padding: 5px 0; text-align: right; font-family: monospace; font-weight: bold; color: #0f172a;">₹${basic?.toLocaleString('en-IN') || '0'}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 5px 0; color: #334155;">House Rent allowance (HRA) (25%)</td>
+                    <td style="padding: 5px 0; text-align: right; font-family: monospace; font-weight: bold; color: #0f172a;">₹${hra?.toLocaleString('en-IN') || '0'}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 5px 0; color: #334155;">Special Allowance (25%)</td>
+                    <td style="padding: 5px 0; text-align: right; font-family: monospace; font-weight: bold; color: #0f172a;">₹${specialAllowance?.toLocaleString('en-IN') || '0'}</td>
+                  </tr>
+                  <tr style="color: #059669;">
+                    <td style="padding: 5px 0;">Ground Expenses Allowances</td>
+                    <td style="padding: 5px 0; text-align: right; font-family: monospace; font-weight: bold;">+₹${allowance?.toLocaleString('en-IN') || '0'}</td>
+                  </tr>
+                  <tr>
+                    <td colspan="2" style="padding-top: 10px;">
+                      <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 10px; display: flex; justify-content: space-between; font-weight: bold; font-size: 11px; color: #0f172a;">
+                        <span style="display: inline-block;">Gross Earnings Sum</span>
+                        <span style="display: inline-block; text-align: right; font-family: monospace;">₹${grossEarnings?.toLocaleString('en-IN') || '0'}</span>
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+
+              <!-- Statutory Deductions Column -->
+              <td style="width: 50%; vertical-align: top; border-left: 1px solid #f1f5f9; padding-left: 12px;">
+                <div style="font-size: 10px; font-weight: 900; text-transform: uppercase; color: #94a3b8; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; margin-bottom: 10px; letter-spacing: 0.5px;">Statutory Deductions</div>
+                
+                <table style="width: 100%; font-size: 11px; border-collapse: collapse;">
+                  <tr style="color: #475569;">
+                    <td style="padding: 5px 0;">Employee Provident Fund (12%)</td>
+                    <td style="padding: 5px 0; text-align: right; font-family: monospace; font-weight: bold;">-₹${epf?.toLocaleString('en-IN') || '0'}</td>
+                  </tr>
+                  <tr style="color: #475569;">
+                    <td style="padding: 5px 0;">Employee State Insurance (0.75%)</td>
+                    <td style="padding: 5px 0; text-align: right; font-family: monospace; font-weight: bold;">-₹${esi?.toLocaleString('en-IN') || '0'}</td>
+                  </tr>
+                  <tr style="color: #475569;">
+                    <td style="padding: 5px 0;">Tax Withheld / TDS (10%)</td>
+                    <td style="padding: 5px 0; text-align: right; font-family: monospace; font-weight: bold;">-₹${tds?.toLocaleString('en-IN') || '0'}</td>
+                  </tr>
+                  <tr style="color: #475569;">
+                    <td style="padding: 5px 0;">Professional Tax (PT Rate)</td>
+                    <td style="padding: 5px 0; text-align: right; font-family: monospace; font-weight: bold;">-₹${profTax?.toLocaleString('en-IN') || '0'}</td>
+                  </tr>
+                  <tr>
+                    <td colspan="2" style="padding-top: 10px;">
+                      <div style="background: #fdf2f2; border: 1px solid #fecaca; border-radius: 6px; padding: 6px 10px; display: flex; justify-content: space-between; font-weight: bold; font-size: 11px; color: #b91c1c;">
+                        <span style="display: inline-block;">Gross Deductions</span>
+                        <span style="display: inline-block; text-align: right; font-family: monospace;">-₹${totalDeductions?.toLocaleString('en-IN') || '0'}</span>
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+
+          <!-- Net settled pay row -->
+          <div style="background: #1e293b; border-radius: 12px; padding: 15px; color: #ffffff; margin-bottom: 15px;">
+            <table style="width: 100%; border-collapse: collapse;">
+              <tr>
+                <td>
+                  <span style="font-size: 10px; font-weight: 900; text-transform: uppercase; color: #94a3b8; display: block; letter-spacing: 1px;">Net Settled Salary</span>
+                  <span style="font-size: 10.5px; color: #cbd5e1; font-style: italic; display: block; margin-top: 2px;">Certified secure bank wire transfer.</span>
+                </td>
+                <td style="text-align: right; vertical-align: middle;">
+                  <strong style="font-size: 20px; font-family: monospace; color: #34d399;">₹${netPay?.toLocaleString('en-IN') || '0'}</strong>
+                </td>
+              </tr>
             </table>
           </div>
-          <h4 style="font-size: 11px; text-transform: uppercase; margin-bottom: 6px; color: #334155;">Earnings & Deductions Outline</h4>
-          <table style="width: 100%; border-collapse: collapse; font-size: 12px; border: 1px solid #e2e8f0;">
-            <tr><td style="padding: 8px; border: 1px solid #e2e8f0;">Basic Standard Pay</td><td style="padding: 8px; border: 1px solid #e2e8f0; text-align: right;">₹${emp.salary?.toLocaleString('en-IN') || '0'}</td></tr>
-            <tr><td style="padding: 8px; border: 1px solid #e2e8f0; color: #047857;">Corporate Allowance (+)</td><td style="padding: 8px; border: 1px solid #e2e8f0; text-align: right; color: #047857;">+₹${emp.allowance?.toLocaleString('en-IN') || '0'}</td></tr>
-            <tr><td style="padding: 8px; border: 1px solid #e2e8f0; color: #b91c1c;">Provident Fund & Deductions (-)</td><td style="padding: 8px; border: 1px solid #e2e8f0; text-align: right; color: #b91c1c;">-₹${emp.deduction?.toLocaleString('en-IN') || '0'}</td></tr>
-            <tr style="font-weight: bold; background: #f0fdf4;"><td style="padding: 8px; border: 1px solid #e2e8f0; font-size: 13px;">NET REMITTED VALUE</td><td style="padding: 8px; border: 1px solid #e2e8f0; text-align: right; font-size: 13px; color: #047857;">₹${emp.netPay?.toLocaleString('en-IN') || '0'}</td></tr>
-          </table>
-          <div style="font-size: 10px; color: #475569; margin-top: 12px; font-weight: bold;">Payout Class: NACH Electronic Nettransfer Clearing. Authorization: CRM-W3A-SECURE</div>
+
+          <div style="border-top: 1px solid #e2e8f0; padding-top: 10px; font-size: 10px; color: #64748b; font-family: monospace; display: flex; justify-content: space-between;">
+            <span>Authorized Code: CRM-W3A-NACH-SECURE</span>
+            <span>Clearing House Bank Router</span>
+          </div>
         `;
         break;
       }
@@ -527,10 +661,65 @@ export default function PrintAndExportCenter({ isOpen, onClose, document, userEm
     setDownloaded(true);
   };
 
+  // 5.5. TRIGGER A SECURE NEW TAB PRINT (Bypasses iframe sandbox block)
+  const triggerNewTabPrint = () => {
+    try {
+      const printWindow = window.open('', '_blank');
+      if (!printWindow) {
+        alert("Pop-up blocked! Please allow pop-ups for this application, or use the 'Copy Rich Layout (Word)' fallback.");
+        return;
+      }
+      
+      const htmlContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <title>${title} - EXP CRM Print Document</title>
+          <style>
+            body { 
+              background: #ffffff; 
+              padding: 40px; 
+              display: flex; 
+              justify-content: center; 
+              font-family: system-ui, -apple-system, sans-serif;
+              color: #1e293b;
+            }
+            @media print {
+              body { padding: 0; background: #ffffff; }
+            }
+          </style>
+        </head>
+        <body>
+          <div style="width: 100%; max-width: 800px;">
+            ${generateRichHTML()}
+          </div>
+          <script>
+            // Wait for DOM to finish rendering styles, then call browser print dialog
+            setTimeout(function() {
+              window.print();
+            }, 600);
+          </script>
+        </body>
+        </html>
+      `;
+      printWindow.document.write(htmlContent);
+      printWindow.document.close();
+    } catch (err) {
+      console.error("Popup window print failed:", err);
+      alert("Failed to open printable tab. Please use the 'Copy Rich Layout (Word)' button to copy and paste to print.");
+    }
+  };
+
   // 6. ACTUAL NATIVE WINDOW PRINT
   const handleNativePrint = () => {
-    // We add a temporary stylesheet to guarantee only .printable-area is printed
-    // This is super clean and works perfectly.
+    // If inside a sandboxed iframe, we MUST use the new tab print method because window.print() is blocked by sandbox constraints
+    if (window.self !== window.top) {
+      triggerNewTabPrint();
+      return;
+    }
+
+    // Otherwise, we do native in-page print
     const style = window.document.createElement('style');
     style.id = 'print-overrides-style';
     style.innerHTML = `
@@ -700,55 +889,131 @@ export default function PrintAndExportCenter({ isOpen, onClose, document, userEm
                 </div>
               )}
 
-              {type === 'payroll_slip' && data && (
-                <div className="space-y-4">
-                  <div className="border rounded-xl p-3 bg-emerald-50/30 border-emerald-100 flex justify-between items-center">
-                    <div>
-                      <h4 className="font-extrabold text-slate-900 leading-none">{data.name || 'N/A'}</h4>
-                      <p className="text-[10px] text-slate-500 font-medium mt-1 uppercase tracking-wide">{data.role} ({data.department})</p>
+              {type === 'payroll_slip' && data && (() => {
+                const basic = data.basic !== undefined ? data.basic : data.salary;
+                const hra = data.hra || 0;
+                const specialAllowance = data.specialAllowance || 0;
+                const allowance = data.allowance || 0;
+                const grossEarnings = data.grossEarnings !== undefined ? data.grossEarnings : (basic + allowance);
+                
+                const epf = data.epf || 0;
+                const esi = data.esi || 0;
+                const tds = data.tds || 0;
+                const profTax = data.profTax || 0;
+                const totalDeductions = data.totalDeductions !== undefined ? data.totalDeductions : (epf + esi + tds + profTax);
+                
+                const netPay = data.calculatedNet !== undefined ? data.calculatedNet : data.netPay;
+                const cycle = `${data.billingMonth || 'Current'} ${data.billingYear || ''}`.trim() || 'Current';
+
+                const formatINR = (val: number) => '₹' + val.toLocaleString('en-IN');
+
+                return (
+                  <div className="space-y-4 text-slate-800 text-xs font-sans">
+                    
+                    {/* Header */}
+                    <div className="text-center space-y-1 py-2 bg-slate-50 rounded-xl border border-slate-205">
+                      <h4 className="font-extrabold text-slate-900 uppercase text-xs tracking-wider">Salary Statement Circular</h4>
+                      <p className="text-[10px] text-slate-400 font-bold">Billing Cycle: {cycle} • Issued securely via NACH API</p>
                     </div>
-                    <div className="text-right">
-                      <span className="text-[10px] font-mono bg-emerald-100 border border-emerald-200 text-emerald-800 px-2 py-0.5 rounded-full font-bold uppercase">
-                        {data.paidStatus || 'PAID'}
+
+                    {/* Recipient / Coordinates Grid */}
+                    <div className="grid grid-cols-2 gap-4 pb-2.5 border-b border-slate-100">
+                      <div>
+                        <span className="text-[9px] font-extrabold uppercase text-slate-400 block tracking-wider">Recipient Worker Detail:</span>
+                        <span className="font-bold text-slate-900 text-sm block mt-0.5">{data.name || 'N/A'}</span>
+                        <span className="text-[10.5px] text-slate-500 font-medium">{data.role || 'N/A'}</span>
+                        <span className="text-[10.5px] text-slate-500 block">Department: {data.department || 'N/A'}</span>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-[9px] font-extrabold uppercase text-slate-400 block tracking-wider">Payment Coordinates:</span>
+                        <p className="font-mono font-bold text-slate-900 text-[11px] block mt-0.5">Reference ID: {data.employeeId || data.id || 'N/A'}-CY9</p>
+                        <p className="text-slate-500 text-[10.5px]">Method: Instant IMPS NEFT Transfer</p>
+                        <p className="font-black text-emerald-600 uppercase text-[9px] mt-0.5">Status: Reconciled & Paid</p>
+                      </div>
+                    </div>
+
+                    {/* Earnings and Deductions Columns */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5 pt-1">
+                      {/* Earnings */}
+                      <div className="space-y-2">
+                        <span className="text-[9.5px] font-black text-slate-400 uppercase tracking-wider block border-b border-slate-100 pb-1">Component Earnings</span>
+                        
+                        <div className="flex justify-between font-medium">
+                          <span>Basic Salary (50% baseline)</span>
+                          <span className="font-mono text-slate-900">{formatINR(basic)}</span>
+                        </div>
+
+                        <div className="flex justify-between font-medium">
+                          <span>House Rent allowance (HRA) (25%)</span>
+                          <span className="font-mono text-slate-900">{formatINR(hra)}</span>
+                        </div>
+
+                        <div className="flex justify-between font-medium">
+                          <span>Special Allowance (25%)</span>
+                          <span className="font-mono text-slate-900">{formatINR(specialAllowance)}</span>
+                        </div>
+
+                        <div className="flex justify-between font-medium text-emerald-600">
+                          <span>Ground Expenses Allowances</span>
+                          <span className="font-mono">+{formatINR(allowance)}</span>
+                        </div>
+
+                        <div className="border-t border-slate-200 pt-1.5 flex justify-between font-bold text-slate-900 bg-slate-50 px-2 py-1 rounded">
+                          <span>Gross Earnings Sum</span>
+                          <span className="font-mono">{formatINR(grossEarnings)}</span>
+                        </div>
+                      </div>
+
+                      {/* Deductions */}
+                      <div className="space-y-2 border-l border-slate-100 pl-4">
+                        <span className="text-[9.5px] font-black text-slate-400 uppercase tracking-wider block border-b border-slate-100 pb-1">Statutory Deductions</span>
+                        
+                        <div className="flex justify-between text-slate-650">
+                          <span>Employee Provident Fund (12%)</span>
+                          <span className="font-mono">-{formatINR(epf)}</span>
+                        </div>
+
+                        <div className="flex justify-between text-slate-650">
+                          <span>Employee State Insurance (0.75%)</span>
+                          <span className="font-mono">-{formatINR(esi)}</span>
+                        </div>
+
+                        <div className="flex justify-between text-slate-650">
+                          <span>Tax Withheld / TDS (10%)</span>
+                          <span className="font-mono">-{formatINR(tds)}</span>
+                        </div>
+
+                        <div className="flex justify-between text-slate-650">
+                          <span>Professional Tax (PT Rate)</span>
+                          <span className="font-mono">-{formatINR(profTax)}</span>
+                        </div>
+
+                        <div className="border-t border-slate-200 pt-1.5 flex justify-between font-bold text-rose-600 bg-rose-50 px-2 py-1 rounded">
+                          <span>Gross Deductions</span>
+                          <span className="font-mono">-{formatINR(totalDeductions)}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Net settled payload */}
+                    <div className="bg-slate-900 text-white p-4 rounded-2xl flex justify-between items-center mt-6">
+                      <div>
+                        <span className="text-[9.5px] text-slate-400 uppercase font-black tracking-widest block">Net Settled Salary</span>
+                        <p className="text-[10px] text-slate-350 italic mt-0.5">Certified secure bank wire transfer.</p>
+                      </div>
+                      <span className="text-lg font-black font-mono tracking-tight text-emerald-400">
+                        {formatINR(netPay)}
                       </span>
                     </div>
-                  </div>
 
-                  <div className="border rounded-xl overflow-hidden">
-                    <table className="w-full text-left">
-                      <thead>
-                        <tr className="bg-slate-50 border-b text-[10px] font-black text-slate-400 uppercase">
-                          <th className="p-2">Description Allocation</th>
-                          <th className="p-2 text-right">Value (INR)</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y font-mono">
-                        <tr>
-                          <td className="p-2 font-sans font-medium text-slate-700">Basic Apportioned Salary</td>
-                          <td className="p-2 text-right">₹{data.salary?.toLocaleString('en-IN') || '0'}</td>
-                        </tr>
-                        <tr className="text-emerald-700 font-bold">
-                          <td className="p-2 font-sans font-medium">Standard Allowance Additions (+)</td>
-                          <td className="p-2 text-right">+₹{data.allowance?.toLocaleString('en-IN') || '0'}</td>
-                        </tr>
-                        <tr className="text-red-700 font-bold">
-                          <td className="p-2 font-sans font-medium">Provident & PF Tax Deductions (-)</td>
-                          <td className="p-2 text-right">-₹{data.deduction?.toLocaleString('en-IN') || '0'}</td>
-                        </tr>
-                        <tr className="bg-emerald-50 font-black text-emerald-800 text-sm border-t-2">
-                          <td className="p-2 font-sans">NET REMITTANCE GENERATED</td>
-                          <td className="p-2 text-right">₹{data.netPay?.toLocaleString('en-IN') || '0'}</td>
-                        </tr>
-                      </tbody>
-                    </table>
+                    {/* Footer */}
+                    <div className="border-t pt-2 flex justify-between items-center text-[9px] text-slate-400 font-mono">
+                      <span>Authorized Code: CRM-W3A-NACH-SECURE</span>
+                      <span>Clearing House Bank Router</span>
+                    </div>
                   </div>
-
-                  <div className="border-t pt-2 flex justify-between items-center text-[9px] text-slate-400 font-mono">
-                    <span>Authorized Code: CRM-W3A-NACH-SECURE</span>
-                    <span>Clearing House Bank Router</span>
-                  </div>
-                </div>
-              )}
+                );
+              })()}
 
               {type === 'lead_profile' && data && (
                 <div className="space-y-4">
@@ -1006,10 +1271,10 @@ export default function PrintAndExportCenter({ isOpen, onClose, document, userEm
             <div className="p-3 bg-amber-50/50 border border-amber-200 rounded-xl space-y-2 text-slate-700 text-xxs">
               <div className="flex items-center gap-1.5 text-amber-800 font-extrabold uppercase">
                 <ShieldAlert className="w-3.5 h-3.5 text-amber-600" />
-                Iframe Print Warning
+                Iframe Print Bypass Active
               </div>
               <p className="leading-relaxed font-sans">
-                Due to browser sandbox security constraints inside AI Studio iframe preview, direct physical printing can sometimes fail. <strong>Use "Copy Rich HTML" or "Copy Plain Text"</strong> as 100% bulletproof fallbacks to paste beautifully formatted copies into MS Word, Google Docs or email.
+                Due to sandbox restrictions, direct in-page printing is blocked by the browser. <strong>System Print (PDF)</strong> has been upgraded to automatically open a clean printable tab and trigger the print dialog! Ensure pop-ups are allowed.
               </p>
             </div>
 

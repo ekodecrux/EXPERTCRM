@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { 
   Sparkles, Globe, Shield, CreditCard, Users, Zap, Check, CheckCircle2, 
   HelpCircle, Trash2, Plus, ArrowUpRight, DollarSign, RefreshCw, Layers, 
-  FileText, Activity, Server, Sliders, AlertCircle, X, Mail, Link, Building
+  FileText, Activity, Server, Sliders, AlertCircle, X, Mail, Link, Building,
+  Edit
 } from 'lucide-react';
 
 export interface SaaSPlan {
@@ -136,6 +137,7 @@ export default function SaaSWorkspacePanel({
   const [newPassword, setNewPassword] = useState('');
   const [domainProvider, setDomainProvider] = useState<'expertcrm.in' | 'expertaidtech.in' | 'custom'>('expertcrm.in');
   const [customDomain, setCustomDomain] = useState('');
+  const [editingTenant, setEditingTenant] = useState<TenantWorkspace | null>(null);
 
   const activePlan = SAAS_PLANS.find(p => p.id === currentPlanId) || SAAS_PLANS[1];
 
@@ -676,6 +678,14 @@ export default function SaaSWorkspacePanel({
                     )}
 
                     <button
+                      onClick={() => setEditingTenant(t)}
+                      className="p-2 text-slate-400 hover:text-indigo-600 rounded-xl hover:bg-indigo-50 border border-transparent hover:border-indigo-100 transition cursor-pointer"
+                      title="Edit Tenant Details"
+                    >
+                      <Edit className="w-3.5 h-3.5" />
+                    </button>
+
+                    <button
                       onClick={() => deleteTenant(t.id, t.name)}
                       className="p-2 text-slate-400 hover:text-rose-500 rounded-xl hover:bg-rose-50 border border-transparent hover:border-rose-100 transition cursor-pointer"
                       title="Decommission Tenant Domain Cluster"
@@ -790,9 +800,199 @@ export default function SaaSWorkspacePanel({
             </div>
           </div>
 
+          </div>
         </div>
 
-      </div>
+      {/* Edit Tenant Modal Overlay */}
+      {editingTenant && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4">
+          <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl max-w-xl w-full p-6 space-y-4 animate-scaleUp max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center pb-2 border-b border-slate-100">
+              <h3 className="text-sm font-black uppercase text-slate-900 tracking-wider flex items-center gap-1.5">
+                <Edit className="w-4 h-4 text-indigo-600" /> Edit Tenant Details: {editingTenant.name}
+              </h3>
+              <button 
+                type="button"
+                onClick={() => setEditingTenant(null)}
+                className="text-slate-400 hover:text-slate-700 p-1 rounded-full hover:bg-slate-100 transition cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              // Update tenant in local state & persist
+              const updated = tenants.map(t => t.id === editingTenant.id ? editingTenant : t);
+              persistTenants(updated);
+              
+              // If active workspace changed its name, update it
+              if (activeWorkspace === tenants.find(t => t.id === editingTenant.id)?.name) {
+                onWorkspaceChange(editingTenant.name);
+                onUpdatePlan(editingTenant.planId);
+              }
+              
+              showToast(`Tenant "${editingTenant.name}" updated successfully!`, 'success');
+              setEditingTenant(null);
+            }} className="space-y-4 text-slate-800">
+              
+              {/* Core Profile */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <div className="space-y-1">
+                  <label className="block text-[9.5px] font-black text-slate-500 uppercase tracking-widest">Client / Org Name</label>
+                  <input
+                    type="text"
+                    required
+                    value={editingTenant.name}
+                    onChange={(e) => setEditingTenant({ ...editingTenant, name: e.target.value })}
+                    className="w-full text-xs p-2.5 bg-slate-50 border border-slate-250 rounded-xl focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 font-semibold text-slate-800"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="block text-[9.5px] font-black text-slate-500 uppercase tracking-widest">Subdomain (slug)</label>
+                  <input
+                    type="text"
+                    required
+                    value={editingTenant.subdomain}
+                    onChange={(e) => setEditingTenant({ ...editingTenant, subdomain: e.target.value.toLowerCase().replace(/[^a-z0-9]/g, '') })}
+                    className="w-full text-xs p-2.5 bg-slate-50 border border-slate-250 rounded-xl focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 font-semibold text-slate-800"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="block text-[9.5px] font-black text-slate-500 uppercase tracking-widest">Contact Person</label>
+                  <input
+                    type="text"
+                    required
+                    value={editingTenant.clientContactName || ''}
+                    onChange={(e) => setEditingTenant({ ...editingTenant, clientContactName: e.target.value })}
+                    className="w-full text-xs p-2.5 bg-slate-50 border border-slate-250 rounded-xl focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 font-semibold text-slate-800"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="block text-[9.5px] font-black text-slate-500 uppercase tracking-widest">Client Email</label>
+                  <input
+                    type="email"
+                    required
+                    value={editingTenant.clientOnboardEmail || ''}
+                    onChange={(e) => setEditingTenant({ ...editingTenant, clientOnboardEmail: e.target.value })}
+                    className="w-full text-xs p-2.5 bg-slate-50 border border-slate-250 rounded-xl focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 font-semibold text-slate-800"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="block text-[9.5px] font-black text-slate-500 uppercase tracking-widest">Admin Password</label>
+                  <input
+                    type="text"
+                    required
+                    value={editingTenant.adminPassword || ''}
+                    onChange={(e) => setEditingTenant({ ...editingTenant, adminPassword: e.target.value })}
+                    className="w-full text-xs p-2.5 bg-slate-50 border border-slate-250 rounded-xl focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 font-mono font-bold text-slate-800"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="block text-[9.5px] font-black text-slate-500 uppercase tracking-widest">Active Seat Count</label>
+                  <input
+                    type="number"
+                    min="1"
+                    required
+                    value={editingTenant.seatCount}
+                    onChange={(e) => setEditingTenant({ ...editingTenant, seatCount: parseInt(e.target.value) || 1 })}
+                    className="w-full text-xs p-2.5 bg-slate-50 border border-slate-250 rounded-xl focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 font-semibold text-slate-800"
+                  />
+                </div>
+              </div>
+
+              {/* Subscription level and status */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-2">
+                <div className="space-y-1">
+                  <label className="block text-[9.5px] font-black text-slate-500 uppercase tracking-widest">Subscription Plan</label>
+                  <select
+                    value={editingTenant.planId}
+                    onChange={(e) => setEditingTenant({ ...editingTenant, planId: e.target.value })}
+                    className="w-full text-xs p-2.5 bg-slate-50 border border-slate-250 rounded-xl focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 font-bold text-slate-800"
+                  >
+                    {SAAS_PLANS.map(p => (
+                      <option key={p.id} value={p.id}>{p.name} (₹{p.price.toLocaleString('en-IN')}/mo)</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="block text-[9.5px] font-black text-slate-500 uppercase tracking-widest">Tenant Status</label>
+                  <select
+                    value={editingTenant.status}
+                    onChange={(e) => setEditingTenant({ ...editingTenant, status: e.target.value as any })}
+                    className="w-full text-xs p-2.5 bg-slate-50 border border-slate-250 rounded-xl focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 font-bold text-slate-800"
+                  >
+                    <option value="Active">Active</option>
+                    <option value="Suspended">Suspended</option>
+                    <option value="Trialing">Trialing</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Domain Provider and Mapping */}
+              <div className="space-y-3 border-t border-slate-100 pt-3">
+                <label className="block text-[9.5px] font-black text-slate-500 uppercase tracking-widest">Domain & DNS Setup</label>
+                <div className="grid grid-cols-3 gap-2">
+                  {(['expertcrm.in', 'expertaidtech.in', 'custom'] as const).map(provider => (
+                    <button
+                      type="button"
+                      key={provider}
+                      onClick={() => setEditingTenant({ 
+                        ...editingTenant, 
+                        domainProvider: provider,
+                        customDomain: provider === 'custom' ? (editingTenant.customDomain || `${editingTenant.subdomain}.custom-mapped.in`) : undefined
+                      })}
+                      className={`p-2 rounded-xl border text-center cursor-pointer text-[10px] font-extrabold transition flex flex-col justify-center items-center gap-1 ${
+                        editingTenant.domainProvider === provider
+                          ? 'bg-indigo-600 text-white border-indigo-600 shadow-xs'
+                          : 'bg-white border-slate-250 text-slate-700 hover:bg-slate-50'
+                      }`}
+                    >
+                      <span>{provider}</span>
+                    </button>
+                  ))}
+                </div>
+
+                {editingTenant.domainProvider === 'custom' && (
+                  <div className="space-y-1 pt-1.5 animate-fadeIn">
+                    <label className="block text-[9px] font-black text-indigo-950 uppercase tracking-widest">Private Custom Domain (CNAME target)</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="crm.clientdomain.com"
+                      value={editingTenant.customDomain || ''}
+                      onChange={(e) => setEditingTenant({ ...editingTenant, customDomain: e.target.value.toLowerCase().trim() })}
+                      className="w-full text-xs p-2.5 bg-slate-50 border border-indigo-250 rounded-xl focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600 font-mono font-bold text-indigo-950"
+                    />
+                  </div>
+                )}
+              </div>
+
+              <div className="flex gap-2 justify-end pt-3 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => setEditingTenant(null)}
+                  className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-[10px] font-bold uppercase tracking-wider transition cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-[10px] font-bold uppercase tracking-wider transition cursor-pointer"
+                >
+                  Save Tenant Configuration
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
     </div>
   );

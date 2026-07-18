@@ -4,7 +4,7 @@ import {
   Settings, Users, Key, Terminal, RefreshCw, EyeOff,
   UserPlus, Edit, Trash2, ArrowUpRight, Check, AlertTriangle, 
   FileText, Download, Upload, Copy, Eye, Globe, Fingerprint, 
-  Calendar, Clock, Search, Save, X, HardDrive, FileJson, Info, Plus
+  Calendar, Clock, Search, Save, X, HardDrive, FileJson, Info, Plus, Sparkles
 } from 'lucide-react';
 import { AccessControl, AccessRole } from '../types';
 
@@ -56,6 +56,10 @@ const DEFAULT_ROLE_PERMISSIONS: Record<AccessRole, Record<keyof AccessControl['p
     viewDashboard: true, manageLeads: true, manageCalls: true, manageSupport: true,
     manageStaff: true, manageTasks: true, manageHR: true, manageComms: true, manageSecurity: true
   },
+  'Admin': {
+    viewDashboard: true, manageLeads: true, manageCalls: true, manageSupport: true,
+    manageStaff: true, manageTasks: true, manageHR: true, manageComms: true, manageSecurity: true
+  },
   'Sales Manager': {
     viewDashboard: true, manageLeads: true, manageCalls: true, manageSupport: false,
     manageStaff: false, manageTasks: true, manageHR: false, manageComms: true, manageSecurity: false
@@ -95,7 +99,24 @@ export default function SecurityAccess({
 
   const [roleMappings, setRoleMappings] = useState<Record<AccessRole, Record<string, boolean>>>(() => {
     const saved = localStorage.getItem('crm_security_role_maps');
-    return saved ? JSON.parse(saved) : DEFAULT_ROLE_PERMISSIONS;
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        const merged = { ...DEFAULT_ROLE_PERMISSIONS };
+        Object.keys(parsed).forEach((role) => {
+          if (merged[role as AccessRole]) {
+            merged[role as AccessRole] = {
+              ...merged[role as AccessRole],
+              ...parsed[role]
+            };
+          }
+        });
+        return merged;
+      } catch (e) {
+        return DEFAULT_ROLE_PERMISSIONS;
+      }
+    }
+    return DEFAULT_ROLE_PERMISSIONS;
   });
 
   const [ipWhitelist, setIpWhitelist] = useState<string[]>(() => {
@@ -110,6 +131,138 @@ export default function SecurityAccess({
   const [dataMaskingEnforced, setDataMaskingEnforced] = useState<boolean>(() => {
     return localStorage.getItem('crm_security_data_masking') === 'true';
   });
+
+  // Dynamic roles state & generator configuration
+  const [rolesList, setRolesList] = useState<string[]>(() => {
+    const saved = localStorage.getItem('crm_security_roles_list');
+    return saved ? JSON.parse(saved) : ['Super Admin', 'Admin', 'Sales Manager', 'Support Agent', 'HR Specialist', 'Guest'];
+  });
+
+  const [generatorRoleName, setGeneratorRoleName] = useState('');
+  const [generatorPrompt, setGeneratorPrompt] = useState('');
+  const [generatorLoading, setGeneratorLoading] = useState(false);
+  const [generatorJustification, setGeneratorJustification] = useState('');
+  const [generatorError, setGeneratorError] = useState<string | null>(null);
+
+  useEffect(() => {
+    localStorage.setItem('crm_security_roles_list', JSON.stringify(rolesList));
+  }, [rolesList]);
+
+  const applyPresetTemplate = (preset: string) => {
+    switch (preset) {
+      case 'Admin':
+        setGeneratorRoleName('System Admin');
+        setGeneratorPrompt('Full administrator privileges with active access to security logs, payroll data, and systems configuration.');
+        break;
+      case 'Sales':
+        setGeneratorRoleName('Sales Lead');
+        setGeneratorPrompt('Focuses purely on managing pipeline leads, logging client calls, and sending newsletters, with zero access to security or payroll settings.');
+        break;
+      case 'Support':
+        setGeneratorRoleName('Customer Associate');
+        setGeneratorPrompt('Accesses customer support tickets, completes standard tasks, and logs outbound calls. Cannot access HR metrics.');
+        break;
+      case 'HR':
+        setGeneratorRoleName('Payroll Auditor');
+        setGeneratorPrompt('Accesses HR dashboards, manages field coordinators, and verifies worker payroll slips. Restricted from editing security mappings.');
+        break;
+      case 'Observer':
+        setGeneratorRoleName('Observer Auditor');
+        setGeneratorPrompt('Read-only dashboard auditor scope. Restricted write capabilities on all modules including leads, support, and systems.');
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleGenerateRole = async () => {
+    if (!generatorRoleName.trim()) {
+      setGeneratorError('Please provide a descriptive Role name first.');
+      return;
+    }
+    setGeneratorLoading(true);
+    setGeneratorError(null);
+    setGeneratorJustification('');
+
+    try {
+      const response = await fetch('/api/generate-role', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          prompt: generatorPrompt,
+          customName: generatorRoleName
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('API server returned an error state.');
+      }
+
+      const data = await response.json();
+      
+      const finalRoleName = data.roleName || generatorRoleName.trim();
+      if (!rolesList.includes(finalRoleName)) {
+        setRolesList(prev => [...prev, finalRoleName]);
+      }
+
+      setRoleMappings(prev => ({
+        ...prev,
+        [finalRoleName]: data.permissions
+      }));
+
+      // Log security audit log entry
+      const logId = 'LOG-' + Math.floor(Math.random() * 900 + 100);
+      const newLog: AuditLog = {
+        id: logId,
+        timestamp: new Date().toISOString().replace('T', ' ').substring(0, 19),
+        action: `New Access Role generated via AI: ${finalRoleName}`,
+        user: `Super Admin (M. Mehta)`,
+        ipAddress: '127.0.0.1',
+        severity: 'info'
+      };
+      setAuditLogs(prev => [newLog, ...prev]);
+
+      setGeneratorJustification(data.justification || 'Role generated successfully!');
+      
+      setToastMessage(`Role "${finalRoleName}" generated & mapped successfully!`);
+      setTimeout(() => setToastMessage(null), 4000);
+
+    } catch (err: any) {
+      console.error(err);
+      setGeneratorError('Failed to call API generator. Please try again.');
+    } finally {
+      setGeneratorLoading(false);
+    }
+  };
+
+  const handleDeleteCustomRole = (roleToDelete: string) => {
+    if (['Super Admin', 'Admin', 'Sales Manager', 'Support Agent', 'HR Specialist', 'Guest'].includes(roleToDelete)) {
+      return; // Absolute protection for default presets
+    }
+    setRolesList(prev => prev.filter(r => r !== roleToDelete));
+    
+    // clean up permissions mapping
+    const newMappings = { ...roleMappings };
+    delete newMappings[roleToDelete];
+    setRoleMappings(newMappings);
+
+    // Log security audit log entry
+    const logId = 'LOG-' + Math.floor(Math.random() * 900 + 100);
+    const newLog: AuditLog = {
+      id: logId,
+      timestamp: new Date().toISOString().replace('T', ' ').substring(0, 19),
+      action: `Custom Access Role decommissioned: ${roleToDelete}`,
+      user: `Super Admin (M. Mehta)`,
+      ipAddress: '127.0.0.1',
+      severity: 'warning'
+    };
+    setAuditLogs(prev => [newLog, ...prev]);
+
+    setToastMessage(`Role "${roleToDelete}" decommissioned successfully.`);
+    setTimeout(() => setToastMessage(null), 3000);
+  };
 
   // Selected User for Detail View/Edit Profile
   const [selectedUserId, setSelectedUserId] = useState<string>(() => {
@@ -635,12 +788,12 @@ export default function SecurityAccess({
           <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Operational Space Impersonator Scope</span>
           <p className="text-xs text-slate-600 font-medium">Toggle active credentials to check client UI restrictions across tabs.</p>
         </div>
-        <div className="flex flex-wrap gap-1 bg-white p-1 rounded-xl shadow-xxs border border-slate-150">
-          {(['Super Admin', 'Sales Manager', 'Support Agent', 'HR Specialist', 'Guest'] as AccessRole[]).map(role => (
+        <div className="flex flex-wrap gap-1 bg-white p-1 rounded-xl shadow-xxs border border-slate-150 max-w-full overflow-x-auto">
+          {rolesList.map(role => (
             <button
               key={role}
               onClick={() => handleSystemImpersonation(role)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap ${
                 accessControl.role === role 
                   ? 'bg-slate-900 text-amber-400 font-black shadow-xs' 
                   : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
@@ -834,21 +987,178 @@ export default function SecurityAccess({
       {/* ===================== TAB: ROLES & PERMISSIONS ===================== */}
       {activeTab === 'roles' && (
         <div className="space-y-6">
+          {/* Intelligent Role & Permission Generator Panel */}
+          <div className="bg-gradient-to-br from-slate-900 to-slate-950 text-white p-6 rounded-2xl border border-slate-800 shadow-md relative overflow-hidden">
+            <div className="absolute top-0 right-0 p-8 opacity-5 pointer-events-none">
+              <Sparkles className="w-32 h-32 text-amber-400" />
+            </div>
+
+            <div className="flex items-center gap-2 mb-3">
+              <div className="p-1.5 bg-amber-400/10 rounded-xl border border-amber-400/20">
+                <Sparkles className="w-5 h-5 text-amber-400 animate-pulse" />
+              </div>
+              <div>
+                <h3 className="text-sm font-black uppercase tracking-wider text-slate-100 flex items-center gap-1.5">
+                  Intelligent Role & Permission Generator
+                  <span className="text-[9px] bg-amber-400 text-slate-950 font-extrabold px-1.5 py-0.5 rounded-full uppercase tracking-normal">AI Enabled</span>
+                </h3>
+                <p className="text-[11px] text-slate-400">Generate tailor-fit access roles and map clearance tokens instantly via text instructions or template blueprints.</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 mt-5">
+              {/* Left Column: Input Form */}
+              <div className="lg:col-span-7 space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div className="sm:col-span-1 space-y-1">
+                    <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Role Title</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Sales Intern"
+                      value={generatorRoleName}
+                      onChange={(e) => setGeneratorRoleName(e.target.value)}
+                      className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 transition"
+                    />
+                  </div>
+                  <div className="sm:col-span-2 space-y-1">
+                    <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Clearance Presets Quick-Load</label>
+                    <div className="flex flex-wrap gap-1.5">
+                      {[
+                        { id: 'Admin', label: 'Admin' },
+                        { id: 'Sales', label: 'Sales' },
+                        { id: 'Support', label: 'Support' },
+                        { id: 'HR', label: 'HR Special' },
+                        { id: 'Observer', label: 'Observer' }
+                      ].map(p => (
+                        <button
+                          key={p.id}
+                          type="button"
+                          onClick={() => applyPresetTemplate(p.id)}
+                          className="px-2.5 py-1.5 bg-slate-800 border border-slate-700/60 hover:border-amber-400/60 rounded-lg text-[10.5px] font-bold text-slate-300 transition"
+                        >
+                          {p.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Functional Role Scope Prompt & Instructions</label>
+                  <textarea
+                    rows={3}
+                    placeholder="Describe what the employee needs to do. E.g. 'This role is for a call specialist who should be able to log voice calls and complete tasks but is blocked from HR and lead management.'"
+                    value={generatorPrompt}
+                    onChange={(e) => setGeneratorPrompt(e.target.value)}
+                    className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 transition resize-none leading-relaxed"
+                  />
+                </div>
+
+                <div className="flex items-center justify-between pt-1">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setGeneratorRoleName('');
+                      setGeneratorPrompt('');
+                      setGeneratorJustification('');
+                      setGeneratorError(null);
+                    }}
+                    className="px-3 py-1.5 border border-slate-700 text-slate-400 hover:text-white hover:bg-slate-800 text-xs font-bold rounded-lg transition"
+                  >
+                    Clear Slate
+                  </button>
+                  <button
+                    type="button"
+                    disabled={generatorLoading}
+                    onClick={handleGenerateRole}
+                    className="px-4 py-2 bg-amber-400 hover:bg-amber-500 disabled:bg-amber-400/50 text-slate-950 font-extrabold text-xs rounded-xl flex items-center gap-1.5 shadow-md transition"
+                  >
+                    {generatorLoading ? (
+                      <>
+                        <RefreshCw className="w-3.5 h-3.5 animate-spin" /> Generating...
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="w-3.5 h-3.5 text-slate-950" /> Generate Access Role
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              {/* Right Column: AI Insights & Outputs */}
+              <div className="lg:col-span-5 bg-slate-900/60 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between space-y-4">
+                <div className="space-y-3">
+                  <div className="flex items-center gap-1.5 border-b border-slate-800 pb-2">
+                    <Info className="w-3.5 h-3.5 text-amber-400" />
+                    <span className="text-[10px] font-black text-slate-300 uppercase tracking-wider">Security Alignment Analysis</span>
+                  </div>
+
+                  {generatorJustification ? (
+                    <div className="space-y-2.5">
+                      <div className="p-3 bg-emerald-950/40 border border-emerald-900/50 rounded-xl text-xs leading-relaxed text-emerald-300 font-medium">
+                        <div className="flex items-center gap-1.5 mb-1 font-bold text-emerald-200">
+                          <Check className="w-4 h-4 text-emerald-400" /> Successfully Generated Map!
+                        </div>
+                        {generatorJustification}
+                      </div>
+                      <p className="text-[10px] text-slate-400 leading-normal">
+                        This role template has been injected dynamically into the <b>Permission Mapping Matrix</b> below. You can fine-tune specific flags manually anytime.
+                      </p>
+                    </div>
+                  ) : generatorError ? (
+                    <div className="p-3 bg-rose-950/40 border border-rose-900/50 rounded-xl text-xs leading-relaxed text-rose-300 font-medium">
+                      <div className="flex items-center gap-1.5 mb-1 font-bold text-rose-200">
+                        <AlertTriangle className="w-4 h-4 text-rose-400" /> Generation Incident
+                      </div>
+                      {generatorError}
+                    </div>
+                  ) : (
+                    <div className="py-6 text-center space-y-2">
+                      <div className="inline-flex p-2.5 bg-slate-800 rounded-full text-slate-500">
+                        <Key className="w-4.5 h-4.5" />
+                      </div>
+                      <p className="text-[11px] text-slate-400 max-w-[240px] mx-auto leading-relaxed">
+                        Specify a custom title and instructions, or load a preset, then click <b>Generate Access Role</b> to map dynamic security tokens.
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                <div className="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800/80 text-[10px] text-slate-400 leading-normal flex gap-1.5 items-start">
+                  <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>
+                    Clearance mappings adhere to the <b>Principle of Least Privilege (PoLP)</b>. Security matrix adjustments are written to the live audit log.
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-xxs">
             <h3 className="text-sm font-black text-slate-900 uppercase">Enterprise Permission Mapping Matrix</h3>
             <p className="text-xs text-slate-400 mt-0.5">Customize default permission access tokens on a per-role basis. Toggling options here immediately updates that role's template configurations globally.</p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-5">
-              {(['Super Admin', 'Sales Manager', 'Support Agent', 'HR Specialist', 'Guest'] as AccessRole[]).map(role => (
+              {rolesList.map(role => (
                 <div key={role} className="bg-slate-50 border border-slate-200/75 rounded-2xl p-4 space-y-3 shadow-xxs flex flex-col justify-between">
                   <div>
                     <div className="flex items-center justify-between border-b border-slate-150 pb-2 mb-3">
                       <div className="flex items-center gap-1.5">
                         <Key className="w-4 h-4 text-amber-500" />
-                        <span className="text-xs font-black text-slate-900 uppercase tracking-wider">{role}</span>
+                        <span className="text-xs font-black text-slate-900 uppercase tracking-wider truncate max-w-[120px]">{role}</span>
+                        {!['Super Admin', 'Admin', 'Sales Manager', 'Support Agent', 'HR Specialist', 'Guest'].includes(role) && (
+                          <button
+                            onClick={() => handleDeleteCustomRole(role)}
+                            className="text-rose-500 hover:text-rose-700 hover:bg-rose-100/50 p-1 rounded transition"
+                            title="Decommission custom role"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        )}
                       </div>
                       <span className="text-[9.5px] font-black text-slate-400">
-                        {Object.values(roleMappings[role]).filter(Boolean).length} / 9 Active
+                        {roleMappings[role] ? Object.values(roleMappings[role]).filter(Boolean).length : 0} / 9 Active
                       </span>
                     </div>
 
@@ -872,7 +1182,7 @@ export default function SecurityAccess({
                           <span className="text-[10.5px] text-slate-700 font-semibold">{p.label}</span>
                           <input
                             type="checkbox"
-                            checked={roleMappings[role][p.key]}
+                            checked={roleMappings[role] ? roleMappings[role][p.key] : false}
                             onChange={() => handleRolePermissionToggle(role, p.key)}
                             disabled={role === 'Super Admin' && p.key === 'manageSecurity'} // absolute override protection
                             className="w-4.5 h-4.5 rounded border-slate-300 text-slate-900 focus:ring-slate-900"
@@ -1356,11 +1666,9 @@ export default function SecurityAccess({
                     onChange={(e) => setNewUserForm(prev=>({ ...prev, role: e.target.value as any }))}
                     className="w-full p-2.5 bg-slate-50 border border-slate-205 rounded-xl font-bold"
                   >
-                    <option value="Super Admin">Super Admin</option>
-                    <option value="Sales Manager">Sales Manager</option>
-                    <option value="Support Agent">Support Agent</option>
-                    <option value="HR Specialist">HR Specialist</option>
-                    <option value="Guest">Guest</option>
+                    {rolesList.map(r => (
+                      <option key={r} value={r}>{r}</option>
+                    ))}
                   </select>
                 </div>
 
@@ -1456,11 +1764,9 @@ export default function SecurityAccess({
                     onChange={(e) => setEditProfileForm(prev=>({ ...prev, role: e.target.value as any }))}
                     className="w-full p-2.5 bg-slate-50 border border-slate-205 rounded-xl font-bold"
                   >
-                    <option value="Super Admin">Super Admin</option>
-                    <option value="Sales Manager">Sales Manager</option>
-                    <option value="Support Agent">Support Agent</option>
-                    <option value="HR Specialist">HR Specialist</option>
-                    <option value="Guest">Guest</option>
+                    {rolesList.map(r => (
+                      <option key={r} value={r}>{r}</option>
+                    ))}
                   </select>
                 </div>
 

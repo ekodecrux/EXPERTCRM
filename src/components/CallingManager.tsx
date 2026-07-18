@@ -106,7 +106,11 @@ export default function CallingManager({
   const outgoingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Automated background incoming calls setting
-  const [autoIncomingActive, setAutoIncomingActive] = useState(false);
+  const [autoIncomingActive, setAutoIncomingActive] = useState(() => {
+    // Stop all incoming calls at present as requested by the user
+    localStorage.setItem('calling_auto_incoming_active', 'false');
+    return false;
+  });
 
   // End of transcript reference for automatic scroll
   const transcriptEndRef = useRef<HTMLDivElement | null>(null);
@@ -702,6 +706,10 @@ export default function CallingManager({
 
   // Register calling methods to window so App.tsx HUD buttons can invoke them - RUNS ONCE ON MOUNT
   useEffect(() => {
+    // Clear out any stale ringing states and stop sound oscillators immediately on load
+    stopActiveRingers();
+    setActiveCallStatus('idle');
+
     (window as any).__crmAnswerCall = () => {
       stateRef.current.handleAnswerCall();
     };

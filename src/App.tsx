@@ -212,9 +212,21 @@ export default function App() {
   const handleLoginSuccess = (session: UserSession) => {
     setUserSession(session);
     
+    // Switch workspace name and billing plan dynamically to match the authenticated tenant's credentials
+    if (session.tenantWorkspaceName) {
+      setWorkspaceName(session.tenantWorkspaceName);
+    }
+    if (session.tenantPlanId) {
+      setSaasPlanId(session.tenantPlanId);
+    }
+    
     // Auto-update active role
     const defaultPermissionsMap = {
       'Super Admin': {
+        viewDashboard: true, manageLeads: true, manageCalls: true, manageSupport: true,
+        manageStaff: true, manageTasks: true, manageHR: true, manageComms: true, manageSecurity: true
+      },
+      'Admin': {
         viewDashboard: true, manageLeads: true, manageCalls: true, manageSupport: true,
         manageStaff: true, manageTasks: true, manageHR: true, manageComms: true, manageSecurity: true
       },
@@ -462,6 +474,33 @@ export default function App() {
   const handleUpdateRole = (role: AccessRole) => {
     // Standard role mappings for initial simulation bindings
     let updatedPermissions = { ...INITIAL_SECURITY.permissions };
+    
+    // First, try to read the custom configured mappings from localStorage
+    const savedMaps = localStorage.getItem('crm_security_role_maps');
+    if (savedMaps) {
+      try {
+        const parsed = JSON.parse(savedMaps);
+        if (parsed[role]) {
+          updatedPermissions = { ...updatedPermissions, ...parsed[role] };
+          setAccessControl({ role, permissions: updatedPermissions });
+          const matchingUser = PRESET_CREDENTIALS.find(p => p.role === role);
+          if (matchingUser) {
+            setUserSession({
+              name: matchingUser.name,
+              email: matchingUser.email,
+              role: matchingUser.role,
+              avatar: matchingUser.avatar
+            });
+          } else {
+            setUserSession(prev => prev ? { ...prev, role } : null);
+          }
+          return;
+        }
+      } catch (e) {
+        console.error("Error reading saved maps for role", e);
+      }
+    }
+
     if (role === 'Guest') {
       updatedPermissions = {
         viewDashboard: true,
@@ -584,7 +623,8 @@ export default function App() {
               .map(item => {
                 const Icon = item.icon;
               const isSelected = activeTab === item.id;
-              const permitted = hasAccess(item.permission as any);
+              // In this demo environment, Security & Access Control remains always openable to prevent lockouts during role impersonation testing.
+              const permitted = item.id === 'security' ? true : hasAccess(item.permission as any);
 
               return (
                 <button
@@ -922,7 +962,7 @@ export default function App() {
           <div className="flex gap-1.5">
             <button
               onClick={() => setActiveTab('calling')}
-              className="px-2.5 py-1 bg-indigo-650 hover:bg-indigo-750 text-white text-[10px] font-bold rounded uppercase tracking-wider border border-indigo-500 cursor-pointer"
+              className="px-2.5 py-1 bg-indigo-600 hover:bg-indigo-700 text-white text-[10px] font-bold rounded uppercase tracking-wider border border-indigo-500 cursor-pointer"
               title="Maximize calling panel"
             >
               Maximize
@@ -933,7 +973,7 @@ export default function App() {
                   (window as any).__crmEndCall();
                 }
               }}
-              className="p-1 bg-red-650 hover:bg-red-750 text-white rounded border border-red-700 cursor-pointer"
+              className="p-1 bg-red-600 hover:bg-red-700 text-white rounded border border-red-700 cursor-pointer"
               title="Hangup Call"
             >
               <PhoneOff className="w-3.5 h-3.5" />

@@ -115,7 +115,7 @@ export interface CommsLog {
   status: 'Sent' | 'Delivered' | 'Pending';
 }
 
-export type AccessRole = 'Super Admin' | 'Sales Manager' | 'Support Agent' | 'HR Specialist' | 'Guest';
+export type AccessRole = 'Super Admin' | 'Admin' | 'Sales Manager' | 'Support Agent' | 'HR Specialist' | 'Guest' | (string & {});
 
 export interface AccessControl {
   role: AccessRole;
