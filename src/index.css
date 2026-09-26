@@ -47,3 +47,10 @@
 .animate-ping-slow {
   animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
+
+
+/* Keep the authentication experience inside one viewport. */
+html:has(#login-module-container),
+body:has(#login-module-container) {
+  overflow: hidden;
+}

@@ -86,14 +86,14 @@ const CRMBadgeLogo = () => (
     <img
       src="/brand-logo.jpeg"
       alt="Expert CRM — Customer Relationship Management"
-      className="w-48 h-48 sm:w-56 sm:h-56 object-contain rounded-2xl bg-white p-2 shadow-lg"
+      className="w-28 h-28 sm:w-36 sm:h-36 lg:w-40 lg:h-40 object-contain rounded-2xl bg-white p-1.5 shadow-lg"
     />
   </div>
 );
 
 const LaptopDashboardIllustration = () => {
   return (
-    <div className="relative w-full h-[300px] flex items-center justify-center overflow-visible mt-8 animate-fadeIn">
+    <div className="relative w-full h-[190px] flex items-center justify-center overflow-hidden mt-1 animate-fadeIn">
       {/* Decorative Blur Background circles */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-blue-500/10 rounded-full filter blur-3xl pointer-events-none" />
 
@@ -440,7 +440,7 @@ export default function Login({ onLoginSuccess }: LoginProps) {
   const currentTheme = BG_THEMES.find(t => t.id === bgTheme) || BG_THEMES[0];
 
   return (
-    <div id="login-module-container" className={`min-h-screen w-screen bg-gradient-to-tr ${currentTheme.gradientClass} flex items-center justify-center p-4 md:p-10 lg:p-12 font-sans relative overflow-x-hidden select-none transition-all duration-1000`}>
+    <div id="login-module-container" className={`h-screen w-screen bg-gradient-to-tr ${currentTheme.gradientClass} flex items-center justify-center p-2 sm:p-3 lg:p-5 font-sans relative overflow-hidden select-none transition-all duration-1000`}>
       
       {/* Background Theme Selector Option */}
       <div className="absolute top-4 left-4 z-40 flex items-center gap-2 bg-slate-950/40 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-2xl shadow-xl transition-all">
@@ -483,10 +483,10 @@ export default function Login({ onLoginSuccess }: LoginProps) {
       </div>
 
       {/* Main Split Screen Container */}
-      <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-slate-950/20 backdrop-blur-md rounded-[40px] border border-white/5 p-6 md:p-8 relative z-10 shadow-2xl">
+      <div className="w-full h-full max-h-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-3 lg:gap-6 items-center bg-slate-950/20 backdrop-blur-md rounded-[28px] lg:rounded-[40px] border border-white/5 p-3 sm:p-4 lg:p-6 relative z-10 shadow-2xl overflow-hidden">
         
         {/* ==================== LEFT COLUMN: Enterprise Presentation ==================== */}
-        <div className="lg:col-span-6 flex flex-col justify-between space-y-8 p-4 text-white relative">
+        <div className="hidden lg:flex lg:col-span-6 h-full min-h-0 flex-col justify-between space-y-3 p-3 text-white relative overflow-hidden">
           
           {/* Logo Badge (Light/White version on Dark Background) */}
           <div className="flex justify-start">
@@ -494,14 +494,14 @@ export default function Login({ onLoginSuccess }: LoginProps) {
           </div>
 
           {/* Heading Lines */}
-          <div className="space-y-2 mt-2">
-            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight leading-none text-white">
+          <div className="space-y-1 mt-1">
+            <h2 className="text-2xl xl:text-3xl font-extrabold tracking-tight leading-none text-white">
               Manage Relationships.
             </h2>
-            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight leading-none text-white">
+            <h2 className="text-2xl xl:text-3xl font-extrabold tracking-tight leading-none text-white">
               Boost Sales.
             </h2>
-            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight leading-none text-sky-400">
+            <h2 className="text-2xl xl:text-3xl font-extrabold tracking-tight leading-none text-sky-400">
               Grow Your Business.
             </h2>
           </div>
@@ -564,9 +564,9 @@ export default function Login({ onLoginSuccess }: LoginProps) {
         </div>
 
         {/* ==================== RIGHT COLUMN: White Rounded Login Card ==================== */}
-        <div className="lg:col-span-6 flex justify-center p-2">
+        <div className="col-span-1 lg:col-span-6 flex justify-center items-center p-1 min-h-0 h-full">
           
-          <div className="bg-white rounded-[32px] md:rounded-[40px] shadow-2xl p-6 sm:p-8 md:p-10 lg:p-12 w-full max-w-md border border-slate-100 flex flex-col justify-between space-y-6 relative overflow-hidden animate-fadeIn">
+          <div className="bg-white rounded-[24px] md:rounded-[32px] shadow-2xl p-4 sm:p-6 lg:p-7 w-full max-w-md max-h-full border border-slate-100 flex flex-col justify-between space-y-4 relative overflow-hidden animate-fadeIn">
             {/* Soft accent glow header strip */}
             <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-500 to-indigo-600"></div>
 
