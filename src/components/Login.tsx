@@ -84,7 +84,7 @@ const MicrosoftIcon = () => (
 const CRMBadgeLogo = () => (
   <div className="flex flex-col items-center select-none animate-fadeIn">
     <img
-      src="/brand-logo.jpeg"
+      src="/brand-logo.jpeg?v=2"
       alt="Expert CRM — Customer Relationship Management"
       className="w-28 h-28 sm:w-36 sm:h-36 lg:w-40 lg:h-40 object-contain rounded-2xl bg-white p-1.5 shadow-lg"
     />

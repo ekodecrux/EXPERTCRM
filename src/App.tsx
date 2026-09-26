@@ -603,7 +603,7 @@ export default function App() {
           {/* Logo Brand Header Block */}
           <div className="p-3 border-b border-[#1E293B] flex items-center gap-2.5">
             <img
-              src="/brand-logo.jpeg"
+              src="/brand-logo.jpeg?v=2"
               alt="Expert CRM"
               className={`${sidebarOpen ? 'w-10 h-10' : 'w-9 h-9'} object-contain rounded-lg bg-white p-0.5 shrink-0`}
             />
