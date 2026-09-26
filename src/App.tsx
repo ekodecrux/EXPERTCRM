@@ -601,12 +601,12 @@ export default function App() {
       >
         <div>
           {/* Logo Brand Header Block */}
-          <div className="p-4 border-b border-[#1E293B] flex items-center gap-2.5">
-            <div className="flex gap-0.5 items-end h-6 shrink-0">
-              <span className="w-1.5 h-4.5 bg-indigo-500 rounded-xs block"></span>
-              <span className="w-1.5 h-6 bg-cyan-500 rounded-xs block"></span>
-              <span className="w-1.5 h-3 bg-emerald-500 rounded-xs block"></span>
-            </div>
+          <div className="p-3 border-b border-[#1E293B] flex items-center gap-2.5">
+            <img
+              src="/brand-logo.jpeg"
+              alt="Expert CRM"
+              className={`${sidebarOpen ? 'w-10 h-10' : 'w-9 h-9'} object-contain rounded-lg bg-white p-0.5 shrink-0`}
+            />
             
             {sidebarOpen && (
               <div>

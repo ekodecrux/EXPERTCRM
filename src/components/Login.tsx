@@ -81,251 +81,15 @@ const MicrosoftIcon = () => (
   </svg>
 );
 
-const CRMBadgeLogo = ({ darkTheme = false }: { darkTheme?: boolean }) => {
-  // Theme-aware dynamic colors to maintain high contrast and exact brand matching
-  const primaryNavy = darkTheme ? '#FFFFFF' : '#1E1265';
-  const secondaryNavy = darkTheme ? '#E2E8F0' : '#271776';
-  const accentBlue = darkTheme ? '#38BDF8' : '#0084FF'; // Bright sky blue / brand blue
-  const bracketCyan = darkTheme ? '#00E0FF' : '#00A3FF'; // Glowing cyan / brand cyan
-
-  const idSuffix = darkTheme ? 'dark' : 'light';
-
-  return (
-    <div className="flex flex-col items-center select-none animate-fadeIn">
-      <svg 
-        id={`crm-badge-logo-svg-${idSuffix}`}
-        viewBox="0 0 500 500" 
-        className="w-48 h-48 sm:w-56 sm:h-56 transition-all duration-300"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <defs>
-          {/* Gradients */}
-          <linearGradient id={`bracketLeftGrad_${idSuffix}`} x1="1" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor={bracketCyan} />
-            <stop offset="100%" stopColor={secondaryNavy} />
-          </linearGradient>
-          <linearGradient id={`bracketRightGrad_${idSuffix}`} x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor={secondaryNavy} />
-            <stop offset="100%" stopColor={bracketCyan} />
-          </linearGradient>
-          <linearGradient id={`hexagonLeftGrad_${idSuffix}`} x1="0.5" y1="0" x2="0.5" y2="1">
-            <stop offset="0%" stopColor={primaryNavy} />
-            <stop offset="100%" stopColor={secondaryNavy} />
-          </linearGradient>
-          <linearGradient id={`hexagonRightGrad_${idSuffix}`} x1="0.5" y1="0" x2="0.5" y2="1">
-            <stop offset="0%" stopColor={accentBlue} />
-            <stop offset="100%" stopColor={bracketCyan} />
-          </linearGradient>
-          <linearGradient id={`middlePersonGrad_${idSuffix}`} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#00A3FF" />
-            <stop offset="100%" stopColor="#005EFF" />
-          </linearGradient>
-        </defs>
-
-        {/* 1. TOP BRACKETS (SEAMLESS COLORED JUNCTIONS) */}
-        {/* Left Chevron < */}
-        <line x1="238" y1="30" x2="198" y2="55" stroke={accentBlue} strokeWidth="12" strokeLinecap="round" />
-        <line x1="198" y1="55" x2="238" y2="80" stroke={secondaryNavy} strokeWidth="12" strokeLinecap="round" />
-        
-        {/* Right Chevron > */}
-        <line x1="262" y1="30" x2="302" y2="55" stroke={secondaryNavy} strokeWidth="12" strokeLinecap="round" />
-        <line x1="302" y1="55" x2="262" y2="80" stroke={accentBlue} strokeWidth="12" strokeLinecap="round" />
-
-        {/* 2. HEXAGON LEFT SIDE (SEAMLESS CONNECTED CIRCUIT BOARD TRACE) */}
-        <path 
-          d="M 235,73 L 75,165 L 75,290 L 55,290 L 55,350 L 200,445" 
-          fill="none" 
-          stroke={`url(#hexagonLeftGrad_${idSuffix})`} 
-          strokeWidth="10" 
-          strokeLinecap="round" 
-          strokeLinejoin="round" 
-        />
-        {/* Left-most outer joint circle */}
-        <circle cx="55" cy="290" r="6" fill={secondaryNavy} />
-        {/* Bottom-left end joint circle */}
-        <circle cx="200" cy="445" r="9" fill={secondaryNavy} />
-
-        {/* 4. HEXAGON RIGHT SIDE */}
-        <path 
-          d="M 265,73 L 425,165 L 425,270" 
-          fill="none" 
-          stroke={`url(#hexagonRightGrad_${idSuffix})`} 
-          strokeWidth="10" 
-          strokeLinecap="round" 
-          strokeLinejoin="round" 
-        />
-
-        {/* 5. HEXAGON BOTTOM-RIGHT SWOOPING ARROW & RISING BARS */}
-        {/* Rising Bars */}
-        <path d="M 275,415 L 305,400 L 305,465 L 275,465 Z" fill={primaryNavy} />
-        <path d="M 320,390 L 350,370 L 350,465 L 320,465 Z" fill={`url(#middlePersonGrad_${idSuffix})`} />
-        <path d="M 365,355 L 395,330 L 395,465 L 365,465 Z" fill={`url(#hexagonRightGrad_${idSuffix})`} />
-        <path d="M 410,310 L 440,280 L 440,465 L 410,465 Z" fill={`url(#bracketRightGrad_${idSuffix})`} />
-
-        {/* Swooping Arrow Curve */}
-        <path 
-          d="M 245,410 Q 365,400 440,278" 
-          fill="none" 
-          stroke={accentBlue} 
-          strokeWidth="8" 
-          strokeLinecap="round" 
-        />
-        {/* Arrow Head (Sharper, perfectly aligned) */}
-        <path 
-          d="M 440,278 L 415,295 L 430,305 Z" 
-          fill={accentBlue} 
-        />
-
-        {/* 6. CENTER TEAM USER SILHOUETTES */}
-        {/* Team crescent support */}
-        <path d="M 160,155 Q 250,195 340,155 Q 250,178 160,155 Z" fill={secondaryNavy} />
-
-        {/* Left Side Silhouette */}
-        <circle cx="195" cy="122" r="14" fill={secondaryNavy} />
-        <path d="M170,165 C170,145 182,138 195,138 C208,138 220,145 220,165 Z" fill={secondaryNavy} />
-
-        {/* Right Side Silhouette */}
-        <circle cx="305" cy="122" r="14" fill={secondaryNavy} />
-        <path d="M280,165 C280,145 292,138 305,138 C318,138 330,145 330,165 Z" fill={secondaryNavy} />
-
-        {/* Middle Big Silhouette */}
-        <circle cx="250" cy="110" r="20" fill={`url(#middlePersonGrad_${idSuffix})`} />
-        <path d="M215,165 C215,138 230,130 250,130 C270,130 285,138 285,165 Z" fill={`url(#middlePersonGrad_${idSuffix})`} />
-
-        {/* 7. LARGE CRM TEXT */}
-        <text 
-          x="250" 
-          y="310" 
-          textAnchor="middle" 
-          fontFamily="'Inter', 'Space Grotesk', system-ui, sans-serif" 
-          fontWeight="900" 
-          fontSize="120" 
-          letterSpacing="-3"
-        >
-          <tspan fill={primaryNavy}>CR</tspan>
-          <tspan fill={accentBlue}>M</tspan>
-        </text>
-
-        {/* 8. SUBTITLE WITH DOTS AND LINES */}
-        <text 
-          x="250" 
-          y="348" 
-          textAnchor="middle" 
-          fill={primaryNavy} 
-          fontFamily="'Inter', 'Space Grotesk', system-ui, sans-serif" 
-          fontWeight="800" 
-          fontSize="13" 
-          letterSpacing="1"
-        >
-          CUSTOMER RELATIONSHIP MANAGEMENT
-        </text>
-        
-        {/* Left Line & Dot */}
-        <line x1="85" y1="344" x2="110" y2="344" stroke={primaryNavy} strokeWidth="2" strokeLinecap="round" />
-        <circle cx="85" cy="344" r="3.5" fill={primaryNavy} />
-
-        {/* Right Line & Dot */}
-        <line x1="390" y1="344" x2="415" y2="344" stroke={primaryNavy} strokeWidth="2" strokeLinecap="round" />
-        <circle cx="415" cy="344" r="3.5" fill={primaryNavy} />
-
-        {/* 9. FOUR COLUMNS (LEADS, SALES, SUPPORT, ANALYTICS - PERFECTLY CENTERED) */}
-        {/* Dividers */}
-        <line x1="176" y1="375" x2="176" y2="415" stroke={primaryNavy} strokeWidth="1" opacity="0.3" />
-        <line x1="250" y1="375" x2="250" y2="415" stroke={primaryNavy} strokeWidth="1" opacity="0.3" />
-        <line x1="324" y1="375" x2="324" y2="415" stroke={primaryNavy} strokeWidth="1" opacity="0.3" />
-
-        {/* Col 1: LEADS */}
-        <g transform="translate(139, 380)">
-          <circle cx="0" cy="-10" r="11" fill={accentBlue} />
-          {/* White Silhouette inside Leads */}
-          <circle cx="0" cy="-13" r="3" fill="#FFFFFF" />
-          <path d="M-5,-5 C-5,-8 -2,-9 0,-9 C2,-9 5,-8 5,-5 Z" fill="#FFFFFF" />
-          
-          <text 
-            x="0" 
-            y="17" 
-            textAnchor="middle" 
-            fill={primaryNavy} 
-            fontFamily="'Inter', 'Space Grotesk', sans-serif" 
-            fontWeight="900" 
-            fontSize="8.5" 
-            letterSpacing="0.5"
-          >
-            LEADS
-          </text>
-        </g>
-
-        {/* Col 2: SALES */}
-        <g transform="translate(213, 380)">
-          {/* Target Target Icon */}
-          <circle cx="0" cy="-10" r="11" fill="none" stroke={accentBlue} strokeWidth="2.2" />
-          <circle cx="0" cy="-10" r="6" fill="none" stroke={accentBlue} strokeWidth="1.5" />
-          <circle cx="0" cy="-10" r="2.2" fill={accentBlue} />
-          {/* Dart feathers */}
-          <path d="M8,-18 L2,-12" stroke={accentBlue} strokeWidth="2.2" strokeLinecap="round" />
-          <path d="M10,-15 L7,-12" stroke={accentBlue} strokeWidth="1.2" />
-          <path d="M6,-19 L3,-16" stroke={accentBlue} strokeWidth="1.2" />
-          
-          <text 
-            x="0" 
-            y="17" 
-            textAnchor="middle" 
-            fill={primaryNavy} 
-            fontFamily="'Inter', 'Space Grotesk', sans-serif" 
-            fontWeight="900" 
-            fontSize="8.5" 
-            letterSpacing="0.5"
-          >
-            SALES
-          </text>
-        </g>
-
-        {/* Col 3: SUPPORT */}
-        <g transform="translate(287, 380)">
-          {/* Headphones */}
-          <path d="M-9,-6 A9,9 0 0,1 9,-6" fill="none" stroke={accentBlue} strokeWidth="2.2" strokeLinecap="round" />
-          <rect x="-11" y="-8" width="3.5" height="6.5" rx="1" fill={accentBlue} />
-          <rect x="7.5" y="-8" width="3.5" height="6.5" rx="1" fill={accentBlue} />
-          <path d="M-8,-2 Q-4,1.5 0,1.5" fill="none" stroke={accentBlue} strokeWidth="1.5" strokeLinecap="round" />
-          
-          <text 
-            x="0" 
-            y="17" 
-            textAnchor="middle" 
-            fill={primaryNavy} 
-            fontFamily="'Inter', 'Space Grotesk', sans-serif" 
-            fontWeight="900" 
-            fontSize="8.5" 
-            letterSpacing="0.5"
-          >
-            SUPPORT
-          </text>
-        </g>
-
-        {/* Col 4: ANALYTICS */}
-        <g transform="translate(361, 380)">
-          {/* Rising bars */}
-          <rect x="-8" y="-4" width="3.2" height="7" rx="0.8" fill={accentBlue} />
-          <rect x="-2.2" y="-10" width="3.2" height="13" rx="0.8" fill={accentBlue} />
-          <rect x="3.5" y="-15" width="3.2" height="18" rx="0.8" fill={accentBlue} />
-          
-          <text 
-            x="0" 
-            y="17" 
-            textAnchor="middle" 
-            fill={primaryNavy} 
-            fontFamily="'Inter', 'Space Grotesk', sans-serif" 
-            fontWeight="900" 
-            fontSize="8.5" 
-            letterSpacing="0.5"
-          >
-            ANALYTICS
-          </text>
-        </g>
-      </svg>
-    </div>
-  );
-};
+const CRMBadgeLogo = () => (
+  <div className="flex flex-col items-center select-none animate-fadeIn">
+    <img
+      src="/brand-logo.jpeg"
+      alt="Expert CRM — Customer Relationship Management"
+      className="w-48 h-48 sm:w-56 sm:h-56 object-contain rounded-2xl bg-white p-2 shadow-lg"
+    />
+  </div>
+);
 
 const LaptopDashboardIllustration = () => {
   return (
@@ -726,7 +490,7 @@ export default function Login({ onLoginSuccess }: LoginProps) {
           
           {/* Logo Badge (Light/White version on Dark Background) */}
           <div className="flex justify-start">
-            <CRMBadgeLogo darkTheme={true} />
+            <CRMBadgeLogo />
           </div>
 
           {/* Heading Lines */}
@@ -810,7 +574,7 @@ export default function Login({ onLoginSuccess }: LoginProps) {
             <div className="space-y-6">
               {/* Colored Badge Logo (Dark/Light background version) */}
               <div className="flex justify-center">
-                <CRMBadgeLogo darkTheme={false} />
+                <CRMBadgeLogo />
               </div>
 
               {/* Headers */}
