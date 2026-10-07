@@ -5,6 +5,7 @@ import {
   FileText, Activity, Server, Sliders, AlertCircle, X, Mail, Link, Building,
   Edit
 } from 'lucide-react';
+import CRMLogo from './CRMLogo';
 
 export interface SaaSPlan {
   id: string;
@@ -257,16 +258,19 @@ export default function SaaSWorkspacePanel({
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-indigo-500/20 to-purple-600/5 rounded-full filter blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
         
         <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="space-y-2 max-w-xl">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 text-[10px] uppercase font-black tracking-widest text-indigo-300 bg-indigo-500/20 backdrop-blur rounded-full border border-indigo-500/30">
-              <Zap className="w-3 h-3 text-indigo-400" /> Multi-Tenant SaaS Roster
-            </span>
-            <h3 className="text-xl md:text-2xl font-black tracking-tight leading-none text-white">
-              Tenant Hub & Subscription Control Center
-            </h3>
-            <p className="text-[11.5px] text-slate-350 leading-relaxed font-semibold">
-              You are viewing the SaaS architecture dashboard. Provision isolated workspaces, allocate seat quotas, toggle active subdomains, and simulate secure Stripe subscription ledger reconciliations.
-            </p>
+          <div className="flex items-start gap-4">
+            <CRMLogo size="lg" darkTheme={true} showBorder={true} className="shrink-0 hidden sm:flex" />
+            <div className="space-y-2 max-w-xl">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 text-[10px] uppercase font-black tracking-widest text-indigo-300 bg-indigo-500/20 backdrop-blur rounded-full border border-indigo-500/30">
+                <Zap className="w-3 h-3 text-indigo-400" /> Multi-Tenant SaaS Roster
+              </span>
+              <h3 className="text-xl md:text-2xl font-black tracking-tight leading-none text-white">
+                Tenant Hub & Subscription Control Center
+              </h3>
+              <p className="text-[11.5px] text-slate-350 leading-relaxed font-semibold">
+                You are viewing the SaaS architecture dashboard. Provision isolated workspaces, allocate seat quotas, toggle active subdomains, and simulate secure Stripe subscription ledger reconciliations.
+              </p>
+            </div>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3">

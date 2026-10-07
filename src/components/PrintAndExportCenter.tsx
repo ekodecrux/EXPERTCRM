@@ -3,6 +3,7 @@ import {
   X, Printer, Copy, Check, FileText, Download, Share2, Clipboard, Mail, ShieldAlert
 } from 'lucide-react';
 import { Lead, CallLog, SupportTicket, FieldStaff, Task, Employee, CommsLog } from '../types';
+import crmLogoImg from '../assets/images/crm_logo_v2_1784807669094.jpg';
 
 interface PrintAndExportCenterProps {
   isOpen: boolean;
@@ -238,11 +239,16 @@ export default function PrintAndExportCenter({ isOpen, onClose, document, userEm
         <div style="border-bottom: 2px solid #4f46e5; padding-bottom: 12px; margin-bottom: 20px;">
           <table style="width: 100%; border-collapse: collapse;">
             <tr>
-              <td>
-                <span style="font-size: 15px; font-weight: 900; color: #4f46e5; text-transform: uppercase; letter-spacing: 1px;">EXP CRM ENTERPRISE</span>
-                <div style="font-size: 9px; color: #94a3b8; font-weight: 700; margin-top: 2px;">SECURE DIGITAL TRANSMISSION</div>
+              <td style="vertical-align: middle;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <img src="${crmLogoImg}" alt="CRM Logo" style="width: 44px; height: 44px; object-fit: contain; border-radius: 6px; border: 1px solid #e2e8f0; vertical-align: middle;" />
+                  <div style="display: inline-block; vertical-align: middle;">
+                    <span style="font-size: 15px; font-weight: 900; color: #1e1265; text-transform: uppercase; letter-spacing: 1px;">EXP CRM ENTERPRISE</span>
+                    <div style="font-size: 9px; color: #0284c7; font-weight: 700; margin-top: 2px;">SECURE DIGITAL TRANSMISSION</div>
+                  </div>
+                </div>
               </td>
-              <td style="text-align: right; font-size: 11px; color: #64748b;">
+              <td style="text-align: right; font-size: 11px; color: #64748b; vertical-align: middle;">
                 <strong>Date:</strong> ${timestamp}<br/>
                 <strong>Security:</strong> <span style="font-family: monospace; color: #dc2626;">${uniqueHash}</span>
               </td>

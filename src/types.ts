@@ -26,6 +26,46 @@ export interface CallLog {
   type: 'Answered' | 'Missed';
   notes: string;
   agentName: string;
+  agentId?: string;
+  agentDevice?: string;
+  syncSource?: 'Mobile App' | 'Desktop VoIP' | 'CSV Import' | 'API';
+  disposition?: 'Interested' | 'Follow Up' | 'Meeting Demo Booked' | 'Not Interested' | 'Left Voicemail' | 'Wrong Number' | 'Deal Closed' | 'Callback Requested';
+  recordingUrl?: string;
+  direction?: 'Incoming' | 'Outgoing';
+  syncedAt?: string;
+}
+
+export interface CallAgent {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  avatar?: string;
+  device: string; // e.g. "Samsung Galaxy S24 Ultra (Android 14)", "Apple iPhone 15 Pro (iOS 18)"
+  deviceId: string;
+  appVersion: string;
+  pairingToken: string;
+  isAuthorized: boolean;
+  status: 'Available' | 'On Call' | 'Wrap-up' | 'Break' | 'Offline';
+  currentCall?: {
+    clientName: string;
+    clientPhone: string;
+    duration: number; // elapsed seconds
+    startTime: string;
+    direction: 'Incoming' | 'Outgoing';
+    isRecording?: boolean;
+    leadId?: string;
+  };
+  metrics: {
+    totalCalls: number;
+    connectedCalls: number;
+    talkTimeMinutes: number;
+    missedCalls: number;
+    avgDurationSecs: number;
+  };
+  lastSyncTime: string;
+  batteryLevel?: number;
+  assignedCampaign?: string;
 }
 
 export interface SupportTicket {
@@ -115,7 +155,7 @@ export interface CommsLog {
   status: 'Sent' | 'Delivered' | 'Pending';
 }
 
-export type AccessRole = 'Super Admin' | 'Admin' | 'Sales Manager' | 'Support Agent' | 'HR Specialist' | 'Guest' | (string & {});
+export type AccessRole = 'Super Admin' | 'Admin' | 'Sales Manager' | 'Call Agent' | 'Support Agent' | 'HR Specialist' | 'Guest' | (string & {});
 
 export interface AccessControl {
   role: AccessRole;

@@ -1,4 +1,4 @@
-import { Lead, CallLog, SupportTicket, FieldStaff, Task, Employee, CommsLog, AccessControl } from './types';
+import { Lead, CallLog, CallAgent, SupportTicket, FieldStaff, Task, Employee, CommsLog, AccessControl } from './types';
 
 export const INITIAL_LEADS: Lead[] = [
   {
@@ -85,6 +85,110 @@ export const INITIAL_LEADS: Lead[] = [
   }
 ];
 
+export const INITIAL_CALL_AGENTS: CallAgent[] = [
+  {
+    id: 'AGT-101',
+    name: 'Rohan Sharma',
+    email: 'rohan@expertcrm.com',
+    phone: '+91 98201 55678',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face',
+    device: 'Samsung Galaxy S24 Ultra (Android 14)',
+    deviceId: 'AND-SM-S928B-01',
+    appVersion: 'v2.4.2 (Production)',
+    pairingToken: 'EXP-88219',
+    isAuthorized: true,
+    status: 'Available',
+    metrics: {
+      totalCalls: 28,
+      connectedCalls: 22,
+      talkTimeMinutes: 84,
+      missedCalls: 6,
+      avgDurationSecs: 229
+    },
+    lastSyncTime: 'Just now',
+    batteryLevel: 91,
+    assignedCampaign: 'Enterprise Inbound & Outbound Key Deals'
+  },
+  {
+    id: 'AGT-102',
+    name: 'Sneha Patel',
+    email: 'sneha@expertcrm.com',
+    phone: '+91 97112 44332',
+    avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&h=150&fit=crop&crop=face',
+    device: 'Apple iPhone 15 Pro (iOS 17.5)',
+    deviceId: 'IOS-IPH15P-89',
+    appVersion: 'v2.4.2 (Production)',
+    pairingToken: 'EXP-77341',
+    isAuthorized: true,
+    status: 'On Call',
+    currentCall: {
+      clientName: 'Preeti Sharma (Apex Retail)',
+      clientPhone: '9123456789',
+      duration: 165,
+      startTime: '10:42 AM',
+      direction: 'Outgoing',
+      isRecording: true,
+      leadId: 'L-102'
+    },
+    metrics: {
+      totalCalls: 34,
+      connectedCalls: 29,
+      talkTimeMinutes: 112,
+      missedCalls: 5,
+      avgDurationSecs: 232
+    },
+    lastSyncTime: '15s ago',
+    batteryLevel: 78,
+    assignedCampaign: 'Retail POS Migration Calling'
+  },
+  {
+    id: 'AGT-103',
+    name: 'Vikas Deshmukh',
+    email: 'vikas@expertcrm.com',
+    phone: '+91 98450 66778',
+    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face',
+    device: 'Google Pixel 8 Pro (Android 14)',
+    deviceId: 'AND-PIX8P-43',
+    appVersion: 'v2.4.1',
+    pairingToken: 'EXP-91024',
+    isAuthorized: true,
+    status: 'Wrap-up',
+    metrics: {
+      totalCalls: 19,
+      connectedCalls: 15,
+      talkTimeMinutes: 52,
+      missedCalls: 4,
+      avgDurationSecs: 208
+    },
+    lastSyncTime: '1m ago',
+    batteryLevel: 64,
+    assignedCampaign: 'Cold Outreach - Biotech Sector'
+  },
+  {
+    id: 'AGT-104',
+    name: 'Pooja Iyer',
+    email: 'pooja@expertcrm.com',
+    phone: '+91 99203 11889',
+    avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face',
+    device: 'OnePlus 12 (Android 14)',
+    deviceId: 'AND-OP12-19',
+    appVersion: 'v2.3.9 (Outdated)',
+    pairingToken: 'EXP-11094',
+    isAuthorized: false,
+    status: 'Offline',
+    metrics: {
+      totalCalls: 11,
+      connectedCalls: 7,
+      talkTimeMinutes: 24,
+      missedCalls: 4,
+      avgDurationSecs: 205
+    },
+    lastSyncTime: '2 days ago',
+    batteryLevel: 42,
+    assignedCampaign: 'General Support Line'
+  }
+];
+
 export const INITIAL_CALL_LOGS: CallLog[] = [
   {
     id: 'CALL-501',
@@ -94,7 +198,13 @@ export const INITIAL_CALL_LOGS: CallLog[] = [
     duration: '2m 15s',
     type: 'Answered',
     notes: 'Inquired about multi-license integrations and custom API gateways. Follow-up task scheduled.',
-    agentName: 'Aman Varma'
+    agentName: 'Rohan Sharma',
+    agentId: 'AGT-101',
+    agentDevice: 'Samsung Galaxy S24 Ultra',
+    syncSource: 'Mobile App',
+    disposition: 'Interested',
+    direction: 'Outgoing',
+    syncedAt: '2026-10-07 09:15 AM'
   },
   {
     id: 'CALL-502',
@@ -103,8 +213,14 @@ export const INITIAL_CALL_LOGS: CallLog[] = [
     time: '4 hours ago',
     duration: '0m 0s',
     type: 'Missed',
-    notes: 'Inbound ring timed out after 25s. System flagged as VIP priority follow-up.',
-    agentName: 'Deepa Rao'
+    notes: 'Inbound ring timed out after 25s. Auto-logged via mobile push webhook for priority recall.',
+    agentName: 'Sneha Patel',
+    agentId: 'AGT-102',
+    agentDevice: 'iPhone 15 Pro',
+    syncSource: 'Mobile App',
+    disposition: 'Callback Requested',
+    direction: 'Incoming',
+    syncedAt: '2026-10-07 07:30 AM'
   },
   {
     id: 'CALL-503',
@@ -114,7 +230,13 @@ export const INITIAL_CALL_LOGS: CallLog[] = [
     duration: '5m 40s',
     type: 'Answered',
     notes: 'Discussed cloud scaling, database residency rules, and security clearance criteria.',
-    agentName: 'Siddharth Sen'
+    agentName: 'Vikas Deshmukh',
+    agentId: 'AGT-103',
+    agentDevice: 'Google Pixel 8 Pro',
+    syncSource: 'Mobile App',
+    disposition: 'Meeting Demo Booked',
+    direction: 'Outgoing',
+    syncedAt: '2026-10-06 04:20 PM'
   },
   {
     id: 'CALL-504',
@@ -124,7 +246,13 @@ export const INITIAL_CALL_LOGS: CallLog[] = [
     duration: '12m 10s',
     type: 'Answered',
     notes: 'Conducted live system-wide CRM walkthrough including billing and payroll modules.',
-    agentName: 'Ketan Patel'
+    agentName: 'Rohan Sharma',
+    agentId: 'AGT-101',
+    agentDevice: 'Samsung Galaxy S24 Ultra',
+    syncSource: 'Mobile App',
+    disposition: 'Deal Closed',
+    direction: 'Outgoing',
+    syncedAt: '2026-10-05 02:45 PM'
   }
 ];
 

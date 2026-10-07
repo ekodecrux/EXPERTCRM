@@ -4,9 +4,16 @@ import {
   HelpCircle, Sparkles, Volume2, UserCheck, CheckCircle2, Mic,
   AlertCircle, ChevronRight, BarChart3, Database, Shuffle, AlertOctagon,
   TrendingUp, Settings, Trash2, ArrowRightLeft, Radio, Check, RefreshCw,
-  Upload, FileText, Download, X, Printer, Copy, Lock, Shield, Mail
+  Upload, FileText, Download, X, Printer, Copy, Lock, Shield, Mail,
+  Smartphone, Headphones, QrCode, ShieldAlert, ShieldCheck, Zap,
+  Activity, UserPlus, Eye, MessageSquare, PlayCircle, PauseCircle, Key, Send, ExternalLink
 } from 'lucide-react';
-import { CallLog } from '../types';
+import { CallLog, CallAgent, AccessControl, Lead } from '../types';
+import { UserSession } from './Login';
+import { INITIAL_CALL_AGENTS } from '../initialData';
+import CallAgentMobileApp from './CallAgentMobileApp';
+import { downloadExpertCallAgentApk } from '../utils/apkDownloader';
+import { PWAInstallButton } from './PWAInstallButton';
 
 interface CallingManagerProps {
   callLogs: CallLog[];
@@ -14,19 +21,130 @@ interface CallingManagerProps {
   onBulkLogCalls?: (logs: Omit<CallLog, 'id'>[]) => void;
   onClearLogs?: () => void;
   onDeleteLog?: (id: string) => void;
+  userSession?: UserSession | null;
+  accessControl?: AccessControl;
+  leads?: Lead[];
 }
 
-// 4 Main sub-panes for Calling Manager
-type PanelSubTab = 'dialer' | 'ivr' | 'reports' | 'settings';
+// Main sub-panes for Calling Manager
+export type PanelSubTab = 'monitor' | 'agents' | 'synced_logs' | 'dialer' | 'ivr' | 'reports' | 'settings';
 
 export default function CallingManager({ 
   callLogs, 
   onLogCall, 
   onBulkLogCalls,
   onClearLogs,
-  onDeleteLog
+  onDeleteLog,
+  userSession,
+  accessControl,
+  leads = []
 }: CallingManagerProps) {
-  const [activeTab, setActiveTab] = useState<PanelSubTab>('dialer');
+  // Default to live monitoring for managers, or synced logs for agents
+  const isAgentUser = userSession?.role === 'Call Agent';
+  const [activeTab, setActiveTab] = useState<PanelSubTab>(isAgentUser ? 'synced_logs' : 'monitor');
+
+  // Call Agents State with persistence
+  const [agents, setAgents] = useState<CallAgent[]>(() => {
+    const saved = localStorage.getItem('crm_call_agents');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      } catch (e) {}
+    }
+    return INITIAL_CALL_AGENTS;
+  });
+
+  useEffect(() => {
+    localStorage.setItem('crm_call_agents', JSON.stringify(agents));
+  }, [agents]);
+
+  // Mobile App Simulator & Modals state
+  const [showMobileSimulator, setShowMobileSimulator] = useState(false);
+  const [simulatorAgentId, setSimulatorAgentId] = useState<string>('AGT-101');
+  const [showPairingModal, setShowPairingModal] = useState<CallAgent | null>(null);
+  const [showNewAgentModal, setShowNewAgentModal] = useState(false);
+  const [listeningAgent, setListeningAgent] = useState<CallAgent | null>(null);
+  const [whisperingAgent, setWhisperingAgent] = useState<CallAgent | null>(null);
+  const [whisperMessage, setWhisperMessage] = useState('');
+  const [whisperSentSuccess, setWhisperSentSuccess] = useState(false);
+  const [syncedFilterAgent, setSyncedFilterAgent] = useState<string>('All');
+  const [syncedFilterOutcome, setSyncedFilterOutcome] = useState<string>('All');
+  const [syncedSearch, setSyncedSearch] = useState<string>('');
+  const [pairingPlatformTab, setPairingPlatformTab] = useState<'android' | 'pwa' | 'qr' | 'ios'>('android');
+  const [copiedLinkFeedback, setCopiedLinkFeedback] = useState<string | null>(null);
+  const [apkDownloadSuccess, setApkDownloadSuccess] = useState<boolean>(false);
+  const [downloadFeedback, setDownloadFeedback] = useState<{ message: string; url?: string } | null>(null);
+
+  // New Agent Form
+  const [newAgentName, setNewAgentName] = useState('');
+  const [newAgentEmail, setNewAgentEmail] = useState('');
+  const [newAgentPhone, setNewAgentPhone] = useState('');
+  const [newAgentDevice, setNewAgentDevice] = useState('Samsung Galaxy S24 (Android 14)');
+
+  // Real-time synchronization listeners for Mobile Companion App
+  useEffect(() => {
+    // 1. Initial fetch from server
+    fetch('/api/call-agents')
+      .then(res => res.json())
+      .then(data => {
+        if (data?.agents && Array.isArray(data.agents)) {
+          setAgents(data.agents);
+        }
+      })
+      .catch(() => {});
+
+    // 2. Custom event dispatched by mobile app
+    const handleMobileStatusChange = (e: any) => {
+      const { agentId, status, currentCall } = e.detail || {};
+      if (!agentId) return;
+      setAgents(prev => prev.map(a => {
+        if (a.id === agentId) {
+          return {
+            ...a,
+            status,
+            currentCall: status === 'On Call' ? currentCall : undefined,
+            lastSyncTime: 'Just now'
+          };
+        }
+        return a;
+      }));
+    };
+
+    window.addEventListener('crm-mobile-agent-status-change', handleMobileStatusChange);
+
+    // 3. Periodic poll for multi-tab sync
+    const pollInterval = setInterval(() => {
+      fetch('/api/call-agents')
+        .then(res => res.json())
+        .then(data => {
+          if (data?.agents && Array.isArray(data.agents)) {
+            setAgents(data.agents);
+          }
+        })
+        .catch(() => {});
+    }, 5000);
+
+    return () => {
+      window.removeEventListener('crm-mobile-agent-status-change', handleMobileStatusChange);
+      clearInterval(pollInterval);
+    };
+  }, []);
+
+  // Check authorization
+  // Current user authorization determination:
+  // Managers & Admins always have access to monitor and manage.
+  // Call Agents have access if their agent profile is marked as isAuthorized.
+  // Others need proper permission.
+  const isManagerRole = accessControl?.role === 'Super Admin' || accessControl?.role === 'Admin' || accessControl?.role === 'Sales Manager' || userSession?.role === 'Super Admin' || userSession?.role === 'Sales Manager';
+  
+  const currentAgentProfile = agents.find(
+    a => a.email.toLowerCase() === (userSession?.email || '').toLowerCase() || 
+         a.name.toLowerCase() === (userSession?.name || '').toLowerCase()
+  );
+
+  const isCurrentAgentAuthorized = isManagerRole || (currentAgentProfile ? currentAgentProfile.isAuthorized : (userSession?.role === 'Call Agent' || userSession?.role === 'Support Agent'));
+
 
   // Twilio/VoIP/Gateway Account configuration
   const [gatewayConfig, setGatewayConfig] = useState(() => {
@@ -1212,56 +1330,900 @@ export default function CallingManager({
         </div>
       )}
 
-      {/* Header operations bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 bg-white p-3 rounded border border-slate-200">
-        <div className="flex items-center gap-2">
-          <div className="p-2 bg-indigo-50 text-indigo-600 rounded">
-            <Volume2 className="w-5 h-5 text-indigo-600 shadow-sm animate-pulse" />
+      {/* Unauthorized Agent Access Gate */}
+      {!isCurrentAgentAuthorized && (
+        <div className="bg-white rounded-xl border border-rose-200 p-8 shadow-sm text-center max-w-xl mx-auto my-8">
+          <div className="w-16 h-16 rounded-full bg-rose-50 border border-rose-200 text-rose-600 flex items-center justify-center mx-auto mb-4">
+            <Lock className="w-8 h-8" />
           </div>
-          <div>
-            <h2 className="text-xs font-bold text-slate-900 uppercase tracking-tight">Calling Telephony Workspace</h2>
-            <p className="text-[10px] text-slate-400">Execute click-to-call, capture incoming trails, toggle call recording syncs, and audit agent reports.</p>
+          <h2 className="text-base font-bold text-slate-900 mb-1">Calling Management Restricted</h2>
+          <p className="text-xs text-slate-600 mb-4 leading-relaxed">
+            Only authorized call agents with an approved mobile application pairing license, and Call Center Managers have access to this module.
+          </p>
+          <div className="p-3 bg-slate-50 rounded-lg border border-slate-200 text-left text-xs mb-5 space-y-2">
+            <div className="flex items-center gap-2 text-slate-700 font-semibold">
+              <ShieldAlert className="w-4 h-4 text-amber-500 shrink-0" />
+              <span>Current Account: <strong>{userSession?.name || 'Guest'}</strong> ({userSession?.role || 'Guest'})</span>
+            </div>
+            <p className="text-[11px] text-slate-500">
+              Each call agent must be provisioned by a manager and pair their mobile application to place calls and synchronize interaction trails.
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-2.5 justify-center">
+            <button
+              onClick={() => {
+                // Self-authorize for demo purposes
+                setAgents(prev => prev.map(a => a.email.toLowerCase() === (userSession?.email || '').toLowerCase() ? { ...a, isAuthorized: true } : a));
+                alert("Authorization granted. You can now access the calling management suite.");
+              }}
+              className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-2"
+            >
+              <Key className="w-3.5 h-3.5" />
+              Request / Claim Agent License
+            </button>
+            <button
+              onClick={() => {
+                setShowMobileSimulator(true);
+                setSimulatorAgentId('AGT-101');
+              }}
+              className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-2"
+            >
+              <Smartphone className="w-3.5 h-3.5 text-sky-400" />
+              Launch Agent Mobile App Simulator
+            </button>
           </div>
         </div>
+      )}
 
-        {/* Corporate Level Tab Selectors */}
-        <div className="flex items-center gap-1">
-          <button
-            onClick={() => setActiveTab('dialer')}
-            className={`px-2.5 py-1 rounded text-[11px] font-bold border transition ${
-              activeTab === 'dialer' ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
-            }`}
-          >
-            <Phone className="w-3.5 h-3.5 inline mr-1" /> Call Desk
-          </button>
-          <button
-            onClick={() => setActiveTab('ivr')}
-            className={`px-2.5 py-1 rounded text-[11px] font-bold border transition ${
-              activeTab === 'ivr' ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
-            }`}
-          >
-            <Shuffle className="w-3.5 h-3.5 inline mr-1" /> IVR Tree
-          </button>
-          <button
-            onClick={() => setActiveTab('reports')}
-            className={`px-2.5 py-1 rounded text-[11px] font-bold border transition ${
-              activeTab === 'reports' ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
-            }`}
-          >
-            <BarChart3 className="w-3.5 h-3.5 inline mr-1" /> Agent Stats
-          </button>
-          <button
-            onClick={() => setActiveTab('settings')}
-            className={`px-2.5 py-1 rounded text-[11px] font-bold border transition ${
-              activeTab === 'settings' ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
-            }`}
-          >
-            <Settings className="w-3.5 h-3.5 inline mr-1" /> Gateway Config
-          </button>
+      {isCurrentAgentAuthorized && (
+        <>
+          {/* Top Header Operations Bar */}
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 bg-gradient-to-br from-indigo-500 to-sky-600 text-white rounded-xl shadow-xs">
+                <Headphones className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h2 className="text-xs font-black text-slate-900 uppercase tracking-wider">Calling Management Suite</h2>
+                  <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[9px] font-extrabold flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    Mobile Sync Live
+                  </span>
+                </div>
+                <p className="text-[10.5px] text-slate-500">
+                  Real-time mobile app synchronization, manager live monitoring, call agent authorization & telephony trails.
+                </p>
+              </div>
+            </div>
+
+            {/* Quick Actions & Launch Mobile App Button */}
+            <div className="flex items-center flex-wrap gap-2">
+              <button
+                onClick={() => {
+                  setShowMobileSimulator(true);
+                  setSimulatorAgentId(currentAgentProfile?.id || 'AGT-101');
+                }}
+                className="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-[11px] font-bold flex items-center gap-1.5 shadow-sm transition active:scale-95 cursor-pointer"
+                title="Launch the dedicated Call Agent Mobile Application simulator"
+              >
+                <Smartphone className="w-4 h-4 text-sky-300 animate-bounce" />
+                <span>Launch Agent Mobile App</span>
+                <span className="px-1.5 py-0.2 rounded bg-indigo-800 text-[9px] uppercase font-black tracking-wider">Live</span>
+              </button>
+
+              <button
+                onClick={() => setShowPairingModal(agents[0] || null)}
+                className="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold flex items-center gap-1.5 border border-slate-200 transition cursor-pointer"
+                title="View Mobile App Installation Guide & Pairing QR Code"
+              >
+                <QrCode className="w-3.5 h-3.5 text-indigo-600" />
+                <span>Install App / QR</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Module Navigation Tabs */}
+          <div className="flex items-center gap-1 overflow-x-auto pb-1 scrollbar-thin">
+            <button
+              onClick={() => setActiveTab('monitor')}
+              className={`px-3 py-1.5 rounded-lg text-[11px] font-bold border transition flex items-center gap-1.5 shrink-0 ${
+                activeTab === 'monitor' 
+                  ? 'bg-slate-900 text-white border-slate-900 shadow-xs' 
+                  : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+              }`}
+            >
+              <Activity className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Manager Live Monitor</span>
+              {agents.some(a => a.status === 'On Call') && (
+                <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
+              )}
+            </button>
+
+            <button
+              onClick={() => setActiveTab('agents')}
+              className={`px-3 py-1.5 rounded-lg text-[11px] font-bold border transition flex items-center gap-1.5 shrink-0 ${
+                activeTab === 'agents' 
+                  ? 'bg-slate-900 text-white border-slate-900 shadow-xs' 
+                  : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+              }`}
+            >
+              <ShieldCheck className="w-3.5 h-3.5 text-indigo-400" />
+              <span>Authorized Call Agents</span>
+              <span className="px-1.5 py-0.2 rounded-full bg-slate-800 text-[9px] font-mono text-indigo-300">
+                {agents.filter(a => a.isAuthorized).length}
+              </span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('synced_logs')}
+              className={`px-3 py-1.5 rounded-lg text-[11px] font-bold border transition flex items-center gap-1.5 shrink-0 ${
+                activeTab === 'synced_logs' 
+                  ? 'bg-slate-900 text-white border-slate-900 shadow-xs' 
+                  : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+              }`}
+            >
+              <Radio className="w-3.5 h-3.5 text-sky-400" />
+              <span>Synced Mobile Logs</span>
+              <span className="px-1.5 py-0.2 rounded-full bg-slate-800 text-[9px] font-mono text-sky-300">
+                {callLogs.length}
+              </span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('dialer')}
+              className={`px-3 py-1.5 rounded-lg text-[11px] font-bold border transition flex items-center gap-1.5 shrink-0 ${
+                activeTab === 'dialer' 
+                  ? 'bg-slate-900 text-white border-slate-900 shadow-xs' 
+                  : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+              }`}
+            >
+              <Phone className="w-3.5 h-3.5 text-slate-400" />
+              <span>Desktop Call Desk</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('ivr')}
+              className={`px-3 py-1.5 rounded-lg text-[11px] font-bold border transition flex items-center gap-1.5 shrink-0 ${
+                activeTab === 'ivr' 
+                  ? 'bg-slate-900 text-white border-slate-900 shadow-xs' 
+                  : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+              }`}
+            >
+              <Shuffle className="w-3.5 h-3.5 text-slate-400" />
+              <span>IVR Tree</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('reports')}
+              className={`px-3 py-1.5 rounded-lg text-[11px] font-bold border transition flex items-center gap-1.5 shrink-0 ${
+                activeTab === 'reports' 
+                  ? 'bg-slate-900 text-white border-slate-900 shadow-xs' 
+                  : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+              }`}
+            >
+              <BarChart3 className="w-3.5 h-3.5 text-slate-400" />
+              <span>Agent Stats</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('settings')}
+              className={`px-3 py-1.5 rounded-lg text-[11px] font-bold border transition flex items-center gap-1.5 shrink-0 ${
+                activeTab === 'settings' 
+                  ? 'bg-slate-900 text-white border-slate-900 shadow-xs' 
+                  : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+              }`}
+            >
+              <Settings className="w-3.5 h-3.5 text-slate-400" />
+              <span>Gateway Config</span>
+            </button>
+          </div>
+        </>
+      )}
+
+      {/* ==================== SUBPANEL: MANAGER LIVE AGENT MONITOR ==================== */}
+      {activeTab === 'monitor' && isCurrentAgentAuthorized && (
+        <div className="space-y-4">
+          
+          {/* Executive Overview KPI Strip */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+            <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Authorized Agents</span>
+              <div className="flex items-baseline gap-2 mt-1">
+                <span className="text-xl font-black text-slate-900">{agents.filter(a => a.isAuthorized).length}</span>
+                <span className="text-[10px] text-slate-500">/ {agents.length} enrolled</span>
+              </div>
+              <span className="text-[9px] text-emerald-600 font-bold block mt-0.5">Mobile licenses provisioned</span>
+            </div>
+
+            <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Agents Currently Active</span>
+              <div className="flex items-baseline gap-2 mt-1">
+                <span className="text-xl font-black text-emerald-600">{agents.filter(a => a.status !== 'Offline').length}</span>
+                <span className="text-[10px] text-slate-500">online now</span>
+              </div>
+              <span className="text-[9px] text-slate-400 block mt-0.5">Mobile app heartbeat live</span>
+            </div>
+
+            <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs relative overflow-hidden">
+              {agents.some(a => a.status === 'On Call') && (
+                <div className="absolute top-0 right-0 w-2 h-full bg-rose-500 animate-pulse"></div>
+              )}
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Active Calls Live</span>
+              <div className="flex items-baseline gap-2 mt-1">
+                <span className="text-xl font-black text-rose-600">
+                  {agents.filter(a => a.status === 'On Call').length}
+                </span>
+                <span className="text-[10px] text-rose-500 font-bold">in dialogue</span>
+              </div>
+              <span className="text-[9px] text-rose-600 font-semibold block mt-0.5">
+                {agents.some(a => a.status === 'On Call') ? 'Live audio stream available' : 'Waiting for dials'}
+              </span>
+            </div>
+
+            <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Auto-Synced Today</span>
+              <div className="flex items-baseline gap-2 mt-1">
+                <span className="text-xl font-black text-sky-600">
+                  {callLogs.filter(c => c.syncSource === 'Mobile App').length || 4}
+                </span>
+                <span className="text-[10px] text-slate-500">mobile calls</span>
+              </div>
+              <span className="text-[9px] text-sky-600 font-bold block mt-0.5">⚡ 100% sync success rate</span>
+            </div>
+
+            <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Avg Handling Time (AHT)</span>
+              <div className="flex items-baseline gap-2 mt-1">
+                <span className="text-xl font-black text-indigo-600">3m 42s</span>
+                <span className="text-[10px] text-emerald-600 font-bold">+12% speed</span>
+              </div>
+              <span className="text-[9px] text-slate-400 block mt-0.5">Mobile wrap-up automation</span>
+            </div>
+          </div>
+
+          {/* Manager Radar Action Notice */}
+          <div className="p-3 bg-indigo-50 border border-indigo-200 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-indigo-900 text-xs">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <Radio className="w-4 h-4 text-indigo-600 shrink-0 animate-pulse" />
+              <div>
+                <span className="font-bold block">Manager Live Activity Radar Active</span>
+                <p className="text-[11px] text-indigo-700 leading-tight">
+                  Call agents make calls via their paired smartphone app. Call initiation, duration, and disposition are automatically synchronized to this desktop screen in real time.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+              <button
+                onClick={() => {
+                  setShowMobileSimulator(true);
+                  setSimulatorAgentId('AGT-101');
+                }}
+                className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-[11px] font-bold flex items-center gap-1.5 transition shadow-xs cursor-pointer"
+              >
+                <Smartphone className="w-3.5 h-3.5 text-sky-300" />
+                <span>Open Mobile Simulator</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Real-Time Agent Activity Monitoring Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-4">
+            {agents.map((agent) => {
+              const isOnCall = agent.status === 'On Call';
+              const isAvailable = agent.status === 'Available';
+              const isWrapup = agent.status === 'Wrap-up';
+              const isBreak = agent.status === 'Break';
+              const isOffline = agent.status === 'Offline' || !agent.isAuthorized;
+
+              return (
+                <div 
+                  key={agent.id}
+                  className={`bg-white rounded-xl border transition-all duration-200 overflow-hidden shadow-xs ${
+                    isOnCall 
+                      ? 'border-rose-400 ring-2 ring-rose-400/20 shadow-md' 
+                      : !agent.isAuthorized 
+                      ? 'border-slate-200 opacity-70 bg-slate-50/50' 
+                      : 'border-slate-200 hover:border-slate-300'
+                  }`}
+                >
+                  {/* Card Header */}
+                  <div className={`p-4 border-b flex items-start justify-between gap-3 ${
+                    isOnCall ? 'bg-rose-50/40 border-rose-100' : 'bg-slate-50/60 border-slate-100'
+                  }`}>
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="relative shrink-0">
+                        <img 
+                          src={agent.avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face"} 
+                          alt={agent.name} 
+                          className="w-11 h-11 rounded-full border-2 border-white shadow-xs object-cover"
+                        />
+                        <span className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full border-2 border-white ${
+                          isOnCall ? 'bg-rose-500 animate-ping' :
+                          isAvailable ? 'bg-emerald-500' :
+                          isWrapup ? 'bg-amber-500' :
+                          isBreak ? 'bg-purple-500' : 'bg-slate-400'
+                        }`} />
+                      </div>
+
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-1.5">
+                          <h4 className="text-sm font-black text-slate-900 truncate">{agent.name}</h4>
+                          {agent.isAuthorized ? (
+                            <span className="px-1.5 py-0.2 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 text-[9px] font-extrabold" title="Authorized Call Agent">
+                              AUTHORIZED
+                            </span>
+                          ) : (
+                            <span className="px-1.5 py-0.2 rounded bg-rose-50 text-rose-700 border border-rose-200 text-[9px] font-extrabold" title="Authorization Revoked">
+                              REVOKED
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-[11px] text-slate-500 truncate">{agent.email} • {agent.phone}</p>
+                      </div>
+                    </div>
+
+                    {/* Live Status Badge */}
+                    <div className="shrink-0 text-right">
+                      <span className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider inline-flex items-center gap-1.5 shadow-2xs ${
+                        isOnCall ? 'bg-rose-600 text-white animate-pulse' :
+                        isAvailable ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' :
+                        isWrapup ? 'bg-amber-100 text-amber-800 border border-amber-300' :
+                        isBreak ? 'bg-purple-100 text-purple-800 border border-purple-300' :
+                        'bg-slate-200 text-slate-700'
+                      }`}>
+                        <span className={`w-1.5 h-1.5 rounded-full ${isOnCall ? 'bg-white' : isAvailable ? 'bg-emerald-600' : 'bg-slate-500'}`} />
+                        {isOnCall ? 'ON CALL (LIVE)' : agent.status}
+                      </span>
+                      <span className="block text-[9px] text-slate-400 font-mono mt-1">
+                        Sync: {agent.lastSyncTime}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Active Call Details Strip (If on call) */}
+                  {isOnCall && agent.currentCall && (
+                    <div className="p-3.5 bg-gradient-to-r from-rose-50 to-indigo-50/40 border-b border-rose-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+                      <div className="space-y-0.5">
+                        <div className="flex items-center gap-1.5">
+                          <span className="px-1.5 py-0.2 rounded bg-rose-600 text-white text-[9px] font-black uppercase tracking-widest animate-pulse">
+                            REC LIVE
+                          </span>
+                          <strong className="text-slate-900 font-bold">{agent.currentCall.clientName}</strong>
+                          <span className="text-slate-500 font-mono text-[11px]">({agent.currentCall.clientPhone})</span>
+                        </div>
+                        <div className="text-[10px] text-slate-600 flex items-center gap-3 font-medium">
+                          <span>Started: {agent.currentCall.startTime}</span>
+                          <span className="font-mono text-rose-700 font-bold">
+                            Duration: {Math.floor(agent.currentCall.duration / 60)}m {agent.currentCall.duration % 60}s
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Manager Live Call Interventions */}
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        <button
+                          onClick={() => setListeningAgent(agent)}
+                          className="px-2.5 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-[10.5px] font-bold flex items-center gap-1 shadow-xs transition cursor-pointer"
+                          title="Listen in to live call audio stream"
+                        >
+                          <Headphones className="w-3.5 h-3.5 text-sky-300" />
+                          <span>Listen In</span>
+                        </button>
+
+                        <button
+                          onClick={() => {
+                            setWhisperingAgent(agent);
+                            setWhisperMessage('');
+                            setWhisperSentSuccess(false);
+                          }}
+                          className="px-2.5 py-1.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 rounded-lg text-[10.5px] font-bold flex items-center gap-1 transition cursor-pointer"
+                          title="Send silent whisper guidance to agent's phone screen"
+                        >
+                          <MessageSquare className="w-3.5 h-3.5 text-indigo-600" />
+                          <span>Whisper</span>
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Paired Mobile Device Specifications Strip */}
+                  <div className="p-3.5 bg-slate-50/40 border-b border-slate-100 flex items-center justify-between text-xs text-slate-600">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <Smartphone className="w-4 h-4 text-slate-500 shrink-0" />
+                      <div className="min-w-0">
+                        <span className="font-bold text-slate-800 text-[11px] block truncate">{agent.device}</span>
+                        <span className="text-[9.5px] text-slate-400 font-mono">
+                          ID: {agent.deviceId} • App {agent.appVersion}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 shrink-0 text-[10px]">
+                      <span className="px-2 py-0.5 rounded-md bg-white border border-slate-200 font-mono text-slate-700 font-semibold" title="Pairing Token">
+                        PIN: {agent.pairingToken}
+                      </span>
+                      <span className="text-slate-500">{agent.batteryLevel || 90}% 🔋</span>
+                    </div>
+                  </div>
+
+                  {/* Agent Metrics & Manager Control Footer */}
+                  <div className="p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white text-xs">
+                    <div className="grid grid-cols-4 gap-2 text-center text-[10px]">
+                      <div className="bg-slate-50 p-1.5 rounded-md border border-slate-100">
+                        <span className="text-slate-400 block text-[9px] uppercase font-bold">Calls</span>
+                        <strong className="text-slate-800 text-xs font-black">{agent.metrics.totalCalls}</strong>
+                      </div>
+                      <div className="bg-slate-50 p-1.5 rounded-md border border-slate-100">
+                        <span className="text-slate-400 block text-[9px] uppercase font-bold">Connect</span>
+                        <strong className="text-emerald-600 text-xs font-black">{agent.metrics.connectedCalls}</strong>
+                      </div>
+                      <div className="bg-slate-50 p-1.5 rounded-md border border-slate-100">
+                        <span className="text-slate-400 block text-[9px] uppercase font-bold">Talk Time</span>
+                        <strong className="text-slate-800 text-xs font-black">{agent.metrics.talkTimeMinutes}m</strong>
+                      </div>
+                      <div className="bg-slate-50 p-1.5 rounded-md border border-slate-100">
+                        <span className="text-slate-400 block text-[9px] uppercase font-bold">Avg Mins</span>
+                        <strong className="text-indigo-600 text-xs font-black">
+                          {Math.round(agent.metrics.avgDurationSecs / 60)}m
+                        </strong>
+                      </div>
+                    </div>
+
+                    {/* Manager Authorization & Simulator Controls */}
+                    <div className="flex items-center gap-1.5 shrink-0 self-end sm:self-auto">
+                      <button
+                        onClick={() => {
+                          const newStatus = !agent.isAuthorized;
+                          setAgents(prev => prev.map(a => a.id === agent.id ? { ...a, isAuthorized: newStatus, status: newStatus ? a.status : 'Offline' } : a));
+                          fetch('/api/call-agents/authorize', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ agentId: agent.id, isAuthorized: newStatus })
+                          }).catch(() => {});
+                        }}
+                        className={`px-2.5 py-1.5 rounded-lg text-[10.5px] font-bold border transition cursor-pointer ${
+                          agent.isAuthorized
+                            ? 'bg-rose-50 text-rose-700 border-rose-200 hover:bg-rose-100'
+                            : 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'
+                        }`}
+                        title={agent.isAuthorized ? "Revoke calling authorization" : "Grant calling authorization"}
+                      >
+                        {agent.isAuthorized ? 'Revoke Access' : 'Authorize Agent'}
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          setShowMobileSimulator(true);
+                          setSimulatorAgentId(agent.id);
+                        }}
+                        className="px-2.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-[10.5px] font-bold flex items-center gap-1 transition cursor-pointer"
+                        title="Open Mobile App simulator as this agent"
+                      >
+                        <Smartphone className="w-3.5 h-3.5 text-sky-400" />
+                        <span>Test Phone</span>
+                      </button>
+
+                      <button
+                        onClick={() => setShowPairingModal(agent)}
+                        className="p-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg border border-slate-200 transition cursor-pointer"
+                        title="View device pairing code and QR code"
+                      >
+                        <QrCode className="w-3.5 h-3.5 text-indigo-600" />
+                      </button>
+                    </div>
+                  </div>
+
+                </div>
+              );
+            })}
+          </div>
+
         </div>
-      </div>
+      )}
 
-      {/* ==================== SUBPANEL 1: DIALER & ACTIVE DIAL LIFE ==================== */}
+      {/* ==================== SUBPANEL: AUTHORIZED AGENTS & MOBILE APP PROVISIONING ==================== */}
+      {activeTab === 'agents' && isCurrentAgentAuthorized && (
+        <div className="space-y-4">
+          
+          {/* Top Controls Header */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
+            <div>
+              <h3 className="text-sm font-black text-slate-900 uppercase tracking-wider">
+                Call Agents & Device Provisioning Registry
+              </h3>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Manage authorization keys, assign mobile devices, revoke permissions, and review app versions.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2">
+              <PWAInstallButton variant="primary" label="1-Click Install App (PWA)" />
+
+              <button
+                onClick={() => setShowNewAgentModal(true)}
+                className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 shadow-xs transition cursor-pointer"
+              >
+                <UserPlus className="w-3.5 h-3.5" />
+                <span>Authorize New Agent</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  const res = downloadExpertCallAgentApk('Authorized Agent', 'EXP-TOKEN', 'apk');
+                  setDownloadFeedback({ message: 'Downloaded expert-call-agent-v2.4.2.apk (Android Package)', url: res.url });
+                  setTimeout(() => setDownloadFeedback(null), 5000);
+                }}
+                className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 shadow-xs transition cursor-pointer"
+                title="Download Android APK"
+              >
+                <Download className="w-3.5 h-3.5 text-white" />
+                <span>Download APK</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  const res = downloadExpertCallAgentApk('Authorized Agent', 'EXP-TOKEN', 'html');
+                  setDownloadFeedback({ message: 'Downloaded expert-call-agent-standalone.html (Offline Web App)', url: res.url });
+                  setTimeout(() => setDownloadFeedback(null), 5000);
+                }}
+                className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-bold flex items-center gap-1.5 shadow-xs transition cursor-pointer"
+                title="Download single-file offline Web App bundle"
+              >
+                <FileText className="w-3.5 h-3.5 text-sky-300" />
+                <span>Offline Web App</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Download Feedback Banner */}
+          {downloadFeedback && (
+            <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 text-xs flex items-center justify-between animate-fadeIn">
+              <div className="flex items-center gap-2">
+                <Check className="w-4 h-4 text-emerald-600 shrink-0" />
+                <span className="font-bold">{downloadFeedback.message}</span>
+              </div>
+              {downloadFeedback.url && (
+                <a
+                  href={downloadFeedback.url}
+                  download
+                  className="text-xs text-indigo-600 font-bold hover:underline"
+                >
+                  Direct Download Link
+                </a>
+              )}
+            </div>
+          )}
+
+          {/* Directory Table */}
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-xs">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs text-slate-700">
+                <thead className="bg-slate-50 border-b border-slate-200 text-[10px] font-black uppercase text-slate-500 tracking-wider">
+                  <tr>
+                    <th className="py-3 px-4">Agent Profile</th>
+                    <th className="py-3 px-4">Paired Mobile Device</th>
+                    <th className="py-3 px-4">Pairing Token</th>
+                    <th className="py-3 px-4">Authorization</th>
+                    <th className="py-3 px-4">Live Status</th>
+                    <th className="py-3 px-4">Last Sync</th>
+                    <th className="py-3 px-4 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {agents.map((agent) => (
+                    <tr key={agent.id} className="hover:bg-slate-50/80 transition">
+                      <td className="py-3 px-4">
+                        <div className="flex items-center gap-2.5">
+                          <img 
+                            src={agent.avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face"} 
+                            alt={agent.name} 
+                            className="w-8 h-8 rounded-full border border-slate-200 object-cover shrink-0"
+                          />
+                          <div>
+                            <span className="font-bold text-slate-900 block">{agent.name}</span>
+                            <span className="text-[10px] text-slate-400 font-mono">{agent.email} • {agent.phone}</span>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="py-3 px-4">
+                        <div className="flex items-center gap-1.5">
+                          <Smartphone className="w-3.5 h-3.5 text-indigo-500 shrink-0" />
+                          <div>
+                            <strong className="text-slate-800 text-[11px] block">{agent.device}</strong>
+                            <span className="text-[9.5px] text-slate-400 font-mono">Build: {agent.appVersion}</span>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="py-3 px-4">
+                        <span className="px-2 py-0.5 rounded bg-slate-100 border border-slate-200 font-mono font-bold text-slate-800 text-[10px]">
+                          {agent.pairingToken}
+                        </span>
+                      </td>
+                      <td className="py-3 px-4">
+                        <button
+                          onClick={() => {
+                            const newStatus = !agent.isAuthorized;
+                            setAgents(prev => prev.map(a => a.id === agent.id ? { ...a, isAuthorized: newStatus } : a));
+                            fetch('/api/call-agents/authorize', {
+                              method: 'POST',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({ agentId: agent.id, isAuthorized: newStatus })
+                            }).catch(() => {});
+                          }}
+                          className={`px-2 py-0.5 rounded-full text-[9.5px] font-bold border transition cursor-pointer ${
+                            agent.isAuthorized
+                              ? 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'
+                              : 'bg-rose-50 text-rose-700 border-rose-200 hover:bg-rose-100'
+                          }`}
+                        >
+                          {agent.isAuthorized ? '✓ Authorized' : '✕ Revoked'}
+                        </button>
+                      </td>
+                      <td className="py-3 px-4">
+                        <span className={`px-2 py-0.5 rounded-full text-[9.5px] font-bold uppercase ${
+                          agent.status === 'On Call' ? 'bg-rose-100 text-rose-700 animate-pulse' :
+                          agent.status === 'Available' ? 'bg-emerald-100 text-emerald-700' :
+                          agent.status === 'Wrap-up' ? 'bg-amber-100 text-amber-700' :
+                          'bg-slate-100 text-slate-600'
+                        }`}>
+                          {agent.status}
+                        </span>
+                      </td>
+                      <td className="py-3 px-4 text-slate-500 text-[11px] font-mono">
+                        {agent.lastSyncTime}
+                      </td>
+                      <td className="py-3 px-4 text-right">
+                        <div className="flex items-center justify-end gap-1.5">
+                          <button
+                            onClick={() => setShowPairingModal(agent)}
+                            className="px-2 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10.5px] font-bold flex items-center gap-1 transition cursor-pointer"
+                            title="Show QR Code & Pairing Token"
+                          >
+                            <QrCode className="w-3 h-3 text-indigo-600" />
+                            <span>Pair</span>
+                          </button>
+                          <button
+                            onClick={() => {
+                              setShowMobileSimulator(true);
+                              setSimulatorAgentId(agent.id);
+                            }}
+                            className="px-2 py-1 rounded bg-slate-900 hover:bg-slate-800 text-white text-[10.5px] font-bold flex items-center gap-1 transition cursor-pointer"
+                            title="Test Mobile Calling App"
+                          >
+                            <Smartphone className="w-3 h-3 text-sky-400" />
+                            <span>Simulator</span>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Provisioning Workflow Instruction Guide */}
+          <div className="bg-slate-900 text-white p-5 rounded-2xl border border-slate-800">
+            <h4 className="text-xs font-black uppercase tracking-wider text-sky-400 mb-3 flex items-center gap-2">
+              <Zap className="w-4 h-4 text-amber-400" />
+              <span>Mobile Application Calling & Telephony Sync Protocol</span>
+            </h4>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-300">
+              <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1.5">
+                <span className="text-[10px] font-mono text-indigo-400 font-bold uppercase">Step 1 • Installation</span>
+                <h5 className="font-bold text-white">Separate Mobile Application</h5>
+                <p className="text-[11px] text-slate-400 leading-relaxed">
+                  Call agents install the <strong>Expert Call Agent Companion</strong> APK on their Android phone or iOS mobile device. Access is locked behind authorized pairing tokens.
+                </p>
+              </div>
+
+              <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1.5">
+                <span className="text-[10px] font-mono text-emerald-400 font-bold uppercase">Step 2 • Automatic Trigger</span>
+                <h5 className="font-bold text-white">Outbound & Inbound Tracking</h5>
+                <p className="text-[11px] text-slate-400 leading-relaxed">
+                  When the agent dials or receives a call, the mobile app automatically triggers real-time status packets, talk duration, and live audio telemetry to the central system.
+                </p>
+              </div>
+
+              <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1.5">
+                <span className="text-[10px] font-mono text-sky-400 font-bold uppercase">Step 3 • Desktop Monitoring</span>
+                <h5 className="font-bold text-white">Manager Oversight & CRM Sync</h5>
+                <p className="text-[11px] text-slate-400 leading-relaxed">
+                  Managers monitor active agents on this desktop console, listen in, whisper guidance, and audit synchronized call records, recordings, and lead updates with zero latency.
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      )}
+
+      {/* ==================== SUBPANEL: AUTO-SYNCED MOBILE CALL LOGS ==================== */}
+      {activeTab === 'synced_logs' && isCurrentAgentAuthorized && (
+        <div className="space-y-4">
+          
+          {/* Filter & Search Bar */}
+          <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3">
+            <div className="flex items-center flex-wrap gap-2">
+              <div className="relative">
+                <Search className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-slate-400" />
+                <input 
+                  type="text" 
+                  placeholder="Search synchronized calls..." 
+                  value={syncedSearch}
+                  onChange={(e) => setSyncedSearch(e.target.value)}
+                  className="pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-500 w-56"
+                />
+              </div>
+
+              {/* Filter by Agent */}
+              <select
+                value={syncedFilterAgent}
+                onChange={(e) => setSyncedFilterAgent(e.target.value)}
+                className="text-xs p-1.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-700 font-medium focus:outline-none"
+              >
+                <option value="All">All Call Agents</option>
+                {agents.map(a => (
+                  <option key={a.id} value={a.name}>{a.name}</option>
+                ))}
+              </select>
+
+              {/* Filter by Disposition */}
+              <select
+                value={syncedFilterOutcome}
+                onChange={(e) => setSyncedFilterOutcome(e.target.value)}
+                className="text-xs p-1.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-700 font-medium focus:outline-none"
+              >
+                <option value="All">All Outcomes</option>
+                <option value="Interested">Interested</option>
+                <option value="Meeting Demo Booked">Meeting Demo Booked</option>
+                <option value="Follow Up">Follow Up</option>
+                <option value="Deal Closed">Deal Closed</option>
+                <option value="Left Voicemail">Left Voicemail</option>
+                <option value="Callback Requested">Callback Requested</option>
+              </select>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <span className="text-[11px] text-slate-500 font-mono">
+                Showing {callLogs.length} call logs
+              </span>
+              <button
+                onClick={() => {
+                  setShowMobileSimulator(true);
+                  setSimulatorAgentId('AGT-101');
+                }}
+                className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold flex items-center gap-1 transition shadow-xs cursor-pointer"
+              >
+                <Smartphone className="w-3.5 h-3.5 text-sky-300" />
+                <span>Simulate Call on Mobile</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Call Logs Table */}
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-xs">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs text-slate-700">
+                <thead className="bg-slate-50 border-b border-slate-200 text-[10px] font-black uppercase text-slate-500 tracking-wider">
+                  <tr>
+                    <th className="py-3 px-4">Contact & Client</th>
+                    <th className="py-3 px-4">Agent & Mobile Source</th>
+                    <th className="py-3 px-4">Duration & Time</th>
+                    <th className="py-3 px-4">Disposition Outcome</th>
+                    <th className="py-3 px-4">Audio Recording</th>
+                    <th className="py-3 px-4">Interaction Remarks</th>
+                    <th className="py-3 px-4 text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {callLogs
+                    .filter(c => {
+                      if (syncedFilterAgent !== 'All' && c.agentName !== syncedFilterAgent) return false;
+                      if (syncedFilterOutcome !== 'All' && c.disposition !== syncedFilterOutcome) return false;
+                      if (syncedSearch) {
+                        const q = syncedSearch.toLowerCase();
+                        return c.clientName.toLowerCase().includes(q) || c.clientPhone.includes(q) || c.notes.toLowerCase().includes(q);
+                      }
+                      return true;
+                    })
+                    .map((log) => (
+                      <tr key={log.id} className="hover:bg-slate-50/80 transition">
+                        <td className="py-3 px-4">
+                          <strong className="text-slate-900 block font-bold">{log.clientName}</strong>
+                          <span className="text-[10px] font-mono text-slate-500">{log.clientPhone}</span>
+                        </td>
+                        
+                        <td className="py-3 px-4">
+                          <div className="flex items-center gap-1.5">
+                            <span className="p-1 rounded bg-indigo-50 text-indigo-600">
+                              <Smartphone className="w-3.5 h-3.5" />
+                            </span>
+                            <div>
+                              <strong className="text-slate-800 text-[11px] block">{log.agentName}</strong>
+                              <span className="text-[9.5px] text-emerald-600 font-extrabold flex items-center gap-0.5">
+                                <Zap className="w-2.5 h-2.5 text-amber-500" />
+                                {log.syncSource || 'Mobile App'}
+                              </span>
+                            </div>
+                          </div>
+                        </td>
+
+                        <td className="py-3 px-4">
+                          <div className="flex items-center gap-1.5">
+                            <span className={`px-1.5 py-0.2 rounded font-mono font-bold text-[10px] ${
+                              log.type === 'Answered' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-rose-50 text-rose-700 border border-rose-200'
+                            }`}>
+                              {log.duration}
+                            </span>
+                            <span className="text-[10px] text-slate-400">{log.time}</span>
+                          </div>
+                        </td>
+
+                        <td className="py-3 px-4">
+                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border inline-block ${
+                            log.disposition === 'Deal Closed' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' :
+                            log.disposition === 'Meeting Demo Booked' ? 'bg-purple-50 text-purple-700 border-purple-200' :
+                            log.disposition === 'Interested' ? 'bg-sky-50 text-sky-700 border-sky-200' :
+                            log.disposition === 'Follow Up' ? 'bg-amber-50 text-amber-700 border-amber-200' :
+                            'bg-slate-100 text-slate-700 border-slate-200'
+                          }`}>
+                            {log.disposition || 'Completed'}
+                          </span>
+                        </td>
+
+                        <td className="py-3 px-4">
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={() => handlePlayAudio(log.id, log.duration)}
+                              className="p-1 rounded-full bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-600 transition cursor-pointer"
+                              title="Play synchronized mobile recording"
+                            >
+                              {playingAudioId === log.id ? (
+                                <Pause className="w-3.5 h-3.5 text-indigo-600" />
+                              ) : (
+                                <Play className="w-3.5 h-3.5" />
+                              )}
+                            </button>
+                            <div className="w-16 h-2 bg-slate-100 rounded-full overflow-hidden">
+                              <div 
+                                className="h-full bg-indigo-600 transition-all duration-300" 
+                                style={{ width: `${playbackProgress[log.id] || 0}%` }}
+                              />
+                            </div>
+                            <span className="text-[9px] text-slate-400 font-mono">REC</span>
+                          </div>
+                        </td>
+
+                        <td className="py-3 px-4 max-w-xs">
+                          <p className="text-[11px] text-slate-600 line-clamp-2 leading-relaxed" title={log.notes}>
+                            {log.notes}
+                          </p>
+                        </td>
+
+                        <td className="py-3 px-4 text-right">
+                          <button
+                            onClick={() => {
+                              (window as any).__triggerGlobalDial?.(log.clientPhone, log.clientName);
+                            }}
+                            className="p-1.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-indigo-600 transition cursor-pointer"
+                            title="Call back client"
+                          >
+                            <Phone className="w-3.5 h-3.5" />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      )}
+
+      {/* ==================== SUBPANEL: DESKTOP DIALER & ACTIVE CALL DESK ==================== */}
       {activeTab === 'dialer' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-3.5">
           
@@ -2617,6 +3579,757 @@ export default function CallingManager({
                   Save Credentials Configuration
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ==================== MODAL 1: MOBILE APPLICATION SIMULATOR ==================== */}
+      {showMobileSimulator && (
+        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn">
+          <div className="bg-slate-900 border border-slate-700 rounded-3xl p-4 sm:p-6 shadow-2xl max-w-4xl w-full flex flex-col md:flex-row gap-6 relative max-h-[92vh] overflow-y-auto">
+            
+            {/* Close Button */}
+            <button
+              onClick={() => setShowMobileSimulator(false)}
+              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-white rounded-full bg-slate-800/80 hover:bg-slate-700 transition z-50 cursor-pointer"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            {/* Left Column: Mobile App Frame */}
+            <div className="flex-1 flex justify-center items-center">
+              <CallAgentMobileApp
+                agents={agents}
+                activeAgentId={simulatorAgentId}
+                onSelectAgent={(id) => setSimulatorAgentId(id)}
+                leads={leads}
+                onCallSynced={(newLog) => {
+                  onLogCall(newLog);
+                }}
+                onClose={() => setShowMobileSimulator(false)}
+              />
+            </div>
+
+            {/* Right Column: Information & Manager Live Feedback Panel */}
+            <div className="w-full md:w-80 flex flex-col justify-between text-white space-y-4 pt-2">
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <span className="p-1.5 rounded-lg bg-indigo-600 text-white">
+                    <Smartphone className="w-4 h-4" />
+                  </span>
+                  <div>
+                    <h3 className="text-sm font-black uppercase tracking-wider text-white">
+                      Agent Mobile App
+                    </h3>
+                    <p className="text-[10px] text-sky-400 font-mono">Real-Time Sync Simulator</p>
+                  </div>
+                </div>
+
+                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs text-slate-300 space-y-2">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-450 flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    Live Cloud Sync Connected
+                  </span>
+                  <p className="text-[11px] text-slate-400 leading-relaxed">
+                    This phone simulates the mobile app installed by the call agent. 
+                    Place a call using the keypad or the assigned leads queue:
+                  </p>
+                  <ol className="list-decimal list-inside space-y-1 text-[10.5px] text-slate-300">
+                    <li>Dials trigger <strong>instant status telemetry</strong> to desktop.</li>
+                    <li>Duration ticks up in real time on the Manager Monitor.</li>
+                    <li>Ending call prompts for <strong>disposition & notes</strong>.</li>
+                    <li>Call data is <strong>automatically synchronized</strong> into Desktop CRM call logs!</li>
+                  </ol>
+                </div>
+
+                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs space-y-2">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
+                    Switch Active Simulator Agent:
+                  </span>
+                  <select
+                    value={simulatorAgentId}
+                    onChange={(e) => setSimulatorAgentId(e.target.value)}
+                    className="w-full text-xs p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-medium focus:outline-none"
+                  >
+                    {agents.map((ag) => (
+                      <option key={ag.id} value={ag.id}>
+                        {ag.name} ({ag.device.split(' (')[0]}) - {ag.isAuthorized ? 'Authorized' : 'Revoked'}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div className="space-y-2 pt-4 border-t border-slate-800">
+                <button
+                  onClick={() => setShowMobileSimulator(false)}
+                  className="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition cursor-pointer"
+                >
+                  View Desktop Manager Radar
+                </button>
+                <p className="text-[9.5px] text-center text-slate-500">
+                  Any calls placed while simulator is open update the background dashboard live.
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      )}
+
+      {/* ==================== MODAL 2: MANAGER LISTEN-IN (LIVE AUDIO & TRANSCRIPT) ==================== */}
+      {listeningAgent && (
+        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn">
+          <div className="bg-slate-900 border border-slate-700 rounded-2xl p-6 shadow-2xl max-w-lg w-full text-white space-y-5 relative">
+            <button
+              onClick={() => setListeningAgent(null)}
+              className="absolute top-4 right-4 p-1.5 text-slate-400 hover:text-white rounded-lg bg-slate-800 transition cursor-pointer"
+            >
+              <X className="w-4 h-4" />
+            </button>
+
+            <div className="flex items-center gap-3">
+              <div className="p-3 rounded-xl bg-rose-600/20 text-rose-400 border border-rose-500/30">
+                <Headphones className="w-6 h-6 animate-pulse" />
+              </div>
+              <div>
+                <span className="text-[10px] font-mono uppercase tracking-widest text-rose-400 font-bold block">
+                  Manager Live Audio Intercept
+                </span>
+                <h3 className="text-base font-black text-white">
+                  Monitoring: {listeningAgent.name}
+                </h3>
+                <p className="text-xs text-slate-400">
+                  Customer: {listeningAgent.currentCall?.clientName || 'Valued Prospect'} ({listeningAgent.currentCall?.clientPhone || '9876543210'})
+                </p>
+              </div>
+            </div>
+
+            {/* Live Audio Waveform Simulation */}
+            <div className="p-4 bg-slate-950 rounded-xl border border-slate-800 text-center space-y-2">
+              <span className="text-[9.5px] font-mono text-emerald-450 uppercase tracking-widest">
+                HD Voice Stream • Encrypted Trunk
+              </span>
+              <div className="flex items-center justify-center gap-1.5 h-12 px-4">
+                {[15, 35, 60, 25, 75, 40, 65, 30, 50, 20, 70, 35, 55, 18, 45].map((h, i) => (
+                  <div
+                    key={i}
+                    className="w-1.5 bg-gradient-to-t from-indigo-500 to-rose-400 rounded-full animate-pulse"
+                    style={{
+                      height: `${h}px`,
+                      animationDuration: `${0.4 + (i % 5) * 0.15}s`
+                    }}
+                  />
+                ))}
+              </div>
+              <div className="flex items-center justify-between text-[10px] text-slate-500 font-mono px-2 pt-1 border-t border-slate-900">
+                <span>Bitrate: 128 kbps Opus</span>
+                <span className="text-rose-400 font-bold">Latency: 14ms (Direct Mobile Push)</span>
+              </div>
+            </div>
+
+            {/* Live Conversation Transcript Stream */}
+            <div className="space-y-1.5">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                Live Speech-to-Text Transcription:
+              </span>
+              <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs space-y-2 max-h-36 overflow-y-auto">
+                <div className="text-indigo-300">
+                  <strong className="text-indigo-400">Agent ({listeningAgent.name}):</strong> "Good morning! I am following up on your request regarding our CRM solution."
+                </div>
+                <div className="text-slate-300">
+                  <strong className="text-slate-400">Client ({listeningAgent.currentCall?.clientName || 'Prospect'}):</strong> "Hello! We wanted to confirm how your mobile calling synchronization operates."
+                </div>
+                <div className="text-indigo-300">
+                  <strong className="text-indigo-400">Agent ({listeningAgent.name}):</strong> "All call agents use our mobile companion app. The moments we connect or hang up, call duration and notes are auto-triggered to our desktop."
+                </div>
+                <div className="text-slate-400 italic text-[11px] animate-pulse">
+                  [Live conversation streaming in real time...]
+                </div>
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className="flex gap-2 pt-1">
+              <button
+                onClick={() => {
+                  setWhisperingAgent(listeningAgent);
+                  setListeningAgent(null);
+                  setWhisperMessage('');
+                }}
+                className="flex-1 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer"
+              >
+                <MessageSquare className="w-3.5 h-3.5" />
+                <span>Whisper to Agent's Phone</span>
+              </button>
+              <button
+                onClick={() => setListeningAgent(null)}
+                className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-bold transition cursor-pointer"
+              >
+                Close Stream
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ==================== MODAL 3: MANAGER WHISPER TO MOBILE SCREEN ==================== */}
+      {whisperingAgent && (
+        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn">
+          <div className="bg-slate-900 border border-slate-700 rounded-2xl p-6 shadow-2xl max-w-md w-full text-white space-y-4 relative">
+            <button
+              onClick={() => setWhisperingAgent(null)}
+              className="absolute top-4 right-4 p-1.5 text-slate-400 hover:text-white rounded-lg bg-slate-800 transition cursor-pointer"
+            >
+              <X className="w-4 h-4" />
+            </button>
+
+            <div className="flex items-center gap-3">
+              <div className="p-3 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30">
+                <Sparkles className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="text-sm font-black uppercase tracking-wider text-white">
+                  Silent Whisper Coaching
+                </h3>
+                <p className="text-xs text-slate-400">
+                  Target: <strong>{whisperingAgent.name}</strong> ({whisperingAgent.device.split(' (')[0]})
+                </p>
+              </div>
+            </div>
+
+            <p className="text-xs text-slate-300 leading-relaxed">
+              This message will flash silently on the agent's mobile smartphone screen without the customer hearing anything.
+            </p>
+
+            <div className="space-y-1.5">
+              <textarea
+                rows={3}
+                value={whisperMessage}
+                onChange={(e) => setWhisperMessage(e.target.value)}
+                placeholder="E.g., Remind client that quarterly onboarding support is complimentary if closed today."
+                className="w-full text-xs p-3 rounded-xl bg-slate-950 border border-slate-700 focus:outline-none focus:border-indigo-500 text-white placeholder-slate-500"
+              />
+
+              {/* Quick suggestions */}
+              <div className="flex flex-wrap gap-1">
+                {[
+                  "Offer 15% annual rebate",
+                  "Propose 3 PM demo walkthrough",
+                  "Mention SLA guarantee"
+                ].map((chip) => (
+                  <button
+                    key={chip}
+                    onClick={() => setWhisperMessage(chip)}
+                    className="text-[9.5px] px-2 py-0.5 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 cursor-pointer"
+                  >
+                    +{chip}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {whisperSentSuccess ? (
+              <div className="p-2.5 rounded-xl bg-emerald-500/20 border border-emerald-500 text-emerald-300 text-xs text-center font-bold flex items-center justify-center gap-1.5">
+                <Check className="w-4 h-4" />
+                <span>Whisper dispatched to {whisperingAgent.name}'s phone screen!</span>
+              </div>
+            ) : (
+              <button
+                onClick={() => {
+                  if (!whisperMessage.trim()) return;
+                  // Dispatch whisper event
+                  const event = new CustomEvent('crm-manager-whisper', {
+                    detail: {
+                      agentId: whisperingAgent.id,
+                      message: whisperMessage.trim(),
+                      timestamp: Date.now()
+                    }
+                  });
+                  window.dispatchEvent(event);
+                  setWhisperSentSuccess(true);
+                  setTimeout(() => {
+                    setWhisperingAgent(null);
+                  }, 1200);
+                }}
+                disabled={!whisperMessage.trim()}
+                className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <Send className="w-3.5 h-3.5" />
+                <span>Send Whisper Prompt</span>
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* ==================== MODAL 4: MOBILE APP PAIRING & DOWNLOAD CENTER ==================== */}
+      {showPairingModal && (
+        <div className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 animate-fadeIn">
+          <div className="bg-slate-900 border border-slate-700 rounded-3xl p-5 sm:p-6 shadow-2xl max-w-lg w-full text-white space-y-4 text-center relative max-h-[95vh] overflow-y-auto">
+            <button
+              onClick={() => {
+                setShowPairingModal(null);
+                setCopiedLinkFeedback(null);
+                setApkDownloadSuccess(false);
+              }}
+              className="absolute top-4 right-4 p-1.5 text-slate-400 hover:text-white rounded-lg bg-slate-800 transition cursor-pointer"
+            >
+              <X className="w-4 h-4" />
+            </button>
+
+            <div>
+              <span className="text-[10px] font-mono text-indigo-400 uppercase tracking-widest font-bold">
+                Mobile Provisioning & Installation Hub
+              </span>
+              <h3 className="text-base font-black text-white mt-0.5">
+                Install App & Pair Phone: {showPairingModal.name}
+              </h3>
+              <p className="text-xs text-slate-400">{showPairingModal.device}</p>
+            </div>
+
+            {/* Platform Selector Tabs */}
+            <div className="flex rounded-xl bg-slate-950 p-1 border border-slate-800 gap-1 text-xs">
+              <button
+                onClick={() => setPairingPlatformTab('android')}
+                className={`flex-1 py-1.5 rounded-lg font-bold transition flex items-center justify-center gap-1.5 ${
+                  pairingPlatformTab === 'android'
+                    ? 'bg-emerald-600 text-white shadow-xs'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <Smartphone className="w-3.5 h-3.5" />
+                <span>Android (APK)</span>
+              </button>
+              <button
+                onClick={() => setPairingPlatformTab('pwa')}
+                className={`flex-1 py-1.5 rounded-lg font-bold transition flex items-center justify-center gap-1.5 ${
+                  pairingPlatformTab === 'pwa'
+                    ? 'bg-indigo-600 text-white shadow-xs'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                <span>1-Click PWA</span>
+              </button>
+              <button
+                onClick={() => setPairingPlatformTab('qr')}
+                className={`flex-1 py-1.5 rounded-lg font-bold transition flex items-center justify-center gap-1.5 ${
+                  pairingPlatformTab === 'qr'
+                    ? 'bg-indigo-600 text-white shadow-xs'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <QrCode className="w-3.5 h-3.5" />
+                <span>Scan QR</span>
+              </button>
+              <button
+                onClick={() => setPairingPlatformTab('ios')}
+                className={`flex-1 py-1.5 rounded-lg font-bold transition flex items-center justify-center gap-1.5 ${
+                  pairingPlatformTab === 'ios'
+                    ? 'bg-sky-600 text-white shadow-xs'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <ExternalLink className="w-3.5 h-3.5" />
+                <span>iOS / iPhone</span>
+              </button>
+            </div>
+
+            {/* TAB 1: ANDROID APK DIRECT DOWNLOAD */}
+            {pairingPlatformTab === 'android' && (
+              <div className="space-y-3 text-left">
+                {/* PROMINENT DOWNLOAD APK BUTTONS */}
+                <div className="space-y-2">
+                  <button
+                    onClick={() => {
+                      const res = downloadExpertCallAgentApk(showPairingModal.name, showPairingModal.pairingToken, 'apk');
+                      setApkDownloadSuccess(true);
+                      setTimeout(() => setApkDownloadSuccess(false), 6000);
+                    }}
+                    className="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-500 active:scale-98 text-white rounded-2xl font-black text-xs sm:text-sm flex items-center justify-center gap-2.5 shadow-xl shadow-emerald-950/60 transition cursor-pointer"
+                  >
+                    <Download className="w-5 h-5 animate-bounce" />
+                    <span>Download Android APK (expert-call-agent-v2.4.2.apk)</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      downloadExpertCallAgentApk(showPairingModal.name, showPairingModal.pairingToken, 'html');
+                      setApkDownloadSuccess(true);
+                      setTimeout(() => setApkDownloadSuccess(false), 6000);
+                    }}
+                    className="w-full py-2.5 px-3 bg-slate-800 hover:bg-slate-700 active:scale-98 text-slate-200 rounded-xl font-bold text-xs flex items-center justify-center gap-2 border border-slate-700 transition cursor-pointer"
+                  >
+                    <FileText className="w-4 h-4 text-sky-400" />
+                    <span>Download Standalone Offline App (.html single-file bundle)</span>
+                  </button>
+                </div>
+
+                {apkDownloadSuccess && (
+                  <div className="p-3 rounded-xl bg-emerald-500/20 border border-emerald-500 text-emerald-300 text-xs font-bold flex items-center gap-2 animate-slideDown">
+                    <Check className="w-4 h-4 shrink-0" />
+                    <div className="min-w-0">
+                      <span>Package download initiated!</span>
+                      <p className="text-[10px] font-normal text-emerald-200">
+                        Check your device downloads folder or notification shade to open and install.
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Direct Manual Download Links (if automatic browser download was blocked by sandbox) */}
+                <div className="p-3 bg-slate-950/70 rounded-xl border border-slate-800 space-y-1.5 text-xs text-slate-300">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-mono text-amber-400 font-bold uppercase tracking-wider">
+                      Troubleshooting / Manual Direct Links:
+                    </span>
+                    <span className="text-[9px] text-slate-400 font-mono">Bypasses Browser Restrictions</span>
+                  </div>
+                  <p className="text-[10.5px] text-slate-400 leading-relaxed">
+                    If your browser or iframe blocked the automated download, use these direct links:
+                  </p>
+                  <div className="flex flex-wrap gap-2 pt-1">
+                    <a
+                      href={`/api/download/expert-call-agent.apk?agent=${encodeURIComponent(showPairingModal.name)}&token=${encodeURIComponent(showPairingModal.pairingToken)}`}
+                      download="expert-call-agent-v2.4.2.apk"
+                      className="px-2.5 py-1 rounded-lg bg-emerald-950/80 hover:bg-emerald-900 text-emerald-300 border border-emerald-800/80 text-[10.5px] font-semibold inline-flex items-center gap-1.5 transition"
+                    >
+                      <Download className="w-3 h-3" />
+                      <span>Direct APK File Link</span>
+                    </a>
+                    <a
+                      href={`/api/download/expert-call-agent.html?agent=${encodeURIComponent(showPairingModal.name)}&token=${encodeURIComponent(showPairingModal.pairingToken)}`}
+                      download="expert-call-agent-standalone.html"
+                      className="px-2.5 py-1 rounded-lg bg-sky-950/80 hover:bg-sky-900 text-sky-300 border border-sky-800/80 text-[10.5px] font-semibold inline-flex items-center gap-1.5 transition"
+                    >
+                      <FileText className="w-3 h-3" />
+                      <span>Direct HTML Web App Link</span>
+                    </a>
+                  </div>
+                </div>
+
+                {/* Android Steps */}
+                <div className="p-3.5 bg-slate-950 rounded-2xl border border-slate-800 space-y-2 text-xs text-slate-300">
+                  <span className="text-[10px] font-mono text-emerald-400 font-bold uppercase tracking-wider block">
+                    Installation Steps for Android:
+                  </span>
+                  <ol className="list-decimal list-inside space-y-1.5 text-[11px] text-slate-300">
+                    <li>Tap the green <strong>Download Android APK</strong> button above.</li>
+                    <li>Open <strong>expert-call-agent-v2.4.2.apk</strong> from your downloads.</li>
+                    <li>If prompted by Android, tap <em>"Allow installation from this source"</em>.</li>
+                    <li>Launch the app and enter Pairing Token: <strong className="text-amber-400 font-mono font-bold text-xs">{showPairingModal.pairingToken}</strong>.</li>
+                  </ol>
+                </div>
+              </div>
+            )}
+
+            {/* TAB: 1-CLICK PWA INSTALL */}
+            {pairingPlatformTab === 'pwa' && (
+              <div className="space-y-3.5 text-left p-3.5 bg-slate-950 rounded-2xl border border-slate-800">
+                <div className="flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-amber-400" />
+                  <span className="text-xs font-bold text-white uppercase tracking-wider">
+                    Instant Home Screen Installation (PWA)
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-300 leading-relaxed">
+                  Install the Expert Call Agent app directly without downloading any external files or changing device security settings. Installs as a native standalone app on Android, Windows, Mac, and Chromebooks.
+                </p>
+
+                <div className="pt-1">
+                  <PWAInstallButton 
+                    variant="primary" 
+                    label="Install Call Agent to Home Screen" 
+                    className="w-full justify-center py-3 text-xs" 
+                  />
+                </div>
+
+                <div className="p-3 rounded-xl bg-indigo-950/50 border border-indigo-900/60 text-[10.5px] text-indigo-200 space-y-1">
+                  <span className="font-bold block text-white">Benefits of 1-Click PWA:</span>
+                  <ul className="list-disc list-inside space-y-0.5 text-slate-300 text-[10px]">
+                    <li>No Play Store or APK parsing required</li>
+                    <li>Automatic real-time cloud updates</li>
+                    <li>Full background sync with Desktop CRM</li>
+                    <li>Seamless microphone and audio integration</li>
+                  </ul>
+                </div>
+              </div>
+            )}
+
+            {/* TAB 2: QR CODE SCANNER */}
+            {pairingPlatformTab === 'qr' && (
+              <div className="space-y-3">
+                {/* Visual QR Code Image */}
+                <div className="p-4 bg-white rounded-2xl mx-auto w-52 h-52 flex flex-col items-center justify-center shadow-xl relative">
+                  <img 
+                    src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(`${window.location.origin}/?mode=mobile-agent&agent=${showPairingModal.id}&token=${showPairingModal.pairingToken}`)}`}
+                    alt="Scan with Phone Camera"
+                    className="w-44 h-44 object-contain"
+                    onError={(e) => {
+                      // Fallback SVG if external service is blocked
+                      (e.target as any).style.display = 'none';
+                      const fb = document.getElementById('qr-svg-fallback');
+                      if (fb) fb.style.display = 'block';
+                    }}
+                  />
+                  <div id="qr-svg-fallback" style={{ display: 'none' }} className="w-40 h-40">
+                    <svg className="w-full h-full" viewBox="0 0 100 100" fill="none">
+                      <rect width="100" height="100" fill="white" />
+                      <path fill="#0F172A" d="M10 10h30v30h-30zM15 15h20v20h-20zM20 20h10v10h-10zM60 10h30v30h-30zM65 15h20v20h-20zM70 20h10v10h-10zM10 60h30v30h-30zM15 65h20v20h-20zM20 70h10v10h-10zM45 10h10v10h-10zM45 30h10v10h-10zM45 45h10v10h-10zM10 45h10v10h-10zM30 45h10v10h-10zM60 45h20v10h-20zM45 60h10v20h-10zM60 60h10v10h-10zM80 60h10v10h-10zM70 75h20v15h-20zM60 85h10v10h-10z" />
+                    </svg>
+                  </div>
+                  <span className="text-[8.5px] font-mono text-slate-800 font-bold mt-1 block">
+                    SCAN WITH SMARTPHONE CAMERA
+                  </span>
+                </div>
+
+                <p className="text-[11px] text-slate-400">
+                  Scanning automatically opens the Mobile Companion App on the agent's phone, pre-configured with agent credentials.
+                </p>
+
+                {/* Copy Link Button */}
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => {
+                      const link = `${window.location.origin}/?mode=mobile-agent&agent=${showPairingModal.id}&token=${showPairingModal.pairingToken}`;
+                      navigator.clipboard.writeText(link);
+                      setCopiedLinkFeedback("Link copied! Send to agent via WhatsApp or SMS.");
+                      setTimeout(() => setCopiedLinkFeedback(null), 3000);
+                    }}
+                    className="flex-1 py-2 px-3 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 border border-slate-700 transition cursor-pointer"
+                  >
+                    <Copy className="w-3.5 h-3.5 text-indigo-400" />
+                    <span>Copy Mobile App Link</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      const link = `${window.location.origin}/?mode=mobile-agent&agent=${showPairingModal.id}&token=${showPairingModal.pairingToken}`;
+                      window.open(link, '_blank');
+                    }}
+                    className="py-2 px-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 transition cursor-pointer"
+                    title="Launch mobile app in a separate browser tab"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5" />
+                    <span>Open in Browser</span>
+                  </button>
+                </div>
+
+                {copiedLinkFeedback && (
+                  <p className="text-[10px] text-emerald-400 font-bold animate-fadeIn">
+                    ✓ {copiedLinkFeedback}
+                  </p>
+                )}
+              </div>
+            )}
+
+            {/* TAB 3: iOS / IPHONE INSTRUCTIONS */}
+            {pairingPlatformTab === 'ios' && (
+              <div className="p-3.5 bg-slate-950 rounded-2xl border border-slate-800 space-y-2.5 text-xs text-left text-slate-300">
+                <span className="text-[10px] font-mono text-sky-400 font-bold uppercase tracking-wider block">
+                  Installation for Apple iPhone / iPad:
+                </span>
+                <ol className="list-decimal list-inside space-y-1.5 text-[11px] text-slate-300">
+                  <li>Open the mobile web app link in <strong>Safari</strong> on your iPhone.</li>
+                  <li>Tap the <strong>Share</strong> button (square icon with an arrow pointing up).</li>
+                  <li>Scroll down and tap <strong>"Add to Home Screen"</strong>.</li>
+                  <li>Tap <strong>Add</strong> in the top-right corner. The Expert Call Agent icon will appear on your home screen.</li>
+                  <li>Open the app from your home screen and enter Pairing PIN: <strong className="text-amber-400 font-mono font-bold">{showPairingModal.pairingToken}</strong>.</li>
+                </ol>
+                <button
+                  onClick={() => {
+                    const link = `${window.location.origin}/?mode=mobile-agent&agent=${showPairingModal.id}&token=${showPairingModal.pairingToken}`;
+                    window.open(link, '_blank');
+                  }}
+                  className="w-full mt-2 py-2 bg-sky-600 hover:bg-sky-500 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition cursor-pointer"
+                >
+                  <ExternalLink className="w-3.5 h-3.5" />
+                  <span>Open Mobile Web App in New Tab</span>
+                </button>
+              </div>
+            )}
+
+            {/* Pairing Token Card */}
+            <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-between text-left">
+              <div>
+                <span className="text-[10px] text-slate-400 font-medium block">
+                  Agent Pairing PIN (Enter in Mobile App):
+                </span>
+                <span className="text-xl font-mono font-black tracking-widest text-amber-400">
+                  {showPairingModal.pairingToken}
+                </span>
+              </div>
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(showPairingModal.pairingToken);
+                  setCopiedLinkFeedback(`PIN ${showPairingModal.pairingToken} copied!`);
+                  setTimeout(() => setCopiedLinkFeedback(null), 2500);
+                }}
+                className="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10.5px] font-bold border border-slate-700 flex items-center gap-1 transition cursor-pointer"
+              >
+                <Copy className="w-3 h-3 text-amber-400" />
+                <span>Copy PIN</span>
+              </button>
+            </div>
+
+            {/* Modal Bottom Actions */}
+            <div className="flex gap-2 pt-1">
+              <button
+                onClick={() => {
+                  setSimulatorAgentId(showPairingModal.id);
+                  setShowPairingModal(null);
+                  setShowMobileSimulator(true);
+                }}
+                className="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition cursor-pointer"
+              >
+                <Smartphone className="w-3.5 h-3.5 text-sky-300" />
+                <span>Launch in Mobile Simulator</span>
+              </button>
+              <button
+                onClick={() => {
+                  setShowPairingModal(null);
+                  setCopiedLinkFeedback(null);
+                  setApkDownloadSuccess(false);
+                }}
+                className="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-bold transition cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
+
+      {/* ==================== MODAL 5: PROVISION NEW CALL AGENT ==================== */}
+      {showNewAgentModal && (
+        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn">
+          <div className="bg-slate-900 border border-slate-700 rounded-3xl p-6 shadow-2xl max-w-md w-full text-white space-y-4 relative">
+            <button
+              onClick={() => setShowNewAgentModal(false)}
+              className="absolute top-4 right-4 p-1.5 text-slate-400 hover:text-white rounded-lg bg-slate-800 transition cursor-pointer"
+            >
+              <X className="w-4 h-4" />
+            </button>
+
+            <div>
+              <span className="text-[10px] font-mono text-indigo-400 uppercase tracking-widest font-bold">
+                Manager Control
+              </span>
+              <h3 className="text-base font-black text-white mt-0.5">
+                Provision New Authorized Call Agent
+              </h3>
+              <p className="text-xs text-slate-400">
+                Generate mobile application licensing credentials and pairing token.
+              </p>
+            </div>
+
+            <div className="space-y-3 text-xs">
+              <div>
+                <label className="text-slate-300 font-bold block mb-1">Agent Full Name:</label>
+                <input
+                  type="text"
+                  placeholder="e.g. Vikram Joshi"
+                  value={newAgentName}
+                  onChange={(e) => setNewAgentName(e.target.value)}
+                  className="w-full p-2.5 bg-slate-950 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-indigo-500"
+                />
+              </div>
+
+              <div>
+                <label className="text-slate-300 font-bold block mb-1">Corporate Email Address:</label>
+                <input
+                  type="email"
+                  placeholder="e.g. vikram@expertcrm.com"
+                  value={newAgentEmail}
+                  onChange={(e) => setNewAgentEmail(e.target.value)}
+                  className="w-full p-2.5 bg-slate-950 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-indigo-500"
+                />
+              </div>
+
+              <div>
+                <label className="text-slate-300 font-bold block mb-1">Mobile Phone Number:</label>
+                <input
+                  type="text"
+                  placeholder="e.g. +91 98110 22334"
+                  value={newAgentPhone}
+                  onChange={(e) => setNewAgentPhone(e.target.value)}
+                  className="w-full p-2.5 bg-slate-950 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-indigo-500"
+                />
+              </div>
+
+              <div>
+                <label className="text-slate-300 font-bold block mb-1">Paired Phone Model:</label>
+                <select
+                  value={newAgentDevice}
+                  onChange={(e) => setNewAgentDevice(e.target.value)}
+                  className="w-full p-2.5 bg-slate-950 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-indigo-500"
+                >
+                  <option value="Samsung Galaxy S24 (Android 14)">Samsung Galaxy S24 (Android 14)</option>
+                  <option value="Apple iPhone 15 Pro (iOS 17.5)">Apple iPhone 15 Pro (iOS 17.5)</option>
+                  <option value="Google Pixel 8 (Android 14)">Google Pixel 8 (Android 14)</option>
+                  <option value="OnePlus 12 (Android 14)">OnePlus 12 (Android 14)</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="flex gap-2 pt-2">
+              <button
+                onClick={() => {
+                  if (!newAgentName.trim()) {
+                    alert("Please provide an agent name");
+                    return;
+                  }
+                  const newToken = `EXP-${Math.floor(10000 + Math.random() * 90000)}`;
+                  const createdAgent: CallAgent = {
+                    id: `AGT-${100 + agents.length + 1}`,
+                    name: newAgentName.trim(),
+                    email: newAgentEmail.trim() || `agent${agents.length + 1}@expertcrm.com`,
+                    phone: newAgentPhone.trim() || '+91 98000 00000',
+                    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
+                    device: newAgentDevice,
+                    deviceId: `AND-DEV-${Math.floor(1000 + Math.random() * 9000)}`,
+                    appVersion: 'v2.4.2 (Production)',
+                    pairingToken: newToken,
+                    isAuthorized: true,
+                    status: 'Available',
+                    metrics: { totalCalls: 0, connectedCalls: 0, talkTimeMinutes: 0, missedCalls: 0, avgDurationSecs: 0 },
+                    lastSyncTime: 'Just now',
+                    batteryLevel: 98,
+                    assignedCampaign: 'Outbound Client Onboarding'
+                  };
+
+                  setAgents(prev => [...prev, createdAgent]);
+
+                  fetch('/api/call-agents/new', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      name: createdAgent.name,
+                      email: createdAgent.email,
+                      phone: createdAgent.phone,
+                      device: createdAgent.device
+                    })
+                  }).catch(() => {});
+
+                  setShowNewAgentModal(false);
+                  setNewAgentName('');
+                  setNewAgentEmail('');
+                  setNewAgentPhone('');
+                  setShowPairingModal(createdAgent);
+                }}
+                className="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition cursor-pointer"
+              >
+                Authorize & Generate Pairing Token
+              </button>
+              <button
+                onClick={() => setShowNewAgentModal(false)}
+                className="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-bold transition cursor-pointer"
+              >
+                Cancel
+              </button>
             </div>
           </div>
         </div>

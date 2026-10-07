@@ -37,10 +37,11 @@ interface AuditLog {
 }
 
 const INITIAL_USERS: SecurityUser[] = [
-  { id: 'USR-101', name: 'Aman Varma', role: 'Sales Manager', email: 'aman@expertcrm.com', active: true, device: 'Mobile-Apply', mfaEnrolled: true, lastLogin: '2026-06-17 09:12' },
-  { id: 'USR-102', name: 'Siddharth Sen', role: 'Sales Manager', email: 'sid@expertcrm.com', active: true, device: 'Web Portal', mfaEnrolled: true, lastLogin: '2026-06-17 08:45' },
-  { id: 'USR-103', name: 'Deepa Rao', role: 'Support Agent', email: 'deepa@expertcrm.com', active: true, device: 'Web Portal', mfaEnrolled: false, lastLogin: '2026-06-17 09:30' },
-  { id: 'USR-104', name: 'Ketan Patel', role: 'HR Specialist', email: 'ketan@expertcrm.com', active: false, device: 'Offline', mfaEnrolled: false, lastLogin: '2026-06-15 14:22' }
+  { id: 'USR-101', name: 'Aman Varma', role: 'Sales Manager', email: 'aman@expertcrm.com', active: true, device: 'Web Portal', mfaEnrolled: true, lastLogin: '2026-06-17 09:12' },
+  { id: 'USR-102', name: 'Rohan Sharma', role: 'Call Agent', email: 'rohan@expertcrm.com', active: true, device: 'Mobile Companion (Android)', mfaEnrolled: true, lastLogin: '2026-06-17 09:40' },
+  { id: 'USR-103', name: 'Sneha Patel', role: 'Call Agent', email: 'sneha@expertcrm.com', active: true, device: 'Mobile Companion (iOS)', mfaEnrolled: true, lastLogin: '2026-06-17 09:35' },
+  { id: 'USR-104', name: 'Deepa Rao', role: 'Support Agent', email: 'deepa@expertcrm.com', active: true, device: 'Web Portal', mfaEnrolled: false, lastLogin: '2026-06-17 09:30' },
+  { id: 'USR-105', name: 'Ketan Patel', role: 'HR Specialist', email: 'ketan@expertcrm.com', active: false, device: 'Offline', mfaEnrolled: false, lastLogin: '2026-06-15 14:22' }
 ];
 
 const DEFAULT_AUDIT_LOGS: AuditLog[] = [
@@ -63,6 +64,10 @@ const DEFAULT_ROLE_PERMISSIONS: Record<AccessRole, Record<keyof AccessControl['p
   'Sales Manager': {
     viewDashboard: true, manageLeads: true, manageCalls: true, manageSupport: false,
     manageStaff: false, manageTasks: true, manageHR: false, manageComms: true, manageSecurity: false
+  },
+  'Call Agent': {
+    viewDashboard: true, manageLeads: true, manageCalls: true, manageSupport: false,
+    manageStaff: false, manageTasks: true, manageHR: false, manageComms: false, manageSecurity: false
   },
   'Support Agent': {
     viewDashboard: true, manageLeads: false, manageCalls: true, manageSupport: true,
