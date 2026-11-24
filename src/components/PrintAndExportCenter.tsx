@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  X, Printer, Copy, Check, FileText, Download, Share2, Clipboard, Mail, ShieldAlert
+  X, Printer, Copy, Check, FileText, Download, Share2, Clipboard, Mail, ShieldAlert,
+  MessageSquare, Phone, Send, ExternalLink
 } from 'lucide-react';
 import { Lead, CallLog, SupportTicket, FieldStaff, Task, Employee, CommsLog } from '../types';
 import crmLogoImg from '../assets/images/crm_logo_v2_1784807669094.jpg';
@@ -14,11 +15,15 @@ interface PrintAndExportCenterProps {
     data: any;
   } | null;
   userEmail?: string;
+  leads?: Lead[];
+  onSendWhatsAppLog?: (log: Omit<CommsLog, 'id' | 'sentTime'>) => void;
 }
 
-export default function PrintAndExportCenter({ isOpen, onClose, document, userEmail = 'expertaidtech@gmail.com' }: PrintAndExportCenterProps) {
+export default function PrintAndExportCenter({ isOpen, onClose, document, userEmail = 'expertaidtech@gmail.com', leads = [], onSendWhatsAppLog }: PrintAndExportCenterProps) {
   const [copied, setCopied] = useState<'none' | 'rich' | 'plain'>('none');
   const [downloaded, setDownloaded] = useState(false);
+  const [waPhone, setWaPhone] = useState('');
+  const [waDispatched, setWaDispatched] = useState(false);
 
   useEffect(() => {
     if (copied !== 'none') {
@@ -33,6 +38,18 @@ export default function PrintAndExportCenter({ isOpen, onClose, document, userEm
       return () => clearTimeout(t);
     }
   }, [downloaded]);
+
+  useEffect(() => {
+    if (!document) return;
+    setWaDispatched(false);
+    const dataObj = document.data || {};
+    const targetName = (dataObj.clientName || dataObj.leadName || '').toString().trim().toLowerCase();
+    const targetCompany = (dataObj.companyName || '').toString().trim().toLowerCase();
+    const matchedLead =
+      leads.find((l) => targetName && l.name.trim().toLowerCase() === targetName) ||
+      leads.find((l) => targetCompany && l.company.trim().toLowerCase() === targetCompany);
+    setWaPhone(dataObj.phone || matchedLead?.phone || '');
+  }, [document, leads]);
 
   if (!isOpen || !document) return null;
 
@@ -1329,6 +1346,90 @@ export default function PrintAndExportCenter({ isOpen, onClose, document, userEm
                 {downloaded ? <Check className="w-4 h-4 text-emerald-600" /> : <Download className="w-4 h-4 text-slate-500" />}
                 {downloaded ? 'HTML Leaflet Saved!' : 'Download Offline Document'}
               </button>
+
+              {(type === 'invoice' || type === 'quotation') && (() => {
+                const digits = waPhone.replace(/\D/g, '');
+                const normalizedDigits = digits.length === 10 ? `91${digits}` : digits;
+                const customerName = data?.clientName || data?.leadName || 'Customer';
+                const docLabel = type === 'invoice' ? 'POS Bill Soft Copy' : 'Quotation Soft Copy';
+                const waSummary = [
+                  `*EXP CRM ENTERPRISE - ${docLabel.toUpperCase()}*`,
+                  `Ref: *${data?.id || title}*`,
+                  `Customer: *${customerName}*`,
+                  data?.companyName ? `Company: ${data.companyName}` : '',
+                  `Item: ${data?.itemName || 'Enterprise Package'}`,
+                  `Subtotal: ₹${data?.rawPrice?.toLocaleString('en-IN') || '0'}`,
+                  `Discount: -₹${data?.discountPrice?.toLocaleString('en-IN') || '0'}`,
+                  data?.gstPrice !== undefined ? `GST (18%): +₹${data.gstPrice.toLocaleString('en-IN')}` : '',
+                  `*NET TOTAL: ₹${data?.netPrice?.toLocaleString('en-IN') || '0'}*`,
+                  `Thank you for your business!`
+                ]
+                  .filter(Boolean)
+                  .join('\n');
+
+                const handleDispatchWa = () => {
+                  if (!waPhone.trim()) return;
+                  onSendWhatsAppLog?.({
+                    recipient: `${customerName} (${waPhone.trim()})`,
+                    type: 'WhatsApp',
+                    subject: `${docLabel} - ${data?.id || title}`,
+                    content: waSummary,
+                    status: 'Delivered'
+                  });
+                  setWaDispatched(true);
+                };
+
+                return (
+                  <div className="mt-3 p-3 rounded-xl border border-emerald-200 bg-emerald-50/60 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#128C7E] flex items-center gap-1">
+                        <MessageSquare className="w-3.5 h-3.5" /> WhatsApp Soft Copy
+                      </span>
+                      {waDispatched && (
+                        <span className="text-[10px] font-bold text-emerald-700">Sent & Logged</span>
+                      )}
+                    </div>
+
+                    <div className="relative">
+                      <Phone className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
+                      <input
+                        type="tel"
+                        value={waPhone}
+                        onChange={(e) => {
+                          setWaPhone(e.target.value);
+                          setWaDispatched(false);
+                        }}
+                        placeholder="Customer registered mobile"
+                        className="w-full pl-8 pr-2.5 py-1.5 bg-white border border-emerald-200 rounded-lg text-xs font-mono text-slate-800 outline-none focus:border-[#128C7E]"
+                      />
+                    </div>
+
+                    <div className="flex gap-1.5">
+                      <button
+                        type="button"
+                        disabled={!waPhone.trim()}
+                        onClick={handleDispatchWa}
+                        className="flex-1 py-2 px-2.5 bg-[#128C7E] hover:bg-[#0e7165] disabled:opacity-50 text-white font-bold text-[11px] rounded-lg flex items-center justify-center gap-1 cursor-pointer transition"
+                      >
+                        <Send className="w-3.5 h-3.5" /> Send WhatsApp
+                      </button>
+
+                      {normalizedDigits && (
+                        <a
+                          href={`https://wa.me/${normalizedDigits}?text=${encodeURIComponent(waSummary)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={handleDispatchWa}
+                          className="py-2 px-2.5 bg-white hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold text-[11px] rounded-lg flex items-center justify-center gap-1 transition"
+                          title="Open pre-filled bill in WhatsApp"
+                        >
+                          <ExternalLink className="w-3.5 h-3.5" /> Open
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                );
+              })()}
             </div>
           </div>
 

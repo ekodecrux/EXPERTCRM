@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
-import { 
-  Lock, Mail, Eye, EyeOff, ShieldAlert, Sparkles, LogIn, Check, 
-  Info, ShieldCheck, X, Fingerprint, Activity, ArrowRight, 
-  ShieldAlert as ShieldIcon, Compass, Users, CheckCircle2,
-  Building, Shield, Cloud, Clock, Smartphone, ChevronRight, HelpCircle,
-  Paintbrush
+import React, { useState, useEffect } from 'react';
+import {
+  Lock, Mail, Eye, EyeOff, ShieldAlert, Check,
+  X, Users, Settings, ArrowRight,
+  Smartphone, User, TrendingUp, Handshake, PieChart, Home,
+  ShoppingBag, FileText
 } from 'lucide-react';
 import { AccessRole } from '../types';
 
@@ -35,7 +34,16 @@ export const PRESET_CREDENTIALS = [
     role: 'Sales Manager' as AccessRole,
     avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&h=150&fit=crop&crop=face',
     badgeColor: 'bg-amber-50 border-amber-200 text-amber-700',
-    description: 'Corporate client roster, outbound dialer queue & invoice records.'
+    description: 'Monitor call agents live, manage campaigns, audit recordings & auto-synced data.'
+  },
+  {
+    name: 'Rohan Sharma',
+    email: 'rohan@expertcrm.com',
+    password: 'callagent123',
+    role: 'Call Agent' as AccessRole,
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face',
+    badgeColor: 'bg-indigo-50 border-indigo-200 text-indigo-700',
+    description: 'Authorized Call Agent with paired Android App (Samsung Galaxy S24 Ultra).'
   },
   {
     name: 'Deepa Rao',
@@ -66,241 +74,214 @@ export const PRESET_CREDENTIALS = [
   }
 ];
 
-const GoogleIcon = () => (
-  <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" width="24" height="24">
-    <path fill="#EA4335" d="M12.24 10.285V14.4h6.887c-.275 1.565-1.88 4.604-6.887 4.604-4.33 0-7.866-3.577-7.866-8s3.536-8 7.866-8c2.46 0 4.105 1.025 5.047 1.926l3.253-3.133C18.29 1.71 15.538 1 12.24 1 5.92 1 12.2 5.92 12.2 12.2s4.92 11.2 11.24 11.2c6.6 0 11-4.64 11-11.2 0-.756-.08-1.332-.18-1.915H12.24z" />
-  </svg>
-);
+const LaptopDashboardShowcase = () => (
+  <div className="relative w-full max-w-[430px] select-none">
+    {/* Soft ambient glow behind laptop */}
+    <div className="absolute -inset-4 bg-cyan-400/15 blur-2xl rounded-3xl pointer-events-none" />
 
-const MicrosoftIcon = () => (
-  <svg className="w-4.5 h-4.5 shrink-0" viewBox="0 0 23 23" width="23" height="23">
-    <path fill="#F25022" d="M0 0h10.5v10.5H0z" />
-    <path fill="#7FBA00" d="M11.5 0h10.5v10.5H11.5z" />
-    <path fill="#01A6F0" d="M0 11.5h10.5v10.5H0z" />
-    <path fill="#FFB900" d="M11.5 11.5h10.5v10.5H11.5z" />
-  </svg>
-);
-
-const CRMBadgeLogo = () => (
-  <div className="flex flex-col items-center select-none animate-fadeIn">
-    <img
-      src="/brand-logo.jpeg?v=2"
-      alt="Expert CRM — Customer Relationship Management"
-      className="w-28 h-28 sm:w-36 sm:h-36 lg:w-40 lg:h-40 object-contain rounded-2xl bg-white p-1.5 shadow-lg"
-    />
-  </div>
-);
-
-const LaptopDashboardIllustration = () => {
-  return (
-    <div className="relative w-full h-[190px] flex items-center justify-center overflow-hidden mt-1 animate-fadeIn">
-      {/* Decorative Blur Background circles */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-blue-500/10 rounded-full filter blur-3xl pointer-events-none" />
-
-      {/* Floating Widget 1: Bar Chart (Left) */}
-      <div className="absolute left-4 top-4 z-20 bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-3 shadow-xl hover:translate-y-[-4px] transition duration-300 w-28">
-        <span className="text-[8px] font-black text-blue-300 uppercase tracking-widest block mb-1">Weekly Leads</span>
-        <div className="flex items-end gap-1.5 h-10 pt-2">
-          <div className="w-2.5 h-4 bg-sky-400 rounded-sm animate-pulse" />
-          <div className="w-2.5 h-7 bg-blue-400 rounded-sm" />
-          <div className="w-2.5 h-10 bg-indigo-500 rounded-sm animate-pulse" />
-          <div className="w-2.5 h-5 bg-sky-300 rounded-sm" />
-          <div className="w-2.5 h-8 bg-blue-500 rounded-sm" />
-        </div>
-        <div className="flex justify-between text-[7px] text-slate-400 mt-1 font-mono">
-          <span>Mon</span>
-          <span>Fri</span>
-        </div>
+    {/* Laptop Screen Frame */}
+    <div
+      className="relative rounded-t-2xl p-[7px] bg-gradient-to-b from-[#1e293b] via-[#0f172a] to-[#090d16] shadow-[0_24px_50px_rgba(2,12,38,0.65)] border border-white/20"
+      style={{ transform: 'perspective(1100px) rotateY(-6deg) rotateX(2deg)' }}
+    >
+      {/* Webcam bezel dot */}
+      <div className="flex justify-center pb-1">
+        <span className="w-1.5 h-1.5 rounded-full bg-slate-600 border border-slate-500/40" />
       </div>
 
-      {/* Floating Widget 2: Stats Badge (Right-top) */}
-      <div className="absolute right-4 top-8 z-20 bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-3 shadow-xl hover:translate-y-[-4px] transition duration-300 flex items-center gap-2">
-        <div className="p-1.5 bg-emerald-500/20 text-emerald-400 rounded-xl">
-          <Activity className="w-4 h-4 animate-pulse" />
+      {/* Inner Display */}
+      <div className="rounded-lg overflow-hidden bg-[#f1f5f9] grid grid-cols-12 h-[225px] sm:h-[245px]">
+        {/* Dark Left Sidebar */}
+        <div className="col-span-3 bg-gradient-to-b from-[#0b2046] to-[#071530] text-slate-300 py-3 px-1.5 flex flex-col gap-1 border-r border-slate-800/80">
+          <div className="flex items-center gap-1.5 px-2 py-1.5 rounded-md bg-[#1173f2] text-white font-semibold text-[9px] shadow-sm">
+            <Home className="w-2.5 h-2.5 shrink-0" />
+            <span className="truncate">Dashboard</span>
+          </div>
+          {[
+            { icon: User, label: 'Leads' },
+            { icon: Users, label: 'Customers' },
+            { icon: ShoppingBag, label: 'Sales' },
+            { icon: FileText, label: 'Reports' },
+            { icon: Settings, label: 'Settings' },
+          ].map(({ icon: Icon, label }) => (
+            <div
+              key={label}
+              className="flex items-center gap-1.5 px-2 py-1.5 rounded-md text-slate-300/85 text-[9px] font-medium"
+            >
+              <Icon className="w-2.5 h-2.5 shrink-0 text-sky-300/80" />
+              <span className="truncate">{label}</span>
+            </div>
+          ))}
         </div>
-        <div>
-          <span className="text-[7px] font-black text-slate-350 uppercase tracking-wider block">Real-time Sync</span>
-          <span className="text-xs font-black text-white">99.98% SLA</span>
-        </div>
-      </div>
 
-      {/* The Laptop 3D mockup */}
-      <div className="relative w-80 flex flex-col items-center">
-        {/* Laptop Screen */}
-        <div className="relative w-64 h-40 bg-slate-900 border-4 border-slate-700 rounded-t-xl overflow-hidden shadow-2xl">
-          {/* Inner Screen Dashboard */}
-          <div className="absolute inset-0 bg-slate-950 p-2 flex flex-col justify-between">
-            {/* Header bar of screen */}
-            <div className="flex items-center justify-between border-b border-slate-800 pb-1">
-              <div className="flex gap-1">
-                <span className="w-1 h-1 rounded-full bg-rose-500" />
-                <span className="w-1 h-1 rounded-full bg-amber-500" />
-                <span className="w-1 h-1 rounded-full bg-emerald-500" />
+        {/* Main Screen Workspace */}
+        <div className="col-span-9 p-2.5 flex flex-col gap-2 bg-[#eef4fb]">
+          {/* Top 3 KPI Cards */}
+          <div className="grid grid-cols-3 gap-2">
+            {/* Total Clients */}
+            <div className="rounded-lg p-2 bg-gradient-to-br from-[#2393f8] to-[#0a66e0] text-white shadow-sm">
+              <div className="w-4 h-4 rounded-full bg-white/20 flex items-center justify-center mb-1">
+                <User className="w-2.5 h-2.5 text-white" />
               </div>
-              <span className="text-[6px] font-mono text-slate-500">expert-crm-nodes://live</span>
-              <span className="w-2 h-1 bg-blue-500 rounded-xxs" />
+              <div className="text-[8px] text-white/85 font-medium leading-none">Total Clients</div>
+              <div className="text-[13px] font-extrabold tracking-tight mt-0.5 tabular-nums leading-tight">
+                1,250
+              </div>
             </div>
 
-            {/* Dashboard grid */}
-            <div className="flex-1 grid grid-cols-12 gap-1.5 mt-1.5">
-              {/* Left sidebar of screen */}
-              <div className="col-span-3 border-r border-slate-900 pr-1 flex flex-col gap-1">
-                <div className="w-full h-2 bg-blue-600/30 rounded-xxs animate-pulse" />
-                <div className="w-full h-1.5 bg-slate-800 rounded-xxs" />
-                <div className="w-full h-1.5 bg-slate-800 rounded-xxs" />
-                <div className="w-full h-1.5 bg-slate-800 rounded-xxs" />
+            {/* Total Deals */}
+            <div className="rounded-lg p-2 bg-gradient-to-br from-[#14b886] to-[#069468] text-white shadow-sm">
+              <div className="w-4 h-4 rounded-full bg-white/20 flex items-center justify-center mb-1">
+                <TrendingUp className="w-2.5 h-2.5 text-white" />
               </div>
+              <div className="text-[8px] text-white/85 font-medium leading-none">Total Deals</div>
+              <div className="text-[13px] font-extrabold tracking-tight mt-0.5 tabular-nums leading-tight">
+                $85,750
+              </div>
+            </div>
 
-              {/* Main panel of screen */}
-              <div className="col-span-9 flex flex-col gap-1.5">
-                {/* 2 stat boxes */}
-                <div className="grid grid-cols-2 gap-1">
-                  <div className="bg-slate-900 p-1 rounded border border-slate-800">
-                    <span className="text-[5px] text-slate-400 block font-bold">Conversion</span>
-                    <span className="text-[7px] text-emerald-400 font-extrabold">+24.5%</span>
-                  </div>
-                  <div className="bg-slate-900 p-1 rounded border border-slate-800">
-                    <span className="text-[5px] text-slate-400 block font-bold">Active Calls</span>
-                    <span className="text-[7px] text-blue-400 font-extrabold">12 Live</span>
-                  </div>
+            {/* Conversion Rate */}
+            <div className="rounded-lg p-2 bg-gradient-to-br from-[#8a5cf5] to-[#692be0] text-white shadow-sm">
+              <div className="w-4 h-4 rounded-full bg-white/20 flex items-center justify-center mb-1">
+                <Check className="w-2.5 h-2.5 text-white" />
+              </div>
+              <div className="text-[8px] text-white/85 font-medium leading-none">Conversion Rate</div>
+              <div className="text-[13px] font-extrabold tracking-tight mt-0.5 tabular-nums leading-tight">
+                78%
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom 2 Charts */}
+          <div className="grid grid-cols-12 gap-2 flex-1 min-h-0">
+            {/* Sales Overview Chart */}
+            <div className="col-span-7 bg-white rounded-lg p-2 shadow-xs border border-slate-200/70 flex flex-col justify-between">
+              <div className="text-[9px] font-bold text-slate-800">Sales Overview</div>
+              <div className="flex-1 flex items-center py-0.5">
+                <svg viewBox="0 0 180 76" className="w-full h-full overflow-visible">
+                  <defs>
+                    <linearGradient id="salesAreaGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#1d8cf8" stopOpacity="0.28" />
+                      <stop offset="100%" stopColor="#1d8cf8" stopOpacity="0.02" />
+                    </linearGradient>
+                  </defs>
+                  {/* Grid lines */}
+                  <line x1="16" y1="12" x2="174" y2="12" stroke="#e2e8f0" strokeWidth="0.8" />
+                  <line x1="16" y1="32" x2="174" y2="32" stroke="#e2e8f0" strokeWidth="0.8" />
+                  <line x1="16" y1="52" x2="174" y2="52" stroke="#e2e8f0" strokeWidth="0.8" />
+                  {/* Y axis labels */}
+                  <text x="2" y="14" fontSize="6" fill="#94a3b8">90</text>
+                  <text x="2" y="34" fontSize="6" fill="#94a3b8">60</text>
+                  <text x="2" y="54" fontSize="6" fill="#94a3b8">30</text>
+                  {/* Area */}
+                  <path
+                    d="M22,50 L50,42 L78,34 L106,40 L134,27 L168,14 L168,60 L22,60 Z"
+                    fill="url(#salesAreaGrad)"
+                  />
+                  {/* Line */}
+                  <polyline
+                    fill="none"
+                    stroke="#0b74f0"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    points="22,50 50,42 78,34 106,40 134,27 168,14"
+                  />
+                  {/* Nodes */}
+                  {[
+                    [22, 50],
+                    [50, 42],
+                    [78, 34],
+                    [106, 40],
+                    [134, 27],
+                    [168, 14]
+                  ].map(([cx, cy], idx) => (
+                    <circle key={idx} cx={cx} cy={cy} r="2.6" fill="#0b74f0" stroke="#ffffff" strokeWidth="1" />
+                  ))}
+                  {/* X labels */}
+                  <text x="16" y="70" fontSize="6.5" fill="#64748b">Jan</text>
+                  <text x="43" y="70" fontSize="6.5" fill="#64748b">Feb</text>
+                  <text x="71" y="70" fontSize="6.5" fill="#64748b">Mar</text>
+                  <text x="99" y="70" fontSize="6.5" fill="#64748b">Apr</text>
+                  <text x="127" y="70" fontSize="6.5" fill="#64748b">May</text>
+                  <text x="159" y="70" fontSize="6.5" fill="#64748b">Jun</text>
+                </svg>
+              </div>
+            </div>
+
+            {/* Lead Sources Donut Chart */}
+            <div className="col-span-5 bg-white rounded-lg p-2 shadow-xs border border-slate-200/70 flex flex-col justify-between">
+              <div className="text-[9px] font-bold text-slate-800">Lead Sources</div>
+              <div className="flex justify-center py-0.5">
+                <svg viewBox="0 0 64 64" className="w-12 h-12">
+                  <circle cx="32" cy="32" r="20" fill="none" stroke="#e2e8f0" strokeWidth="11" />
+                  {/* Blue segment */}
+                  <circle
+                    cx="32" cy="32" r="20" fill="none" stroke="#1d8cf8" strokeWidth="11"
+                    strokeDasharray="44 126" strokeDashoffset="0" transform="rotate(-90 32 32)"
+                  />
+                  {/* Green segment */}
+                  <circle
+                    cx="32" cy="32" r="20" fill="none" stroke="#10b981" strokeWidth="11"
+                    strokeDasharray="34 126" strokeDashoffset="-44" transform="rotate(-90 32 32)"
+                  />
+                  {/* Amber segment */}
+                  <circle
+                    cx="32" cy="32" r="20" fill="none" stroke="#f59e0b" strokeWidth="11"
+                    strokeDasharray="28 126" strokeDashoffset="-78" transform="rotate(-90 32 32)"
+                  />
+                  {/* Rose/Purple segment */}
+                  <circle
+                    cx="32" cy="32" r="20" fill="none" stroke="#ef4444" strokeWidth="11"
+                    strokeDasharray="20 126" strokeDashoffset="-106" transform="rotate(-90 32 32)"
+                  />
+                </svg>
+              </div>
+              <div className="space-y-0.5 text-[7px] text-slate-600 font-medium">
+                <div className="flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#1d8cf8]" /> Website
                 </div>
-
-                {/* Main line chart area */}
-                <div className="flex-1 bg-slate-900 rounded p-1 border border-slate-800 flex flex-col justify-between">
-                  <span className="text-[5px] text-slate-500 font-bold">Sales Growth Trend</span>
-                  {/* SVG line chart */}
-                  <svg className="w-full h-10 mt-1" viewBox="0 0 100 40">
-                    <path
-                      d="M0,35 Q15,20 30,28 T60,10 T90,5 L100,5"
-                      fill="none"
-                      stroke="url(#chartGradient)"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                    />
-                    <path
-                      d="M0,35 Q15,20 30,28 T60,10 T90,5 L100,5 L100,40 L0,40 Z"
-                      fill="url(#areaGradient)"
-                      opacity="0.15"
-                    />
-                    <defs>
-                      <linearGradient id="chartGradient" x1="0" y1="0" x2="1" y2="0">
-                        <stop offset="0%" stopColor="#38bdf8" />
-                        <stop offset="100%" stopColor="#6366f1" />
-                      </linearGradient>
-                      <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#38bdf8" />
-                        <stop offset="100%" stopColor="#38bdf8" stopOpacity="0" />
-                      </linearGradient>
-                    </defs>
-                  </svg>
+                <div className="flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#10b981]" /> Referral
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#f59e0b]" /> Social Media
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#ef4444]" /> Others
                 </div>
               </div>
             </div>
           </div>
         </div>
-
-        {/* Laptop Keyboard Base */}
-        <div className="relative w-76 h-3.5 bg-slate-700 border-t border-slate-500 rounded-b-lg shadow-xl flex justify-center">
-          {/* Trackpad */}
-          <div className="w-12 h-1.5 bg-slate-800 border-x border-b border-slate-750 rounded-b-xs mt-0.5" />
-        </div>
-        
-        {/* Laptop Bottom Shadow line */}
-        <div className="w-68 h-1 bg-slate-950/60 blur-xs rounded-full mt-0.5" />
-      </div>
-
-      {/* Decorative Potted Plant (Right-bottom) */}
-      <div className="absolute right-6 bottom-2 z-10 flex flex-col items-center">
-        {/* Plant Leaves */}
-        <div className="flex justify-center -space-x-1.5">
-          <div className="w-3.5 h-6 bg-emerald-500 rounded-full rotate-[-25deg] origin-bottom shadow-xs border border-emerald-600" />
-          <div className="w-3.5 h-7 bg-emerald-400 rounded-full rotate-[5deg] origin-bottom shadow-xs border border-emerald-500" />
-          <div className="w-3.5 h-5.5 bg-emerald-500 rounded-full rotate-[35deg] origin-bottom shadow-xs border border-emerald-600" />
-        </div>
-        {/* Plant Pot */}
-        <div className="w-6 h-6 bg-amber-500/20 border border-amber-500/35 rounded-b-lg rounded-t-xs flex items-center justify-center shadow-md">
-          <div className="w-5 h-[1.5px] bg-amber-500/40 absolute top-[1px]" />
-        </div>
       </div>
     </div>
-  );
-};
 
-interface BackgroundTheme {
-  id: string;
-  name: string;
-  gradientClass: string;
-  circle1Class: string;
-  circle2Class: string;
-  previewColor: string;
-}
-
-const BG_THEMES: BackgroundTheme[] = [
-  {
-    id: 'midnight',
-    name: 'Cosmic Midnight',
-    gradientClass: 'from-[#02132b] via-[#09264c] to-[#041d3b]',
-    circle1Class: 'bg-blue-600/10',
-    circle2Class: 'bg-indigo-500/10',
-    previewColor: 'bg-blue-600'
-  },
-  {
-    id: 'aurora',
-    name: 'Emerald Aurora',
-    gradientClass: 'from-[#011710] via-[#043325] to-[#011a12]',
-    circle1Class: 'bg-emerald-500/10',
-    circle2Class: 'bg-teal-400/10',
-    previewColor: 'bg-emerald-500'
-  },
-  {
-    id: 'amethyst',
-    name: 'Royal Amethyst',
-    gradientClass: 'from-[#100221] via-[#240542] to-[#140226]',
-    circle1Class: 'bg-purple-600/10',
-    circle2Class: 'bg-fuchsia-500/10',
-    previewColor: 'bg-purple-600'
-  },
-  {
-    id: 'sunset',
-    name: 'Sunset Horizon',
-    gradientClass: 'from-[#1c0206] via-[#38040d] to-[#210206]',
-    circle1Class: 'bg-rose-600/10',
-    circle2Class: 'bg-amber-500/10',
-    previewColor: 'bg-rose-600'
-  },
-  {
-    id: 'obsidian',
-    name: 'Obsidian Coal',
-    gradientClass: 'from-[#060608] via-[#121217] to-[#0b0b0f]',
-    circle1Class: 'bg-slate-600/10',
-    circle2Class: 'bg-zinc-500/10',
-    previewColor: 'bg-zinc-700'
-  }
-];
+    {/* Laptop Metallic Base Deck */}
+    <div
+      className="h-3.5 mx-[-14px] rounded-b-xl bg-gradient-to-b from-[#cbd5e1] via-[#94a3b8] to-[#475569] shadow-[0_14px_30px_rgba(2,10,30,0.65)] relative flex justify-center"
+      style={{ transform: 'perspective(1100px) rotateY(-4deg)' }}
+    >
+      <div className="w-16 h-1 rounded-b-md bg-slate-600/70" />
+    </div>
+  </div>
+);
 
 interface LoginProps {
   onLoginSuccess: (session: UserSession) => void;
 }
 
 export default function Login({ onLoginSuccess }: LoginProps) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState(() => {
+    const remembered = localStorage.getItem('crm_remember_identifier');
+    return remembered || 'admin@expertcrm.com';
+  });
+  const [password, setPassword] = useState('adminpassword123');
+  const [rememberMe, setRememberMe] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [selectedPresetIndex, setSelectedPresetIndex] = useState<number | null>(null);
-  const [selectedTenantId, setSelectedTenantId] = useState<string | null>(null);
-  const [activePresetTab, setActivePresetTab] = useState<'staff' | 'tenant'>('tenant');
-  
-  // Custom states to support Quick credentials drawer beautifully
-  const [isQuickDrawerOpen, setIsQuickDrawerOpen] = useState(false);
-  
-  // Multi background color/theme configuration
-  const [bgTheme, setBgTheme] = useState(() => {
-    return localStorage.getItem('login_bg_theme') || 'midnight';
-  });
 
-  // Load existing tenant directory to support multi-tenant logins dynamically
   const [tenants] = useState(() => {
     const saved = localStorage.getItem('saas_tenants');
     return saved ? JSON.parse(saved) : [
@@ -315,96 +296,77 @@ export default function Login({ onLoginSuccess }: LoginProps) {
   const [forgotStatus, setForgotStatus] = useState<{ success: boolean; message: string; presetMatch?: typeof PRESET_CREDENTIALS[0] } | null>(null);
   const [isForgotSubmitting, setIsForgotSubmitting] = useState(false);
 
+  useEffect(() => {
+    if (rememberMe && email.trim()) {
+      localStorage.setItem('crm_remember_identifier', email.trim());
+    } else if (!rememberMe) {
+      localStorage.removeItem('crm_remember_identifier');
+    }
+  }, [rememberMe, email]);
+
   const handleForgotPasswordSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setForgotStatus(null);
-    
-    const cleanEmail = forgotEmail.trim().toLowerCase();
-    if (!cleanEmail) {
-      setForgotStatus({ success: false, message: 'Please provide your registered security email.' });
+
+    const cleanInput = forgotEmail.trim().toLowerCase();
+    if (!cleanInput) {
+      setForgotStatus({ success: false, message: 'Please provide your registered email or username.' });
       return;
     }
 
     setIsForgotSubmitting(true);
     setTimeout(() => {
       setIsForgotSubmitting(false);
-      const match = PRESET_CREDENTIALS.find(p => p.email.toLowerCase().trim() === cleanEmail);
-      const tenantMatch = tenants.find((t: any) => t.clientOnboardEmail && t.clientOnboardEmail.toLowerCase().trim() === cleanEmail);
-
+      const match = PRESET_CREDENTIALS.find((p) => {
+        const em = p.email.toLowerCase().trim();
+        const local = em.split('@')[0];
+        return em === cleanInput || local === cleanInput || p.name.toLowerCase().trim() === cleanInput;
+      });
       if (match) {
         setForgotStatus({
           success: true,
-          message: `Security authentication record decrypted! We verified identity directory for ${match.name}.`,
+          message: 'Account verified.',
           presetMatch: match
-        });
-      } else if (tenantMatch) {
-        const isExpertCrm = tenantMatch.name.toUpperCase().includes('EXPERT CRM') || tenantMatch.id === 'ten-1' || tenantMatch.subdomain === 'expert';
-        const tenantRole = isExpertCrm ? 'Super Admin' : 'Admin';
-        setForgotStatus({
-          success: true,
-          message: `Tenant Security Profile Decrypted! We verified tenant admin directory for ${tenantMatch.name}.`,
-          presetMatch: {
-            name: tenantMatch.clientContactName || 'Tenant Administrator',
-            email: tenantMatch.clientOnboardEmail || '',
-            password: tenantMatch.adminPassword || '',
-            role: tenantRole,
-            avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face',
-            badgeColor: isExpertCrm ? 'bg-indigo-50 border-indigo-200 text-indigo-700' : 'bg-teal-50 border-teal-200 text-teal-700',
-            description: `Workspace: ${tenantMatch.name} (${tenantMatch.subdomain}.${tenantMatch.domainProvider || 'expertcrm.in'}) - Clearance: ${tenantRole}`
-          }
         });
       } else {
         setForgotStatus({
-          success: true,
-          message: `If an account with "${forgotEmail}" is registered in our security directory, a secure recovery payload link has been dispatched to it.`
+          success: false,
+          message: 'No matching user directory record found for this identifier.'
         });
       }
-    }, 600);
-  };
-
-  const handlePresetSelect = (index: number) => {
-    const preset = PRESET_CREDENTIALS[index];
-    setEmail(preset.email);
-    setPassword(preset.password);
-    setSelectedPresetIndex(index);
-    setSelectedTenantId(null);
-    setError(null);
-    setIsQuickDrawerOpen(false); // Auto close quick drawer on selection
-  };
-
-  const handleTenantSelect = (tenant: any) => {
-    setEmail(tenant.clientOnboardEmail || '');
-    setPassword(tenant.adminPassword || '');
-    setSelectedTenantId(tenant.id);
-    setSelectedPresetIndex(null);
-    setError(null);
-    setIsQuickDrawerOpen(false); // Auto close quick drawer on selection
+    }, 450);
   };
 
   const handleLoginSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-
-    if (!email) {
-      setError('Please provide a valid corporate email Address.');
-      return;
-    }
-    if (!password) {
-      setError('Please provide your secure access password.');
-      return;
-    }
-
     setIsSubmitting(true);
 
-    // Simulate verification delay to mimic modern enterprise SSO handshake
-    setTimeout(() => {
-      const match = PRESET_CREDENTIALS.find(
-        p => p.email.toLowerCase().trim() === email.toLowerCase().trim() && p.password === password
-      );
+    const cleanIdentifier = email.trim().toLowerCase();
+    const cleanPass = password.trim();
 
-      const tenantMatch = tenants.find(
-        (t: any) => t.clientOnboardEmail && t.clientOnboardEmail.toLowerCase().trim() === email.toLowerCase().trim() && t.adminPassword === password
-      );
+    setTimeout(() => {
+      // 1. Check preset staff by email, email username prefix, or full name
+      const match = PRESET_CREDENTIALS.find((p) => {
+        const em = p.email.toLowerCase().trim();
+        const usernamePrefix = em.split('@')[0];
+        const fullName = p.name.toLowerCase().trim();
+        return (
+          (em === cleanIdentifier || usernamePrefix === cleanIdentifier || fullName === cleanIdentifier) &&
+          p.password === cleanPass
+        );
+      });
+
+      // 2. Check multi-tenant accounts by email, subdomain, or contact name
+      const tenantMatch = tenants.find((t: any) => {
+        const em = (t.clientOnboardEmail || '').toLowerCase().trim();
+        const sub = (t.subdomain || '').toLowerCase().trim();
+        const contact = (t.clientContactName || '').toLowerCase().trim();
+        return (
+          (em === cleanIdentifier || sub === cleanIdentifier || contact === cleanIdentifier) &&
+          t.adminPassword === cleanPass
+        );
+      });
 
       if (match) {
         onLoginSuccess({
@@ -419,7 +381,10 @@ export default function Login({ onLoginSuccess }: LoginProps) {
           setIsSubmitting(false);
           return;
         }
-        const isExpertCrm = tenantMatch.name.toUpperCase().includes('EXPERT CRM') || tenantMatch.id === 'ten-1' || tenantMatch.subdomain === 'expert';
+        const isExpertCrm =
+          tenantMatch.name.toUpperCase().includes('EXPERT CRM') ||
+          tenantMatch.id === 'ten-1' ||
+          tenantMatch.subdomain === 'expert';
         const assignedRole = isExpertCrm ? 'Super Admin' : 'Admin';
         onLoginSuccess({
           name: tenantMatch.clientContactName || 'Tenant Administrator',
@@ -431,644 +396,432 @@ export default function Login({ onLoginSuccess }: LoginProps) {
           tenantPlanId: tenantMatch.planId
         });
       } else {
-        setError('Access authorization denied. Invalid credentials or tenant password.');
+        setError('Invalid Email / Username or Password. Please verify your credentials.');
         setIsSubmitting(false);
       }
-    }, 750);
+    }, 450);
   };
 
-  const currentTheme = BG_THEMES.find(t => t.id === bgTheme) || BG_THEMES[0];
+  const featureHighlights = [
+    { icon: TrendingUp, label: 'Track Leads & Opportunities' },
+    { icon: Handshake, label: 'Manage Customers Efficiently' },
+    { icon: PieChart, label: 'Get Powerful Insights & Reports' },
+    { icon: Settings, label: 'Automate Your Workflow' }
+  ];
 
   return (
-    <div id="login-module-container" className={`h-screen w-screen bg-gradient-to-tr ${currentTheme.gradientClass} flex items-center justify-center p-2 sm:p-3 lg:p-5 font-sans relative overflow-hidden select-none transition-all duration-1000`}>
-      
-      {/* Background Theme Selector Option */}
-      <div className="absolute top-4 left-4 z-40 flex items-center gap-2 bg-slate-950/40 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-2xl shadow-xl transition-all">
-        <span className="text-[10px] font-black uppercase text-slate-300 tracking-wider flex items-center gap-1">
-          <Paintbrush className="w-3.5 h-3.5 text-sky-400" />
-          <span className="hidden sm:inline">Theme:</span>
-        </span>
-        <div className="flex items-center gap-1.5 ml-1">
-          {BG_THEMES.map((theme) => (
-            <button
-              key={theme.id}
-              type="button"
-              onClick={() => {
-                setBgTheme(theme.id);
-                localStorage.setItem('login_bg_theme', theme.id);
-              }}
-              title={theme.name}
-              className={`w-5 h-5 rounded-full ${theme.previewColor} border-2 transition-all cursor-pointer hover:scale-110 active:scale-95 ${
-                bgTheme === theme.id ? 'border-white ring-2 ring-sky-400/50 scale-110' : 'border-transparent opacity-70 hover:opacity-100'
-              }`}
-            />
-          ))}
-        </div>
+    <div
+      id="login-module-container"
+      className="min-h-screen w-full relative overflow-hidden flex items-center justify-center font-sans bg-[#041845]"
+    >
+      {/* ==================== ATMOSPHERIC BACKGROUND LAYERS ==================== */}
+      {/* Deep navy-to-bright sunlit glass office gradient */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            'radial-gradient(circle at 68% 35%, rgba(164, 214, 255, 0.72) 0%, rgba(56, 132, 232, 0.55) 36%, rgba(8, 37, 98, 0.94) 76%, #031338 100%)'
+        }}
+      />
+
+      {/* Subtle blurred architectural office window frames in center-right */}
+      <div className="absolute inset-0 pointer-events-none opacity-35 overflow-hidden">
+        <div className="absolute top-0 left-[46%] w-2 h-[75%] bg-slate-900/40 blur-[2px]" />
+        <div className="absolute top-0 left-[61%] w-2 h-[75%] bg-slate-900/35 blur-[2px]" />
+        <div className="absolute top-[28%] left-[38%] right-[12%] h-2 bg-slate-900/30 blur-[2px]" />
+        <div className="absolute bottom-0 left-0 right-0 h-[26%] bg-gradient-to-t from-[#031338]/90 via-[#0b2b6b]/60 to-transparent" />
       </div>
 
-      {/* Dynamic Background Glowing Mesh circles */}
-      <div className={`absolute top-0 left-0 w-[450px] h-[450px] ${currentTheme.circle1Class} rounded-full filter blur-3xl -ml-24 -mt-24 pointer-events-none transition-all duration-1000`} />
-      <div className={`absolute bottom-0 right-0 w-[450px] h-[450px] ${currentTheme.circle2Class} rounded-full filter blur-3xl -mr-24 -mb-24 pointer-events-none transition-all duration-1000`} />
-      
-      {/* Floating Demo Credentials Handle */}
-      <div className="absolute top-4 right-4 z-40">
-        <button
-          type="button"
-          onClick={() => setIsQuickDrawerOpen(true)}
-          className="flex items-center gap-1.5 px-4 py-2 bg-amber-400 hover:bg-amber-500 text-slate-950 font-black text-xs uppercase tracking-wider rounded-xl shadow-lg hover:shadow-amber-400/20 active:scale-95 transition-all cursor-pointer"
-        >
-          <Sparkles className="w-3.5 h-3.5 animate-pulse text-slate-950" />
-          <span>Quick Login Directory</span>
-        </button>
-      </div>
+      {/* Top-left curved wave ribbon SVG */}
+      <svg
+        viewBox="0 0 520 260"
+        className="absolute top-0 left-0 w-[300px] sm:w-[440px] pointer-events-none select-none"
+        preserveAspectRatio="none"
+      >
+        <defs>
+          <linearGradient id="topLeftWave" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#1e88ff" stopOpacity="0.92" />
+            <stop offset="100%" stopColor="#083a9b" stopOpacity="0.15" />
+          </linearGradient>
+        </defs>
+        <path d="M0,0 L390,0 C250,42 125,105 0,210 Z" fill="url(#topLeftWave)" />
+        <path d="M0,0 L260,0 C165,36 85,84 0,152 Z" fill="#0d6efd" fillOpacity="0.45" />
+      </svg>
 
-      {/* Main Split Screen Container */}
-      <div className="w-full h-full max-h-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-3 lg:gap-6 items-center bg-slate-950/20 backdrop-blur-md rounded-[28px] lg:rounded-[40px] border border-white/5 p-3 sm:p-4 lg:p-6 relative z-10 shadow-2xl overflow-hidden">
-        
-        {/* ==================== LEFT COLUMN: Enterprise Presentation ==================== */}
-        <div className="hidden lg:flex lg:col-span-6 h-full min-h-0 flex-col justify-between space-y-3 p-3 text-white relative overflow-hidden">
-          
-          {/* Logo Badge (Light/White version on Dark Background) */}
-          <div className="flex justify-start">
-            <CRMBadgeLogo />
-          </div>
+      {/* Bottom-right vibrant blue sweeping curve SVG */}
+      <svg
+        viewBox="0 0 1200 220"
+        className="absolute bottom-0 right-0 w-full max-w-[1200px] h-[110px] sm:h-[160px] pointer-events-none select-none"
+        preserveAspectRatio="none"
+      >
+        <defs>
+          <linearGradient id="bottomRightWave" x1="0" y1="1" x2="1" y2="0">
+            <stop offset="0%" stopColor="#0a58ca" stopOpacity="0" />
+            <stop offset="45%" stopColor="#0b6ef6" stopOpacity="0.72" />
+            <stop offset="100%" stopColor="#004fc9" stopOpacity="0.96" />
+          </linearGradient>
+        </defs>
+        <path
+          d="M140,220 C480,195 830,135 1200,35 L1200,220 Z"
+          fill="url(#bottomRightWave)"
+        />
+        <path
+          d="M360,220 C680,188 960,140 1200,88 L1200,220 Z"
+          fill="#0ea5e9"
+          fillOpacity="0.24"
+        />
+      </svg>
 
-          {/* Heading Lines */}
-          <div className="space-y-1 mt-1">
-            <h2 className="text-2xl xl:text-3xl font-extrabold tracking-tight leading-none text-white">
-              Manage Relationships.
-            </h2>
-            <h2 className="text-2xl xl:text-3xl font-extrabold tracking-tight leading-none text-white">
-              Boost Sales.
-            </h2>
-            <h2 className="text-2xl xl:text-3xl font-extrabold tracking-tight leading-none text-sky-400">
-              Grow Your Business.
-            </h2>
-          </div>
+      {/* ==================== MAIN TWO-COLUMN STAGE ==================== */}
+      <div className="relative z-10 w-full max-w-[1260px] mx-auto px-5 sm:px-8 lg:px-10 py-14 lg:py-8 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+        {/* ==================== LEFT HERO SHOWCASE ==================== */}
+        <div className="lg:col-span-7 flex flex-col justify-between text-white space-y-6 lg:space-y-7">
+          {/* Top Brand Headline */}
+          <div className="space-y-1.5 text-center lg:text-left lg:pl-4">
+            <h1 className="text-4xl sm:text-5xl xl:text-[56px] font-extrabold tracking-tight leading-none">
+              <span className="text-white">Expert </span>
+              <span className="text-[#16c2ff]">CRM</span>
+            </h1>
 
-          {/* Clean minimal line divider */}
-          <div className="w-14 h-[3px] bg-sky-400 rounded-full" />
-
-          {/* Description Paragraph */}
-          <p className="text-sm text-slate-300 leading-relaxed max-w-md font-medium">
-            Expert CRM helps you manage leads, track sales, support customers and grow your business efficiently.
-          </p>
-
-          {/* Gorgeous CSS Laptop Illustration Scene */}
-          <LaptopDashboardIllustration />
-
-          {/* Inline bottom feature items */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4">
-            <div className="flex flex-col items-center text-center p-2 bg-white/5 rounded-xl border border-white/5">
-              <div className="p-2 bg-blue-500/10 text-sky-400 rounded-full mb-1">
-                <Shield className="w-4 h-4" />
-              </div>
-              <span className="text-[10px] font-black uppercase text-slate-200 block tracking-wider leading-tight">Secure</span>
-              <span className="text-[9px] text-slate-400 font-bold block">Platform</span>
-            </div>
-
-            <div className="flex flex-col items-center text-center p-2 bg-white/5 rounded-xl border border-white/5">
-              <div className="p-2 bg-blue-500/10 text-sky-400 rounded-full mb-1">
-                <Cloud className="w-4 h-4" />
-              </div>
-              <span className="text-[10px] font-black uppercase text-slate-200 block tracking-wider leading-tight">Cloud</span>
-              <span className="text-[9px] text-slate-400 font-bold block">Based</span>
-            </div>
-
-            <div className="flex flex-col items-center text-center p-2 bg-white/5 rounded-xl border border-white/5">
-              <div className="p-2 bg-blue-500/10 text-sky-400 rounded-full mb-1">
-                <Clock className="w-4 h-4" />
-              </div>
-              <span className="text-[10px] font-black uppercase text-slate-200 block tracking-wider leading-tight">Real-time</span>
-              <span className="text-[9px] text-slate-400 font-bold block">Analytics</span>
-            </div>
-
-            <div className="flex flex-col items-center text-center p-2 bg-white/5 rounded-xl border border-white/5">
-              <div className="p-2 bg-blue-500/10 text-sky-400 rounded-full mb-1">
-                <Smartphone className="w-4 h-4" />
-              </div>
-              <span className="text-[10px] font-black uppercase text-slate-200 block tracking-wider leading-tight">Mobile</span>
-              <span className="text-[9px] text-slate-400 font-bold block">Access</span>
+            <div className="inline-flex flex-col items-center lg:items-center pt-1">
+              <p className="text-base sm:text-xl italic font-light tracking-wide text-white/95 flex items-center gap-2.5 sm:gap-3.5">
+                <span>Manage</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-[#16c2ff] inline-block" />
+                <span>Grow</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-[#16c2ff] inline-block" />
+                <span>Succeed</span>
+              </p>
+              {/* Glowing cyan light streak */}
+              <div className="mt-2 h-[2px] w-56 sm:w-72 bg-gradient-to-r from-transparent via-[#22d3ee] to-transparent shadow-[0_0_14px_rgba(34,211,238,0.85)]" />
             </div>
           </div>
 
-          {/* Side Footer */}
-          <div className="pt-6 border-t border-white/5 flex flex-col sm:flex-row sm:items-center sm:justify-between text-[11px] text-slate-405 font-medium gap-2">
-            <span>© 2024 Expert CRM. All rights reserved.</span>
-            <div className="flex gap-4">
-              <span className="hover:underline cursor-pointer hover:text-white transition">Privacy Policy</span>
-              <span className="hover:underline cursor-pointer hover:text-white transition">Terms of Service</span>
-              <span className="hover:underline cursor-pointer hover:text-white transition">Support</span>
+          {/* Middle Row: Feature Highlights + Laptop Mockup */}
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+            {/* Value Prop & 4 Feature Items */}
+            <div className="md:col-span-5 space-y-5">
+              <h2 className="text-2xl sm:text-[27px] font-bold leading-[1.18] tracking-tight text-white">
+                Your Business.
+                <br />
+                Our <span className="text-[#16c2ff]">CRM</span> Power.
+              </h2>
+
+              <div className="relative space-y-3.5 pl-1">
+                {/* Vertical cyan hairline divider between icon circles and labels */}
+                <div className="absolute left-[42px] top-2 bottom-2 w-px bg-cyan-300/45 pointer-events-none" />
+
+                {featureHighlights.map(({ icon: Icon, label }) => (
+                  <div key={label} className="flex items-center gap-5 relative">
+                    <div className="w-9 h-9 rounded-full bg-white/95 text-[#0844a4] flex items-center justify-center shrink-0 shadow-[0_6px_18px_rgba(3,18,56,0.35)]">
+                      <Icon className="w-4 h-4 stroke-[2.2]" />
+                    </div>
+                    <span className="text-[13px] sm:text-sm font-medium text-white/95 leading-snug">
+                      {label}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Laptop Mockup */}
+            <div className="md:col-span-7 flex justify-center md:justify-end">
+              <LaptopDashboardShowcase />
+            </div>
+          </div>
+
+          {/* Bottom-Left Handwritten Script Tagline */}
+          <div className="pt-1 hidden sm:block lg:pl-2">
+            <div className="inline-block -rotate-2">
+              <p
+                className="text-2xl sm:text-[30px] text-white/95 leading-[1.02] tracking-wide"
+                style={{ fontFamily: 'var(--font-script)' }}
+              >
+                Smarter CRM.
+                <br />
+                Greater Growth.
+              </p>
+              <svg viewBox="0 0 210 18" className="w-44 sm:w-52 h-3.5 mt-0.5 overflow-visible">
+                <path
+                  d="M2,13 Q95,2 206,5"
+                  fill="none"
+                  stroke="#18c4ff"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                />
+              </svg>
             </div>
           </div>
         </div>
 
-        {/* ==================== RIGHT COLUMN: White Rounded Login Card ==================== */}
-        <div className="col-span-1 lg:col-span-6 flex justify-center items-center p-1 min-h-0 h-full">
-          
-          <div className="bg-white rounded-[24px] md:rounded-[32px] shadow-2xl p-4 sm:p-6 lg:p-7 w-full max-w-md max-h-full border border-slate-100 flex flex-col justify-between space-y-4 relative overflow-hidden animate-fadeIn">
-            {/* Soft accent glow header strip */}
-            <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-500 to-indigo-600"></div>
-
-            {/* Content Top */}
-            <div className="space-y-6">
-              {/* Colored Badge Logo (Dark/Light background version) */}
-              <div className="flex justify-center">
-                <CRMBadgeLogo />
+        {/* ==================== RIGHT FLOATING WHITE LOGIN CARD ==================== */}
+        <div className="lg:col-span-5 flex justify-center lg:justify-end">
+          <div className="w-full max-w-[420px] bg-white rounded-[26px] shadow-[0_28px_75px_rgba(3,16,52,0.48)] px-6 py-8 sm:px-9 sm:py-10 text-slate-900 relative">
+            {/* Card Brand Wordmark */}
+            <div className="text-center">
+              <div className="text-3xl sm:text-[36px] font-extrabold tracking-tight leading-none">
+                <span className="text-[#082458]">Expert </span>
+                <span className="text-[#0b74f0]">CRM</span>
               </div>
-
-              {/* Headers */}
-              <div className="text-center">
-                <h3 className="text-2xl font-extrabold text-slate-900 tracking-tight leading-none">
-                  Welcome Back!
-                </h3>
-                <p className="text-slate-500 text-sm font-semibold tracking-wide mt-2">
-                  Login to your Expert CRM account
-                </p>
-              </div>
-
-              {/* Direct Error Alerts */}
-              {error && (
-                <div className="p-3.5 bg-rose-50 border border-rose-200 rounded-2xl text-rose-800 flex items-start gap-3 text-xs font-semibold animate-pulse">
-                  <ShieldIcon className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
-                  <span className="leading-snug">{error}</span>
-                </div>
-              )}
-
-              {/* Login Form */}
-              <form onSubmit={handleLoginSubmit} className="space-y-4">
-                
-                {/* Email Address */}
-                <div className="space-y-1">
-                  <label className="block text-slate-700 font-bold text-xs">Email Address</label>
-                  <div className="relative">
-                    <Mail className="absolute left-3.5 top-3 w-4.5 h-4.5 text-slate-400" />
-                    <input
-                      type="email"
-                      required
-                      placeholder="Enter your email"
-                      value={email}
-                      onChange={(e) => {
-                        setEmail(e.target.value);
-                        setError(null);
-                        setSelectedPresetIndex(null);
-                      }}
-                      className="w-full pl-11 pr-4 py-3 rounded-xl border border-slate-200 focus:border-blue-500 bg-slate-50/50 focus:bg-white transition-all focus:ring-1 focus:ring-blue-500 outline-none text-xs font-semibold text-slate-800 placeholder:text-slate-400/80"
-                    />
-                  </div>
-                </div>
-
-                {/* Password Input */}
-                <div className="space-y-1">
-                  <label className="block text-slate-700 font-bold text-xs">Password</label>
-                  <div className="relative">
-                    <Lock className="absolute left-3.5 top-3 w-4.5 h-4.5 text-slate-400" />
-                    <input
-                      type={showPassword ? 'text' : 'password'}
-                      required
-                      placeholder="Enter your password"
-                      value={password}
-                      onChange={(e) => {
-                        setPassword(e.target.value);
-                        setError(null);
-                        setSelectedPresetIndex(null);
-                      }}
-                      className="w-full pl-11 pr-11 py-3 rounded-xl border border-slate-200 focus:border-blue-500 bg-slate-50/50 focus:bg-white transition-all focus:ring-1 focus:ring-blue-500 outline-none text-xs font-semibold text-slate-800 placeholder:text-slate-400/80"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3.5 top-3 text-slate-400 hover:text-slate-600 transition p-0.5 rounded"
-                    >
-                      {showPassword ? <EyeOff className="w-4.5 h-4.5" /> : <Eye className="w-4.5 h-4.5" />}
-                    </button>
-                  </div>
-                </div>
-
-                {/* Remember and Forgot options */}
-                <div className="flex items-center justify-between pt-1">
-                  <label className="flex items-center gap-2 cursor-pointer select-none">
-                    <input
-                      type="checkbox"
-                      defaultChecked
-                      className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 h-4 w-4 cursor-pointer"
-                    />
-                    <span className="text-xs font-bold text-slate-650">Remember Me</span>
-                  </label>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setForgotEmail(email);
-                      setForgotStatus(null);
-                      setIsForgotOpen(true);
-                    }}
-                    className="text-xs font-bold text-blue-600 hover:text-blue-800 hover:underline transition-all"
-                  >
-                    Forgot Password?
-                  </button>
-                </div>
-
-                {/* Royal blue Primary Submit Button with lock icon inside */}
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-600/60 text-white font-extrabold text-xs rounded-xl shadow-md transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer mt-3 shadow-blue-200 active:scale-98"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <svg className="animate-spin h-4 w-4 text-white shrink-0" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      <span>Authenticating Credentials...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Lock className="w-3.5 h-3.5 text-white/80 shrink-0" />
-                      <span>Login</span>
-                    </>
-                  )}
-                </button>
-              </form>
-
-              {/* Or Divider */}
-              <div className="flex items-center justify-center my-4 gap-3">
-                <span className="h-[1px] flex-1 bg-slate-200" />
-                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">OR</span>
-                <span className="h-[1px] flex-1 bg-slate-200" />
-              </div>
-
-              {/* OAuth Handshakes */}
-              <div className="space-y-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setEmail('admin@expertcrm.com');
-                    setPassword('adminpassword123');
-                    setError(null);
-                  }}
-                  className="w-full py-2.5 bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-700 font-bold text-xs rounded-xl flex items-center justify-center gap-2.5 transition active:scale-98"
-                >
-                  <GoogleIcon />
-                  <span>Login with Google</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    setEmail('aman@expertcrm.com');
-                    setPassword('salesmanager123');
-                    setError(null);
-                  }}
-                  className="w-full py-2.5 bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-700 font-bold text-xs rounded-xl flex items-center justify-center gap-2.5 transition active:scale-98"
-                >
-                  <MicrosoftIcon />
-                  <span>Login with Microsoft</span>
-                </button>
-              </div>
-
+              <div className="mt-4 h-[1.5px] w-full bg-gradient-to-r from-[#38bdf8]/25 via-[#0b74f0]/70 to-[#38bdf8]/25" />
             </div>
 
-            {/* Footer Bottom Sign-Up Info inside white card */}
-            <div className="text-center pt-2 border-t border-slate-100">
-              <p className="text-slate-500 font-semibold text-xs leading-none">
-                Don't have an account?{' '}
-                <button
-                  onClick={() => {
-                    setEmail('guest@expertcrm.com');
-                    setPassword('guestuser123');
-                    setError(null);
-                  }}
-                  className="text-blue-600 font-extrabold hover:underline"
-                >
-                  Sign Up
-                </button>
+            {/* Login Prompt Header */}
+            <div className="text-center mt-5 mb-6 space-y-1">
+              <h2 className="text-xl sm:text-[22px] font-extrabold text-[#082458] tracking-tight">
+                Login to Your Account
+              </h2>
+              <p className="text-xs sm:text-[13px] font-medium text-slate-600">
+                Enter your credentials to continue
               </p>
             </div>
 
+            {/* Error Alert */}
+            {error && (
+              <div className="mb-4 p-3 bg-rose-50 border border-rose-200 rounded-xl text-rose-700 flex items-center gap-2 text-xs font-semibold">
+                <ShieldAlert className="w-4 h-4 text-rose-500 shrink-0" />
+                <span>{error}</span>
+              </div>
+            )}
+
+            {/* Login Form */}
+            <form onSubmit={handleLoginSubmit} className="space-y-3.5">
+              {/* Email / Username */}
+              <div className="relative">
+                <User className="w-4 h-4 text-[#1e3a8a]/75 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <input
+                  type="text"
+                  required
+                  autoComplete="username"
+                  aria-label="Email or Username"
+                  placeholder="Email / Username"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    setError(null);
+                  }}
+                  className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 bg-[#f8fafc] focus:bg-white focus:border-[#0b74f0] focus:ring-2 focus:ring-blue-100 text-sm font-medium text-slate-800 placeholder:text-slate-400 outline-none transition"
+                />
+              </div>
+
+              {/* Password */}
+              <div className="relative">
+                <Lock className="w-4 h-4 text-[#1e3a8a]/75 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  required
+                  autoComplete="current-password"
+                  aria-label="Password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setError(null);
+                  }}
+                  className="w-full pl-10 pr-11 py-3 rounded-xl border border-slate-200 bg-[#f8fafc] focus:bg-white focus:border-[#0b74f0] focus:ring-2 focus:ring-blue-100 text-sm font-medium text-slate-800 placeholder:text-slate-400 outline-none transition"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-slate-500 hover:text-slate-700 transition cursor-pointer"
+                >
+                  {showPassword ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
+                </button>
+              </div>
+
+              {/* Remember Me & Forgot Password */}
+              <div className="flex items-center justify-between pt-1 text-xs sm:text-[13px]">
+                <label className="inline-flex items-center gap-2 cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={rememberMe}
+                    onChange={(e) => setRememberMe(e.target.checked)}
+                    className="w-4 h-4 rounded border-slate-300 text-[#0b74f0] focus:ring-[#0b74f0] cursor-pointer"
+                  />
+                  <span className="font-medium text-[#082458]">Remember Me</span>
+                </label>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setForgotEmail(email);
+                    setForgotStatus(null);
+                    setIsForgotOpen(true);
+                  }}
+                  className="font-semibold text-[#0b74f0] hover:underline cursor-pointer whitespace-nowrap shrink-0"
+                >
+                  Forgot Password?
+                </button>
+              </div>
+
+              {/* Login Submit CTA */}
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full mt-2 py-3.5 px-5 rounded-xl bg-gradient-to-r from-[#0b78f4] to-[#005be0] hover:from-[#0768d8] hover:to-[#004ec4] active:scale-[0.99] disabled:opacity-65 text-white font-bold text-base shadow-[0_10px_24px_rgba(11,116,240,0.34)] transition flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap shrink-0"
+              >
+                {isSubmitting ? (
+                  <>
+                    <svg className="animate-spin h-4 w-4 text-white shrink-0" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    </svg>
+                    <span>Signing in...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>Login</span>
+                    <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+                  </>
+                )}
+              </button>
+            </form>
+
+            {/* OR Divider */}
+            <div className="flex items-center gap-3 my-5">
+              <span className="h-px flex-1 bg-slate-200" />
+              <span className="text-[11px] font-semibold text-slate-400 tracking-wider uppercase">OR</span>
+              <span className="h-px flex-1 bg-slate-200" />
+            </div>
+
+            {/* Footer Tagline */}
+            <p className="text-center italic font-medium text-[13px] sm:text-sm text-[#08357a]">
+              A Powerful CRM Solution for Your Business
+            </p>
+
+            {/* Subtle Secondary Utility Link */}
+            <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-center text-[11px] text-slate-500">
+              <a
+                href="/?mode=mobile-agent&agent=AGT-101"
+                className="font-semibold text-slate-600 hover:text-[#082458] inline-flex items-center gap-1.5 transition whitespace-nowrap shrink-0"
+              >
+                <Smartphone className="w-3.5 h-3.5 text-[#0b74f0]" />
+                <span>Mobile Companion App</span>
+              </a>
+            </div>
           </div>
         </div>
-
       </div>
 
-      {/* ==================== DRAWER PANEL: Quick Credentials Selector ==================== */}
-      {isQuickDrawerOpen && (
-        <div className="fixed inset-0 bg-slate-950/65 backdrop-blur-xs flex justify-end z-50 animate-fadeIn">
-          {/* Backdrop closer clicker */}
-          <div className="absolute inset-0" onClick={() => setIsQuickDrawerOpen(false)} />
-
-          {/* Drawer content card */}
-          <div className="relative w-full max-w-md h-full bg-white shadow-2xl p-6 border-l border-slate-100 flex flex-col justify-between overflow-y-auto animate-slideLeft">
-            
-            <div>
-              {/* Header */}
-              <div className="flex items-center justify-between border-b border-slate-100 pb-4 mb-4">
-                <div className="flex items-center gap-2">
-                  <div className="p-2 bg-amber-100 text-amber-700 rounded-xl">
-                    <Sparkles className="w-4 h-4 text-amber-500" />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-black text-slate-900 uppercase tracking-tight">
-                      Quick Access Directory
-                    </h4>
-                    <p className="text-[10px] text-slate-500 font-semibold uppercase mt-0.5">
-                      Bypass typing to test security roles
-                    </p>
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setIsQuickDrawerOpen(false)}
-                  className="p-1.5 bg-slate-50 hover:bg-slate-100 text-slate-500 hover:text-slate-950 rounded-full transition cursor-pointer"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-
-              {/* Tabs selector */}
-              <div className="flex gap-1.5 bg-slate-100 p-1 rounded-xl mb-4">
-                <button
-                  type="button"
-                  onClick={() => setActivePresetTab('tenant')}
-                  className={`flex-1 py-2 text-center rounded-lg text-xs font-extrabold uppercase tracking-wider transition ${
-                    activePresetTab === 'tenant'
-                      ? 'bg-white text-blue-700 shadow-sm'
-                      : 'text-slate-500 hover:text-slate-950'
-                  }`}
-                >
-                  🏢 Tenant Accounts
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setActivePresetTab('staff')}
-                  className={`flex-1 py-2 text-center rounded-lg text-xs font-extrabold uppercase tracking-wider transition ${
-                    activePresetTab === 'staff'
-                      ? 'bg-white text-blue-700 shadow-sm'
-                      : 'text-slate-500 hover:text-slate-950'
-                  }`}
-                >
-                  👥 Corporate Staff
-                </button>
-              </div>
-
-              {/* Help tip */}
-              <div className="bg-blue-50/60 border border-blue-100 rounded-xl p-3 text-[10.5px] text-slate-650 mb-4 flex gap-2">
-                <Info className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
-                <span>
-                  {activePresetTab === 'tenant' 
-                    ? "Log in as SaaS subscribers to verify subdomain tenant routers, billing templates and localized admin portals."
-                    : "Log in as corporate staff employees to examine role-based tab restrictions, call routers and secure audit spaces."}
-                </span>
-              </div>
-
-              {/* Render Presets List */}
-              {activePresetTab === 'tenant' ? (
-                <div className="space-y-2.5">
-                  {tenants.map((ten: any) => {
-                    const isSelected = selectedTenantId === ten.id;
-                    return (
-                      <div
-                        key={ten.id}
-                        onClick={() => handleTenantSelect(ten)}
-                        className={`p-3.5 rounded-2xl border transition text-left cursor-pointer hover:border-blue-400 group relative ${
-                          isSelected ? 'border-blue-500 bg-blue-50/10' : 'border-slate-150 bg-slate-50/40 hover:bg-slate-50'
-                        }`}
-                      >
-                        <div className="flex items-start justify-between gap-2">
-                          <div className="flex items-start gap-2.5 min-w-0">
-                            <div className="p-2 bg-slate-100 text-slate-500 rounded-xl group-hover:bg-blue-600 group-hover:text-white transition shrink-0">
-                              <Building className="w-4 h-4" />
-                            </div>
-                            <div className="min-w-0">
-                              <h5 className="text-xs font-extrabold text-slate-800 uppercase tracking-wide group-hover:text-blue-700 transition truncate">
-                                {ten.name}
-                              </h5>
-                              <p className="text-[10px] text-slate-500 font-semibold mt-0.5 truncate">
-                                Subdomain: <span className="font-bold text-slate-700 font-mono">{ten.subdomain}.{ten.domainProvider || 'expertcrm.in'}</span>
-                              </p>
-                              
-                              <div className="mt-2 flex flex-col gap-1 text-[9.5px] bg-white border border-slate-150 p-2 rounded-xl">
-                                <span className="font-mono text-slate-500 truncate block">
-                                  ✉️ <span className="text-slate-800 font-bold">{ten.clientOnboardEmail}</span>
-                                </span>
-                                <span className="font-mono text-slate-500 truncate block">
-                                  🔑 <span className="text-slate-800 font-bold">{ten.adminPassword}</span>
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="text-right flex flex-col items-end gap-1.5 shrink-0">
-                            <span className={`text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-md border ${
-                              ten.name.toUpperCase().includes('EXPERT CRM') || ten.id === 'ten-1' || ten.subdomain === 'expert'
-                                ? 'bg-blue-50 text-blue-700 border-blue-200'
-                                : 'bg-teal-50 text-teal-700 border-teal-200'
-                            }`}>
-                              {ten.name.toUpperCase().includes('EXPERT CRM') || ten.id === 'ten-1' || ten.subdomain === 'expert' ? 'Super Admin' : 'Admin'}
-                            </span>
-                            <span className="text-[9px] text-slate-400 font-bold">{ten.clientContactName}</span>
-                          </div>
-                        </div>
-
-                        <div className="mt-2 pt-2 border-t border-dashed border-slate-150 flex items-center justify-between text-[10px] text-blue-600 font-bold">
-                          <span>Click to auto-fill & login</span>
-                          <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition" />
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              ) : (
-                <div className="space-y-2.5">
-                  {PRESET_CREDENTIALS.map((preset, index) => {
-                    const isSelected = selectedPresetIndex === index;
-                    return (
-                      <div
-                        key={index}
-                        onClick={() => handlePresetSelect(index)}
-                        className={`p-3.5 rounded-2xl border transition text-left cursor-pointer hover:border-blue-400 group ${
-                          isSelected ? 'border-blue-500 bg-blue-50/10' : 'border-slate-150 bg-slate-50/40 hover:bg-slate-50'
-                        }`}
-                      >
-                        <div className="flex items-start gap-3">
-                          <img
-                            src={preset.avatar}
-                            alt={preset.name}
-                            className="w-10 h-10 rounded-full border border-slate-200 object-cover shrink-0 shadow-xxs"
-                          />
-                          <div className="min-w-0 flex-1">
-                            <div className="flex items-center justify-between gap-1">
-                              <h5 className="text-xs font-extrabold text-slate-800 uppercase tracking-wide group-hover:text-blue-700 transition">
-                                {preset.name}
-                              </h5>
-                              <span className={`text-[8.5px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-md border ${
-                                preset.role === 'Super Admin' 
-                                  ? 'bg-rose-50 border-rose-200 text-rose-700' 
-                                  : preset.role === 'Sales Manager' 
-                                    ? 'bg-amber-50 border-amber-200 text-amber-700' 
-                                    : preset.role === 'Support Agent' 
-                                      ? 'bg-sky-50 border-sky-200 text-sky-700' 
-                                      : 'bg-emerald-50 border-emerald-200 text-emerald-700'
-                              }`}>
-                                {preset.role}
-                              </span>
-                            </div>
-                            <p className="text-[10px] text-slate-500 mt-0.5 line-clamp-1">{preset.description}</p>
-                            
-                            <div className="mt-2 flex flex-col gap-1 text-[9.5px] bg-white border border-slate-150 p-2 rounded-xl">
-                              <span className="font-mono text-slate-500 truncate block">✉️ <span className="text-slate-800 font-bold">{preset.email}</span></span>
-                              <span className="font-mono text-slate-500 truncate block">🔑 <span className="text-slate-800 font-bold">{preset.password}</span></span>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="mt-2.5 pt-2.5 border-t border-dashed border-slate-150 flex items-center justify-between text-[10px] text-blue-600 font-bold">
-                          <span>Click to auto-fill & login</span>
-                          <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition" />
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-
-            </div>
-
-            {/* Bottom Closer action */}
-            <div className="border-t border-slate-100 pt-4 mt-6">
-              <button
-                type="button"
-                onClick={() => setIsQuickDrawerOpen(false)}
-                className="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-extrabold uppercase tracking-wider rounded-xl transition cursor-pointer"
-              >
-                Close Directory
-              </button>
-            </div>
-
-          </div>
-        </div>
-      )}
-
-      {/* Forgot Password Modal Overlay */}
+      {/* ==================== FORGOT PASSWORD MODAL ==================== */}
       {isForgotOpen && (
-        <div className="fixed inset-0 bg-slate-950/65 backdrop-blur-xs flex items-center justify-center z-50 p-4 animate-fadeIn">
+        <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 animate-fadeIn">
           <div className="bg-white rounded-3xl max-w-md w-full p-6 border border-slate-100 shadow-2xl relative overflow-hidden">
-            {/* Accent background line */}
-            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 to-indigo-600"></div>
-            
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-400 to-[#0b74f0]" />
+
             <button
+              type="button"
               onClick={() => setIsForgotOpen(false)}
-              className="absolute right-4 top-4 text-slate-400 hover:text-slate-650 transition p-1 bg-slate-50 hover:bg-slate-100 rounded-full cursor-pointer"
+              className="absolute right-4 top-4 text-slate-400 hover:text-slate-600 transition p-1 bg-slate-50 hover:bg-slate-100 rounded-full cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
 
             <div className="mb-4">
-              <span className="text-[9px] uppercase tracking-widest font-black text-blue-600 bg-blue-50 px-2.5 py-1 rounded-md">Directory Recovery Desk</span>
-              <h3 className="text-md font-black text-slate-900 tracking-tight mt-2 flex items-center gap-1.5">
-                <Lock className="w-4.5 h-4.5 text-blue-600" /> Account Access Password Recovery
+              <span className="text-[10px] uppercase tracking-widest font-bold text-[#0b74f0]">
+                Password Recovery
+              </span>
+              <h3 className="text-base font-extrabold text-[#082458] tracking-tight mt-1 flex items-center gap-1.5">
+                <Lock className="w-4 h-4 text-[#0b74f0]" /> Reset Account Password
               </h3>
-              <p className="text-[10px] text-slate-400 mt-1">Verify dynamic user identity with standard directory services.</p>
+              <p className="text-xs text-slate-500 mt-1">
+                Enter your registered email or username to recover access.
+              </p>
             </div>
 
             {forgotStatus?.success && forgotStatus.presetMatch ? (
               <div className="space-y-4">
-                <div className="p-3 bg-emerald-50 border border-emerald-150 rounded-2xl text-emerald-850 text-[11px] font-semibold space-y-1">
-                  <p className="font-bold text-xs flex items-center gap-1">
-                    <Check className="w-4 h-4 text-emerald-600 shrink-0" /> Authentication Verified!
+                <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-2xl text-emerald-800 text-xs font-semibold space-y-1">
+                  <p className="font-bold flex items-center gap-1">
+                    <Check className="w-4 h-4 text-emerald-600 shrink-0" /> Identity Verified!
                   </p>
-                  <p className="text-slate-500 font-medium">We identified your corporate account details. For local evaluation, you can instantly read or auto-fill your login credentials below:</p>
+                  <p className="text-slate-600 font-medium text-[11px]">
+                    Account credentials found. Auto-fill to sign in:
+                  </p>
                 </div>
 
                 <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-3">
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2.5">
                     <img
                       src={forgotStatus.presetMatch.avatar}
                       alt={forgotStatus.presetMatch.name}
-                      className="w-8 h-8 rounded-full border border-slate-205"
+                      className="w-9 h-9 rounded-full border border-slate-200 object-cover"
                     />
                     <div>
-                      <h4 className="text-xxs font-black text-slate-800 uppercase tracking-wide">{forgotStatus.presetMatch.name}</h4>
-                      <p className="text-[9.5px] text-blue-600 font-bold">{forgotStatus.presetMatch.role}</p>
+                      <h4 className="text-xs font-extrabold text-slate-800 uppercase">
+                        {forgotStatus.presetMatch.name}
+                      </h4>
+                      <p className="text-[11px] text-[#0b74f0] font-bold">
+                        {forgotStatus.presetMatch.role}
+                      </p>
                     </div>
                   </div>
 
-                  <div className="space-y-1.5 text-[11px] font-mono select-none">
-                    <div className="flex justify-between items-center bg-white px-2 py-1.5 border border-slate-150 rounded-lg">
-                      <span className="text-slate-400 font-bold uppercase text-[9px]">ID (Email):</span>
+                  <div className="space-y-1.5 text-xs font-mono">
+                    <div className="flex justify-between items-center bg-white px-3 py-1.5 border border-slate-200 rounded-lg">
+                      <span className="text-slate-400 font-bold text-[10px] uppercase">Email</span>
                       <span className="font-semibold text-slate-800">{forgotStatus.presetMatch.email}</span>
                     </div>
-                    <div className="flex justify-between items-center bg-white px-2 py-1.5 border border-slate-150 rounded-lg">
-                      <span className="text-slate-400 font-bold uppercase text-[9px]">password:</span>
-                      <span className="font-bold text-slate-950 font-sans tracking-wide bg-slate-150 px-1.5 py-0.5 rounded">{forgotStatus.presetMatch.password}</span>
+                    <div className="flex justify-between items-center bg-white px-3 py-1.5 border border-slate-200 rounded-lg">
+                      <span className="text-slate-400 font-bold text-[10px] uppercase">Password</span>
+                      <span className="font-bold text-slate-900">{forgotStatus.presetMatch.password}</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => {
-                      if (forgotStatus.presetMatch) {
-                        setEmail(forgotStatus.presetMatch.email);
-                        setPassword(forgotStatus.presetMatch.password);
-                        setIsForgotOpen(false);
-                      }
-                    }}
-                    className="flex-1 py-2 bg-blue-650 hover:bg-blue-700 text-white font-bold text-xxs rounded-xl shadow-sm transition uppercase tracking-wider cursor-pointer"
-                  >
-                    Auto-Fill Credentials & Sign In
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (forgotStatus.presetMatch) {
+                      setEmail(forgotStatus.presetMatch.email);
+                      setPassword(forgotStatus.presetMatch.password);
+                      setError(null);
+                      setIsForgotOpen(false);
+                    }
+                  }}
+                  className="w-full py-2.5 bg-[#0b74f0] hover:bg-[#005be0] text-white font-bold text-xs rounded-xl shadow-sm transition uppercase tracking-wider cursor-pointer"
+                >
+                  Auto-Fill & Continue
+                </button>
               </div>
             ) : (
               <form onSubmit={handleForgotPasswordSubmit} className="space-y-4">
                 {forgotStatus?.message && !forgotStatus.presetMatch && (
-                  <div className={`p-3 rounded-2xl text-[11px] font-semibold flex gap-2 ${
-                    forgotStatus.success ? 'bg-emerald-50 border border-emerald-200 text-emerald-800' : 'bg-rose-50 border border-rose-200 text-rose-700'
-                  }`}>
-                    {forgotStatus.success ? <Check className="w-4 h-4 shrink-0 mt-0.5" /> : <ShieldAlert className="w-4 h-4 shrink-0 mt-0.5" />}
+                  <div className="p-3 rounded-2xl text-xs font-semibold flex gap-2 bg-rose-50 border border-rose-200 text-rose-700">
+                    <ShieldAlert className="w-4 h-4 shrink-0 mt-0.5" />
                     <span>{forgotStatus.message}</span>
                   </div>
                 )}
 
                 <div className="space-y-1 text-left">
-                  <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest">Registered Corporate Email</label>
+                  <label className="block text-xs font-bold text-slate-700">Email / Username</label>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-2.5 w-4 h-4 text-slate-400" />
+                    <Mail className="absolute left-3 top-3 w-4 h-4 text-slate-400" />
                     <input
-                      type="email"
+                      type="text"
                       required
-                      placeholder="e.g. employee@expertcrm.com"
+                      placeholder="e.g. admin@expertcrm.com"
                       value={forgotEmail}
                       onChange={(e) => setForgotEmail(e.target.value)}
-                      className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-200 focus:border-blue-500 bg-slate-50/50 focus:bg-white transition outline-none font-semibold text-slate-800 focus:ring-1 focus:ring-blue-500"
+                      className="w-full pl-9 pr-3 py-2.5 text-xs rounded-xl border border-slate-200 focus:border-[#0b74f0] bg-slate-50 focus:bg-white transition outline-none font-medium text-slate-800 focus:ring-1 focus:ring-blue-500"
                     />
                   </div>
                 </div>
 
-                <div className="bg-slate-50 p-3.5 rounded-2xl text-[10px] text-slate-405 space-y-1.5 text-left">
-                  <p className="font-bold text-slate-650 flex items-center gap-1">
-                    <Info className="w-3.5 h-3.5 text-blue-500" /> Directory Notice:
-                  </p>
-                  <p className="text-slate-500 leading-normal text-[9.5px]">
-                    If you forget your password, please contact the workspace Super Administrator or file a security ticket through active support logs. Presets or bypass tools are restricted on production instances.
-                  </p>
-                </div>
-
-                <div className="flex gap-2">
+                <div className="flex gap-2 pt-2">
                   <button
                     type="button"
                     onClick={() => setIsForgotOpen(false)}
-                    className="flex-1 py-2 bg-slate-100 hover:bg-slate-200 text-slate-650 font-bold text-xxs rounded-xl transition uppercase tracking-wider cursor-pointer"
+                    className="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-xs rounded-xl transition cursor-pointer"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={isForgotSubmitting}
-                    className="flex-1 py-2 bg-blue-650 hover:bg-blue-750 text-white font-bold text-xxs rounded-xl shadow-md transition uppercase tracking-wider disabled:opacity-50 cursor-pointer"
+                    className="flex-1 py-2.5 bg-[#0b74f0] hover:bg-[#005be0] text-white font-bold text-xs rounded-xl shadow-md transition disabled:opacity-50 cursor-pointer"
                   >
-                    {isForgotSubmitting ? 'Verifying...' : 'Retrieve Workspace Key'}
+                    {isForgotSubmitting ? 'Verifying...' : 'Verify Account'}
                   </button>
                 </div>
               </form>
@@ -1076,7 +829,6 @@ export default function Login({ onLoginSuccess }: LoginProps) {
           </div>
         </div>
       )}
-
     </div>
   );
 }

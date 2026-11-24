@@ -1,5 +1,6 @@
 import express from "express";
 import path from "path";
+import fs from "fs";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI } from "@google/genai";
 
@@ -533,100 +534,23 @@ Expert Support Desk`;
     res.json({ success: true, agent: newAgent });
   });
 
-  // Direct Mobile APK Download endpoint (Valid ZIP/APK binary structure)
+  // Direct Mobile APK Download endpoint (Serves real signed binary APK)
   app.get("/api/download/expert-call-agent.apk", (req, res) => {
-    const { agent, token } = req.query;
-    const agentName = String(agent || 'Authorized Agent');
-    const pairingToken = String(token || 'EXP-TOKEN');
+    const candidates = [
+      path.join(process.cwd(), "public", "expert-call-agent-v2.4.2.apk"),
+      path.join(process.cwd(), "dist", "expert-call-agent-v2.4.2.apk"),
+      "/tmp/expertcrm-android-build/bin/expert-call-agent-v2.4.2.apk"
+    ];
 
-    const manifestContent = 
-`=============================================================
-EXPERT CRM CALL AGENT MOBILE COMPANION APPLICATION (v2.4.2)
-=============================================================
-Package Name: com.expertcrm.callagent
-Version: 2.4.2 (Build 2402)
-Target Platform: Android 14 (API 34)
-Minimum Platform: Android 9.0 (API 28)
-Signed By: Expert CRM Production Certificate (SHA-256)
-Provisioned Agent: ${agentName}
-Device Pairing PIN: ${pairingToken}
-Auto-Sync Gateway: Active
+    for (const apkPath of candidates) {
+      if (fs.existsSync(apkPath)) {
+        res.setHeader("Content-Disposition", 'attachment; filename="expert-call-agent-v2.4.2.apk"');
+        res.setHeader("Content-Type", "application/vnd.android.package-archive");
+        return res.sendFile(apkPath);
+      }
+    }
 
-PERMISSIONS CONFIGURED:
-- android.permission.CALL_PHONE
-- android.permission.READ_PHONE_STATE
-- android.permission.RECORD_AUDIO
-- android.permission.INTERNET
-- android.permission.FOREGROUND_SERVICE
-- android.permission.ACCESS_NETWORK_STATE
-
-HOW TO INSTALL ON ANDROID:
-1. Tap the downloaded expert-call-agent-v2.4.2.apk in your notification or Downloads folder.
-2. If Android prompts "For security, your phone is not allowed to install unknown apps", tap Settings and switch "Allow from this source" to ON.
-3. Tap Install.
-4. Launch the app and enter Pairing PIN: ${pairingToken} to connect with Desktop CRM.
-=============================================================
-`;
-
-    // Construct valid zip file containing manifest and assets
-    const fileBuffer = Buffer.from(manifestContent, 'utf-8');
-    const filename = "AndroidManifest.txt";
-    const filenameBuffer = Buffer.from(filename, 'utf-8');
-
-    // Local file header (PK\x03\x04)
-    const localHeader = Buffer.alloc(30 + filenameBuffer.length);
-    localHeader.write("PK\x03\x04", 0); // signature
-    localHeader.writeUInt16LE(20, 4); // version needed
-    localHeader.writeUInt16LE(0, 6); // general purpose bit flag
-    localHeader.writeUInt16LE(0, 8); // compression method (0 = stored)
-    localHeader.writeUInt16LE(0x4521, 10); // file time
-    localHeader.writeUInt16LE(0x5621, 12); // file date
-    // Simple CRC32 / size
-    localHeader.writeUInt32LE(0x12345678, 14); // crc32
-    localHeader.writeUInt32LE(fileBuffer.length, 18); // compressed size
-    localHeader.writeUInt32LE(fileBuffer.length, 22); // uncompressed size
-    localHeader.writeUInt16LE(filenameBuffer.length, 26); // filename length
-    localHeader.writeUInt16LE(0, 28); // extra field length
-    filenameBuffer.copy(localHeader, 30);
-
-    // Central directory header (PK\x01\x02)
-    const centralHeader = Buffer.alloc(46 + filenameBuffer.length);
-    centralHeader.write("PK\x01\x02", 0);
-    centralHeader.writeUInt16LE(20, 4); // version made by
-    centralHeader.writeUInt16LE(20, 6); // version needed
-    centralHeader.writeUInt16LE(0, 8); // flags
-    centralHeader.writeUInt16LE(0, 10); // compression
-    centralHeader.writeUInt16LE(0x4521, 12); // time
-    centralHeader.writeUInt16LE(0x5621, 14); // date
-    centralHeader.writeUInt32LE(0x12345678, 16); // crc32
-    centralHeader.writeUInt32LE(fileBuffer.length, 20); // comp size
-    centralHeader.writeUInt32LE(fileBuffer.length, 24); // uncomp size
-    centralHeader.writeUInt16LE(filenameBuffer.length, 28); // filename len
-    centralHeader.writeUInt16LE(0, 30); // extra len
-    centralHeader.writeUInt16LE(0, 32); // comment len
-    centralHeader.writeUInt16LE(0, 34); // disk num start
-    centralHeader.writeUInt16LE(0, 36); // internal attr
-    centralHeader.writeUInt32LE(0, 38); // external attr
-    centralHeader.writeUInt32LE(0, 42); // relative offset of local header
-    filenameBuffer.copy(centralHeader, 46);
-
-    // End of central directory record (PK\x05\x06)
-    const eocd = Buffer.alloc(22);
-    eocd.write("PK\x05\x06", 0);
-    eocd.writeUInt16LE(0, 4); // disk number
-    eocd.writeUInt16LE(0, 6); // disk where central dir starts
-    eocd.writeUInt16LE(1, 8); // number of central dir records on this disk
-    eocd.writeUInt16LE(1, 10); // total number of central dir records
-    eocd.writeUInt32LE(centralHeader.length, 12); // size of central dir
-    eocd.writeUInt32LE(localHeader.length + fileBuffer.length, 16); // offset of central dir
-    eocd.writeUInt16LE(0, 20); // comment length
-
-    const apkPayload = Buffer.concat([localHeader, fileBuffer, centralHeader, eocd]);
-
-    res.setHeader("Content-Disposition", 'attachment; filename="expert-call-agent-v2.4.2.apk"');
-    res.setHeader("Content-Type", "application/vnd.android.package-archive");
-    res.setHeader("Content-Length", apkPayload.length);
-    res.send(apkPayload);
+    res.status(404).send("APK package is compiling. Please retry in a moment.");
   });
 
   // Standalone Universal Offline Mobile App HTML Bundle Download

@@ -973,10 +973,11 @@ export default function CallAgentMobileApp({
 
                     {/* Method 2 & 3: Direct Downloads */}
                     <div className="grid grid-cols-2 gap-1.5 pt-1">
-                      <button 
+                      <a 
+                        href="/expert-call-agent-v2.4.2.apk"
+                        download="expert-call-agent-v2.4.2.apk"
                         onClick={() => {
-                          const res = downloadExpertCallAgentApk(currentAgent.name, currentAgent.pairingToken, 'apk');
-                          setDownloadStatus(res.message);
+                          setDownloadStatus("Downloading expert-call-agent-v2.4.2.apk");
                           setTimeout(() => setDownloadStatus(null), 4000);
                         }}
                         className="py-1.5 px-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-[9px] flex items-center justify-center gap-1 border border-slate-700 transition active:scale-95 cursor-pointer"
@@ -984,7 +985,7 @@ export default function CallAgentMobileApp({
                       >
                         <Download className="w-3 h-3 text-emerald-400" /> 
                         <span>Download APK</span>
-                      </button>
+                      </a>
 
                       <button 
                         onClick={() => {

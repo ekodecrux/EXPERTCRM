@@ -19,12 +19,15 @@ import SecurityAccess from './components/SecurityAccess';
 import Login, { UserSession, PRESET_CREDENTIALS } from './components/Login';
 import PrintAndExportCenter from './components/PrintAndExportCenter';
 import SaaSWorkspacePanel from './components/SaaSWorkspacePanel';
+import CRMLogo from './components/CRMLogo';
+import CallAgentMobileApp from './components/CallAgentMobileApp';
+import { PWAInstallButton } from './components/PWAInstallButton';
 
 // Initial Mock data
 import { 
   INITIAL_LEADS, INITIAL_CALL_LOGS, INITIAL_TICKETS, 
   INITIAL_STAFF, INITIAL_TASKS, INITIAL_EMPLOYEES, 
-  INITIAL_COMMS, INITIAL_SECURITY 
+  INITIAL_COMMS, INITIAL_SECURITY, INITIAL_CALL_AGENTS
 } from './initialData';
 
 import { Lead, CallLog, SupportTicket, FieldStaff, Task, Employee, CommsLog, AccessControl, AccessRole } from './types';
@@ -34,6 +37,37 @@ export default function App() {
   const [userSession, setUserSession] = useState<UserSession | null>(() => {
     const saved = localStorage.getItem('crm_user_session');
     return saved ? JSON.parse(saved) : null;
+  });
+
+  // Check if opened as standalone mobile companion app (e.g. via QR code, direct URL, or PWA)
+  const [mobileMode, setMobileMode] = useState<{
+    active: boolean;
+    agentId: string;
+    token: string;
+  }>(() => {
+    try {
+      const sp = new URLSearchParams(window.location.search);
+      const isMobile = sp.get('mode') === 'mobile-agent' || sp.get('mode') === 'mobile';
+      return {
+        active: isMobile,
+        agentId: sp.get('agent') || 'AGT-101',
+        token: sp.get('token') || ''
+      };
+    } catch (e) {
+      return { active: false, agentId: 'AGT-101', token: '' };
+    }
+  });
+
+  // Call agents list with local storage persistence
+  const [callAgents, setCallAgents] = useState(() => {
+    try {
+      const saved = localStorage.getItem('crm_call_agents');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch (e) {}
+    return INITIAL_CALL_AGENTS;
   });
 
   // Global synchronized real-time call state
@@ -127,7 +161,21 @@ export default function App() {
 
   const [employees, setEmployees] = useState<Employee[]>(() => {
     const saved = localStorage.getItem('crm_employees');
-    return saved ? JSON.parse(saved) : INITIAL_EMPLOYEES;
+    if (!saved) return INITIAL_EMPLOYEES;
+    try {
+      const parsed: Employee[] = JSON.parse(saved);
+      const existingNames = new Set(parsed.map(e => e.name.toLowerCase()));
+      const existingIds = new Set(parsed.map(e => e.id));
+      const merged = [...parsed];
+      for (const defaultEmp of INITIAL_EMPLOYEES) {
+        if (!existingNames.has(defaultEmp.name.toLowerCase()) && !existingIds.has(defaultEmp.id)) {
+          merged.push(defaultEmp);
+        }
+      }
+      return merged;
+    } catch {
+      return INITIAL_EMPLOYEES;
+    }
   });
 
   const [commsLogs, setCommsLogs] = useState<CommsLog[]>(() => {
@@ -233,6 +281,10 @@ export default function App() {
       'Sales Manager': {
         viewDashboard: true, manageLeads: true, manageCalls: true, manageSupport: false,
         manageStaff: false, manageTasks: true, manageHR: false, manageComms: true, manageSecurity: false
+      },
+      'Call Agent': {
+        viewDashboard: true, manageLeads: true, manageCalls: true, manageSupport: false,
+        manageStaff: false, manageTasks: true, manageHR: false, manageComms: false, manageSecurity: false
       },
       'Support Agent': {
         viewDashboard: true, manageLeads: false, manageCalls: true, manageSupport: true,
@@ -530,6 +582,19 @@ export default function App() {
         manageHR: false,
         manageSecurity: false
       };
+    } else if (role === 'Call Agent') {
+      updatedPermissions = {
+        ...updatedPermissions,
+        viewDashboard: true,
+        manageLeads: true,
+        manageCalls: true,
+        manageSupport: false,
+        manageStaff: false,
+        manageTasks: true,
+        manageHR: false,
+        manageComms: false,
+        manageSecurity: false
+      };
     }
     
     setAccessControl({ role, permissions: updatedPermissions });
@@ -577,6 +642,72 @@ export default function App() {
     { id: 'security', label: 'Security & Access Control', icon: Lock, permission: 'manageSecurity' },
   ];
 
+  // Dedicated Mobile Companion App view (e.g. agent scanned QR code, clicked direct link, or opened PWA)
+  if (mobileMode.active) {
+    return (
+      <div className="min-h-screen w-screen bg-slate-950 text-white flex flex-col font-sans antialiased overflow-x-hidden">
+        {/* Top Mobile Companion Navigation Bar */}
+        <header className="h-14 bg-slate-900 border-b border-slate-800 px-3 sm:px-5 flex items-center justify-between shrink-0 z-50">
+          <div className="flex items-center gap-2.5">
+            <CRMLogo size="xs" darkTheme={true} showBorder={false} />
+            <div>
+              <div className="flex items-center gap-1.5">
+                <span className="text-xs font-black tracking-wider text-white">EXPERT CALL AGENT</span>
+                <span className="px-1.5 py-0.5 rounded bg-indigo-500/20 border border-indigo-500/40 text-indigo-300 font-mono text-[9px] font-bold">
+                  Mobile Companion
+                </span>
+              </div>
+              <p className="text-[10px] text-sky-400 font-mono">
+                Agent: {callAgents.find(a => a.id === mobileMode.agentId)?.name || 'Authorized Agent'}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <PWAInstallButton variant="secondary" label="Install App (PWA)" />
+            
+            <button
+              onClick={() => {
+                const url = new URL(window.location.href);
+                url.searchParams.delete('mode');
+                url.searchParams.delete('agent');
+                url.searchParams.delete('token');
+                window.history.pushState({}, '', url.pathname);
+                setMobileMode({ active: false, agentId: 'AGT-101', token: '' });
+              }}
+              className="text-[10.5px] font-bold py-1.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition cursor-pointer"
+              title="Return to Desktop CRM"
+            >
+              Desktop CRM Portal
+            </button>
+          </div>
+        </header>
+
+        {/* Mobile View Container */}
+        <div className="flex-1 flex items-center justify-center p-2 sm:p-4 overflow-y-auto">
+          <CallAgentMobileApp
+            agents={callAgents}
+            activeAgentId={mobileMode.agentId}
+            onSelectAgent={(id) => setMobileMode(prev => ({ ...prev, agentId: id }))}
+            leads={leads}
+            onCallSynced={(newLog) => {
+              handleLogCall(newLog);
+            }}
+            isStandalone={true}
+            onClose={() => {
+              const url = new URL(window.location.href);
+              url.searchParams.delete('mode');
+              url.searchParams.delete('agent');
+              url.searchParams.delete('token');
+              window.history.pushState({}, '', url.pathname);
+              setMobileMode({ active: false, agentId: 'AGT-101', token: '' });
+            }}
+          />
+        </div>
+      </div>
+    );
+  }
+
   if (!userSession) {
     return <Login onLoginSuccess={handleLoginSuccess} />;
   }
@@ -602,16 +733,14 @@ export default function App() {
         <div>
           {/* Logo Brand Header Block */}
           <div className="p-3 border-b border-[#1E293B] flex items-center gap-2.5">
-            <img
-              src="/brand-logo.jpeg?v=2"
-              alt="Expert CRM"
-              className={`${sidebarOpen ? 'w-10 h-10' : 'w-9 h-9'} object-contain rounded-lg bg-white p-0.5 shrink-0`}
-            />
+            <CRMLogo size="sm" darkTheme={true} showBorder={true} className="shrink-0" />
             
             {sidebarOpen && (
-              <div>
-                <h1 className="text-md font-black tracking-wider leading-none text-white">EXPERT CRM</h1>
-                <p className="text-[9px] text-cyan-400 font-extrabold uppercase tracking-widest mt-0.5 truncate max-w-[140px]" title={workspaceName}>{workspaceName}</p>
+              <div className="min-w-0">
+                <h1 className="text-sm font-black tracking-wider leading-none text-white flex items-center gap-1">
+                  EXPERT <span className="text-sky-400">CRM</span>
+                </h1>
+                <p className="text-[9px] text-cyan-400 font-extrabold uppercase tracking-widest mt-1 truncate max-w-[130px]" title={workspaceName}>{workspaceName}</p>
               </div>
             )}
           </div>
@@ -706,6 +835,9 @@ export default function App() {
           </div>
 
           <div className="flex items-center gap-3">
+            {/* Install App Quick Action */}
+            <PWAInstallButton variant="secondary" label="Install Mobile App" className="hidden sm:inline-flex" />
+
             {/* Search Input Box */}
             <div className="relative hidden md:block w-60">
               <Search className="absolute left-2.5 top-2 w-3.5 h-3.5 text-slate-400" />
@@ -785,6 +917,7 @@ export default function App() {
               leads={leads}
               onAddLead={handleAddLead}
               onUpdateLeadStatus={handleUpdateLeadStatus}
+              onSendWhatsAppLog={handleAddCommLog}
             />
           )}
 
@@ -795,6 +928,9 @@ export default function App() {
               onBulkLogCalls={handleBulkLogCalls}
               onClearLogs={handleClearCallLogs}
               onDeleteLog={handleDeleteCallLog}
+              userSession={userSession}
+              accessControl={accessControl}
+              leads={leads}
             />
           </div>
 
@@ -894,6 +1030,8 @@ export default function App() {
         onClose={() => setPrintableDoc(null)}
         document={printableDoc}
         userEmail={userSession?.email || 'expertaidtech@gmail.com'}
+        leads={leads}
+        onSendWhatsAppLog={handleAddCommLog}
       />
 
       {/* Global Real-time Call Overlays */}

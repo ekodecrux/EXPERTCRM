@@ -7,6 +7,7 @@ import {
   Percent, Award, Sliders, ListFilter, AlertCircle, Bookmark, Briefcase
 } from 'lucide-react';
 import { Employee } from '../types';
+import { INITIAL_EMPLOYEES } from '../initialData';
 
 interface PayrollManagerProps {
   employees: Employee[];
@@ -93,6 +94,18 @@ const INITIAL_LEAVES: LeaveRequest[] = [
     reason: "Personal summer vacation with family extension.",
     status: "Approved",
     appliedDate: "2026-06-10"
+  },
+  {
+    id: "LV-404",
+    employeeId: "EMP-12",
+    employeeName: "Rajesh Gupta",
+    leaveType: "Casual Leave",
+    startDate: "2026-06-08",
+    endDate: "2026-06-12",
+    totalDays: 5,
+    reason: "Scheduled personal leave for family relocation.",
+    status: "Approved",
+    appliedDate: "2026-06-04"
   }
 ];
 
@@ -130,6 +143,28 @@ const INITIAL_EXPENSES: ExpenseClaim[] = [
     claimDate: "2026-06-12",
     status: "Rejected",
     notes: "Annual meet hospitality, omitted executive authorization voucher."
+  },
+  {
+    id: "EXP-804",
+    employeeId: "EMP-05",
+    employeeName: "Meera Nair",
+    title: "Client Site Transit & Fuel Reimbursement",
+    category: "Travel",
+    amount: 2150,
+    claimDate: "2026-06-14",
+    status: "Pending",
+    notes: "Inter-facility diagnostic inspections."
+  },
+  {
+    id: "EXP-805",
+    employeeId: "EMP-07",
+    employeeName: "Rohan Sharma",
+    title: "Telephony Headset Replacement",
+    category: "Hardware/Assets",
+    amount: 3400,
+    claimDate: "2026-06-11",
+    status: "Approved",
+    notes: "Noise-cancelling call center operational headset."
   }
 ];
 
@@ -167,10 +202,13 @@ export default function PayrollManager({
   const [activeTab, setActiveTab] = useState<HRTab>('roster');
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<'All' | 'Present' | 'Absent' | 'On Leave'>('All');
+  const [departmentFilter, setDepartmentFilter] = useState<string>('All');
 
   // Selected employee for deep analytics (Profile viewer, salary slip, performance)
   const [selectedEmpId, setSelectedEmpId] = useState<string>(employees[0]?.id || 'EMP-01');
   const selectedEmp = employees.find(e => e.id === selectedEmpId) || employees[0];
+  const [leaveApplicantId, setLeaveApplicantId] = useState<string>(employees[0]?.id || 'EMP-01');
+  const [expenseApplicantId, setExpenseApplicantId] = useState<string>(employees[0]?.id || 'EMP-01');
 
   // Forms / Dialog controls
   const [isNewEmpOpen, setIsNewEmpOpen] = useState(false);
@@ -380,10 +418,11 @@ export default function PayrollManager({
     const diffTime = Math.abs(end.getTime() - start.getTime());
     const totalDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
 
+    const applicant = employees.find(e => e.id === leaveApplicantId) || selectedEmp;
     const newRequest: LeaveRequest = {
       id: `LV-${Date.now().toString().slice(-3)}`,
-      employeeId: selectedEmp.id,
-      employeeName: selectedEmp.name,
+      employeeId: applicant.id,
+      employeeName: applicant.name,
       leaveType,
       startDate: leaveStart,
       endDate: leaveEnd,
@@ -396,7 +435,7 @@ export default function PayrollManager({
     setLeaves(prev => [newRequest, ...prev]);
     setLeaveReason('');
     setIsLeaveRequestOpen(false);
-    triggerToast(`Submited leave request for ${selectedEmp.name} (${totalDays} day(s))`);
+    triggerToast(`Submitted leave request for ${applicant.name} (${totalDays} day(s))`);
   };
 
   const handleUpdateLeaveStatus = (id: string, newStatus: 'Approved' | 'Rejected') => {
@@ -426,10 +465,11 @@ export default function PayrollManager({
     e.preventDefault();
     if (!expenseTitle || !expenseAmount) return;
 
+    const claimant = employees.find(e => e.id === expenseApplicantId) || selectedEmp;
     const newClaim: ExpenseClaim = {
       id: `EXP-${Date.now().toString().slice(-3)}`,
-      employeeId: selectedEmp.id,
-      employeeName: selectedEmp.name,
+      employeeId: claimant.id,
+      employeeName: claimant.name,
       title: expenseTitle,
       category: expenseCategory,
       amount: Math.round(Number(expenseAmount)) || 100,
@@ -442,7 +482,7 @@ export default function PayrollManager({
     setExpenseTitle('');
     setExpenseNotes('');
     setIsExpenseClaimOpen(false);
-    triggerToast(`Reimbursement claim submitted for ${selectedEmp.name}: ₹${Number(expenseAmount).toLocaleString()}`);
+    triggerToast(`Reimbursement claim submitted for ${claimant.name}: ₹${Number(expenseAmount).toLocaleString()}`);
   };
 
   const handleUpdateExpenseStatus = (id: string, newStatus: 'Approved' | 'Rejected') => {
@@ -555,15 +595,35 @@ export default function PayrollManager({
     setNewGoalTitle('');
   };
 
-  // Filtering list
+  const handleResetAllEmployees = () => {
+    const existingNames = new Set(employees.map(e => e.name.toLowerCase()));
+    const existingIds = new Set(employees.map(e => e.id));
+    let addedCount = 0;
+    for (const defaultEmp of INITIAL_EMPLOYEES) {
+      if (!existingNames.has(defaultEmp.name.toLowerCase()) && !existingIds.has(defaultEmp.id)) {
+        onAddEmployee(defaultEmp);
+        addedCount++;
+      }
+    }
+    setDepartmentFilter('All');
+    setStatusFilter('All');
+    setSearchTerm('');
+    triggerToast(addedCount > 0 
+      ? `Synchronized roster: added ${addedCount} missing organization employee(s).` 
+      : `All ${employees.length} organization employees are active and synchronized.`);
+  };
+
+  // Filtering list across all criteria
   const filteredEmployeesOnTerms = employees.filter(e => {
     const labelMatch = 
       e.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       e.role.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      e.department.toLowerCase().includes(searchTerm.toLowerCase());
+      e.department.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      e.id.toLowerCase().includes(searchTerm.toLowerCase());
     
     const statusMatch = statusFilter === 'All' || e.attendance === statusFilter;
-    return labelMatch && statusMatch;
+    const deptMatch = departmentFilter === 'All' || e.department === departmentFilter;
+    return labelMatch && statusMatch && deptMatch;
   });
 
   return (
@@ -694,27 +754,78 @@ export default function PayrollManager({
             <div>
               <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 pb-3 border-b border-slate-100">
                 <div>
-                  <h3 className="text-sm font-black text-slate-950 uppercase tracking-tight">Active Team Directory</h3>
-                  <p className="text-[11px] text-slate-400">Detailed staffing grid with real-time editing status and core telemetry parameters.</p>
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-sm font-black text-slate-950 uppercase tracking-tight">Active Team Directory</h3>
+                    <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 text-[10px] font-extrabold font-mono">
+                      {employees.length} Total Workforce
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-400">Detailed staffing grid displaying all employees across all operational departments.</p>
                 </div>
 
                 <div className="flex items-center gap-2">
                   <button 
+                    onClick={handleResetAllEmployees}
+                    className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold flex items-center gap-1.5 transition cursor-pointer"
+                    title="Verify and load all standard organization employees"
+                  >
+                    <Users className="w-3.5 h-3.5 text-slate-500" />
+                    <span>Sync All Staff ({employees.length})</span>
+                  </button>
+
+                  <button 
                     onClick={() => setIsNewEmpOpen(true)}
-                    className="px-3.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 shadow-sm transition"
+                    className="px-3.5 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer"
                   >
                     <Plus className="w-3.5 h-3.5" /> Recruit Personnel
                   </button>
                 </div>
               </div>
 
+              {/* Department Tabs Bar */}
+              <div className="flex items-center gap-1.5 overflow-x-auto pb-2 border-b border-slate-100 my-2 text-xs no-scrollbar">
+                <span className="text-[10px] font-extrabold text-slate-400 uppercase shrink-0">Department:</span>
+                {[
+                  { id: 'All', label: 'All Departments' },
+                  { id: 'Sales & Growth', label: 'Sales & Growth' },
+                  { id: 'Operations', label: 'Operations & Field' },
+                  { id: 'Telephony & Calling', label: 'Telephony & Calling' },
+                  { id: 'Customer Delivery', label: 'Customer Delivery' },
+                  { id: 'Engineering & IT', label: 'Engineering & IT' },
+                  { id: 'Human Resources', label: 'Human Resources' },
+                  { id: 'Accounts & Finance', label: 'Accounts & Finance' }
+                ].map(dept => {
+                  const count = dept.id === 'All' 
+                    ? employees.length 
+                    : employees.filter(e => e.department === dept.id).length;
+                  return (
+                    <button
+                      key={dept.id}
+                      onClick={() => setDepartmentFilter(dept.id)}
+                      className={`px-2.5 py-1 rounded-lg text-[10.5px] font-bold whitespace-nowrap transition flex items-center gap-1.5 cursor-pointer ${
+                        departmentFilter === dept.id
+                          ? 'bg-rose-50 text-rose-700 border border-rose-200 shadow-xxs'
+                          : 'text-slate-500 hover:text-slate-800 bg-slate-50 hover:bg-slate-100 border border-slate-150'
+                      }`}
+                    >
+                      <span>{dept.label}</span>
+                      <span className={`text-[9.5px] px-1.5 py-0.2 rounded-full font-extrabold ${
+                        departmentFilter === dept.id ? 'bg-rose-600 text-white' : 'bg-slate-200 text-slate-600'
+                      }`}>
+                        {count}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+
               {/* Filters toolbar */}
-              <div className="flex flex-wrap items-center justify-between gap-3 my-3">
+              <div className="flex flex-wrap items-center justify-between gap-3 my-2.5">
                 <div className="relative w-full sm:w-64">
                   <Search className="absolute left-2.5 top-2.5 w-3.5 h-3.5 text-slate-400" />
                   <input 
                     type="text" 
-                    placeholder="Search name, job role, department..."
+                    placeholder="Search name, job role, department, or ID..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="w-full text-xs p-2 pl-8.5 bg-slate-50 border border-slate-205 rounded-xl focus:bg-white transition"
@@ -727,7 +838,7 @@ export default function PayrollManager({
                     <button
                       key={tab}
                       onClick={() => setStatusFilter(tab)}
-                      className={`px-2.5 py-1 rounded-md font-bold text-[10.5px] transition ${
+                      className={`px-2.5 py-1 rounded-md font-bold text-[10.5px] transition cursor-pointer ${
                         statusFilter === tab ? 'bg-white text-slate-900 shadow-xxs' : 'text-slate-500 hover:text-slate-800'
                       }`}
                     >
@@ -1172,7 +1283,24 @@ export default function PayrollManager({
 
             {/* Calculations and Breakdown Table wrapper */}
             <div className="xl:col-span-8 bg-white p-4 rounded-2xl border border-slate-100 shadow-xs space-y-4">
-              <h4 className="text-xs font-black uppercase text-slate-400 tracking-wider">Salary Computation Ledger</h4>
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                <div>
+                  <h4 className="text-xs font-black uppercase text-slate-800 tracking-wider">Salary Computation Ledger</h4>
+                  <span className="text-[10px] text-slate-400">Displaying {filteredEmployeesOnTerms.length} of {employees.length} employees ({departmentFilter === 'All' ? 'All Departments' : departmentFilter})</span>
+                </div>
+                <div className="flex items-center gap-2 w-full sm:w-auto">
+                  <div className="relative w-full sm:w-48">
+                    <Search className="absolute left-2.5 top-2.5 w-3 h-3 text-slate-400" />
+                    <input
+                      type="text"
+                      placeholder="Search employee or role..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="text-xs p-1.5 pl-7 bg-slate-50 border border-slate-205 rounded-lg w-full focus:bg-white"
+                    />
+                  </div>
+                </div>
+              </div>
               
               <div className="overflow-x-auto rounded-xl border border-slate-150">
                 <table className="w-full text-left text-xs">
@@ -1190,7 +1318,7 @@ export default function PayrollManager({
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100 font-medium">
-                    {employees.map(emp => {
+                    {filteredEmployeesOnTerms.map(emp => {
                       const calculations = calculateBreakdown(emp.salary, emp.allowance);
                       return (
                         <tr key={emp.id} className="hover:bg-slate-50/50">
@@ -1423,6 +1551,22 @@ export default function PayrollManager({
                 <h4 className="text-xs font-black uppercase text-slate-900 tracking-wider">Focus Performance appraisal</h4>
               </div>
 
+              {/* Workforce Employee Selector */}
+              <div className="space-y-1">
+                <label className="block text-[10px] font-extrabold text-slate-500 uppercase tracking-wider">Select Employee from Workforce ({employees.length} Total)</label>
+                <select
+                  value={selectedEmpId}
+                  onChange={(e) => setSelectedEmpId(e.target.value)}
+                  className="w-full text-xs p-2 bg-slate-50 border border-slate-205 rounded-xl font-bold text-slate-800 focus:bg-white"
+                >
+                  {employees.map(emp => (
+                    <option key={emp.id} value={emp.id}>
+                      {emp.name} ({emp.id}) — {emp.role} [{emp.department}]
+                    </option>
+                  ))}
+                </select>
+              </div>
+
               {selectedEmp ? (
                 <div className="space-y-4 text-xs">
                   <div className="flex items-center gap-3 bg-slate-50 p-3 rounded-xl border border-slate-100">
@@ -1571,9 +1715,12 @@ export default function PayrollManager({
                     onChange={(e) => setNewDept(e.target.value)}
                   >
                     <option value="Sales & Growth">Sales & Growth</option>
-                    <option value="Customer Delivery">Customer Delivery</option>
                     <option value="Operations">Operations</option>
+                    <option value="Telephony & Calling">Telephony & Calling</option>
+                    <option value="Customer Delivery">Customer Delivery</option>
+                    <option value="Engineering & IT">Engineering & IT</option>
                     <option value="Human Resources">Human Resources</option>
+                    <option value="Accounts & Finance">Accounts & Finance</option>
                   </select>
                 </div>
                 <div>
@@ -1657,9 +1804,12 @@ export default function PayrollManager({
                     onChange={(e) => setEditDept(e.target.value)}
                   >
                     <option value="Sales & Growth">Sales & Growth</option>
-                    <option value="Customer Delivery">Customer Delivery</option>
                     <option value="Operations">Operations</option>
+                    <option value="Telephony & Calling">Telephony & Calling</option>
+                    <option value="Customer Delivery">Customer Delivery</option>
+                    <option value="Engineering & IT">Engineering & IT</option>
                     <option value="Human Resources">Human Resources</option>
+                    <option value="Accounts & Finance">Accounts & Finance</option>
                   </select>
                 </div>
                 <div>
@@ -1901,6 +2051,21 @@ export default function PayrollManager({
             
             <form onSubmit={handleRequestLeave} className="space-y-4">
               <div>
+                <label className="block text-[10px] font-extrabold text-slate-500 uppercase tracking-wider mb-1">Select Employee *</label>
+                <select
+                  className="w-full border border-slate-205 rounded-lg p-2 text-xs bg-white font-bold"
+                  value={leaveApplicantId}
+                  onChange={(e) => setLeaveApplicantId(e.target.value)}
+                >
+                  {employees.map(emp => (
+                    <option key={emp.id} value={emp.id}>
+                      {emp.name} ({emp.role} - {emp.department})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
                 <label className="block text-[10px] font-extrabold text-slate-500 uppercase tracking-wider mb-1">Leave Category Type</label>
                 <select
                   className="w-full border border-slate-205 rounded-lg p-2 text-xs bg-white focus:outline-none"
@@ -1976,6 +2141,21 @@ export default function PayrollManager({
             <h3 className="text-sm font-black text-slate-900 uppercase tracking-tight mb-2">Claim Reimbursement Settlement</h3>
             
             <form onSubmit={handleSubmitExpenseClaim} className="space-y-4">
+              <div>
+                <label className="block text-[10px] font-extrabold text-slate-500 uppercase tracking-wider mb-1">Select Claiming Employee *</label>
+                <select
+                  className="w-full border border-slate-205 rounded-lg p-2 text-xs bg-white font-bold"
+                  value={expenseApplicantId}
+                  onChange={(e) => setExpenseApplicantId(e.target.value)}
+                >
+                  {employees.map(emp => (
+                    <option key={emp.id} value={emp.id}>
+                      {emp.name} ({emp.role} - {emp.department})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
               <div>
                 <label className="block text-[10px] font-extrabold text-slate-500 uppercase tracking-wider mb-1">Claim Title Summary</label>
                 <input

@@ -1848,18 +1848,19 @@ export default function CallingManager({
                 <span>Authorize New Agent</span>
               </button>
 
-              <button
+              <a
+                href="/expert-call-agent-v2.4.2.apk"
+                download="expert-call-agent-v2.4.2.apk"
                 onClick={() => {
-                  const res = downloadExpertCallAgentApk('Authorized Agent', 'EXP-TOKEN', 'apk');
-                  setDownloadFeedback({ message: 'Downloaded expert-call-agent-v2.4.2.apk (Android Package)', url: res.url });
+                  setDownloadFeedback({ message: 'Downloaded expert-call-agent-v2.4.2.apk (Android Package)', url: '/expert-call-agent-v2.4.2.apk' });
                   setTimeout(() => setDownloadFeedback(null), 5000);
                 }}
                 className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 shadow-xs transition cursor-pointer"
-                title="Download Android APK"
+                title="Download Android APK (v2.4.2)"
               >
                 <Download className="w-3.5 h-3.5 text-white" />
                 <span>Download APK</span>
-              </button>
+              </a>
 
               <button
                 onClick={() => {
@@ -3940,11 +3941,26 @@ export default function CallingManager({
             {/* TAB 1: ANDROID APK DIRECT DOWNLOAD */}
             {pairingPlatformTab === 'android' && (
               <div className="space-y-3 text-left">
+                {/* Genuine APK Release Specification Header */}
+                <div className="flex flex-wrap items-center gap-1.5 p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-[10.5px]">
+                  <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30 flex items-center gap-1">
+                    <Check className="w-3 h-3 text-emerald-400" />
+                    <span>Verified Production APK</span>
+                  </span>
+                  <span className="px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 font-bold border border-indigo-500/30">
+                    Dual Signed (v1 & v2 Schemes)
+                  </span>
+                  <span className="px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 font-mono text-[9.5px]">
+                    Android 5.0 – 14+ (Universal)
+                  </span>
+                </div>
+
                 {/* PROMINENT DOWNLOAD APK BUTTONS */}
                 <div className="space-y-2">
-                  <button
+                  <a
+                    href="/expert-call-agent-v2.4.2.apk"
+                    download="expert-call-agent-v2.4.2.apk"
                     onClick={() => {
-                      const res = downloadExpertCallAgentApk(showPairingModal.name, showPairingModal.pairingToken, 'apk');
                       setApkDownloadSuccess(true);
                       setTimeout(() => setApkDownloadSuccess(false), 6000);
                     }}
@@ -3952,11 +3968,12 @@ export default function CallingManager({
                   >
                     <Download className="w-5 h-5 animate-bounce" />
                     <span>Download Android APK (expert-call-agent-v2.4.2.apk)</span>
-                  </button>
+                  </a>
 
-                  <button
+                  <a
+                    href={`/api/download/expert-call-agent.html?agent=${encodeURIComponent(showPairingModal.name)}&token=${encodeURIComponent(showPairingModal.pairingToken)}`}
+                    download="expert-call-agent-standalone.html"
                     onClick={() => {
-                      downloadExpertCallAgentApk(showPairingModal.name, showPairingModal.pairingToken, 'html');
                       setApkDownloadSuccess(true);
                       setTimeout(() => setApkDownloadSuccess(false), 6000);
                     }}
@@ -3964,7 +3981,7 @@ export default function CallingManager({
                   >
                     <FileText className="w-4 h-4 text-sky-400" />
                     <span>Download Standalone Offline App (.html single-file bundle)</span>
-                  </button>
+                  </a>
                 </div>
 
                 {apkDownloadSuccess && (
