@@ -283,12 +283,18 @@ export default function Login({ onLoginSuccess }: LoginProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [tenants] = useState(() => {
-    const saved = localStorage.getItem('saas_tenants');
-    return saved ? JSON.parse(saved) : [
+    const defaultTenants = [
       { id: 'ten-1', name: 'Expert CRM HQ', subdomain: 'expert', planId: 'enterprise', status: 'Active', createdAt: '2026-01-10', seatCount: 42, domainProvider: 'expertcrm.in', clientContactName: 'Super Admin Operational', clientOnboardEmail: 'expertaidtech@gmail.com', adminPassword: 'AdminSecureKey#1' },
       { id: 'ten-2', name: 'Mehta Logistics', subdomain: 'mehtalog', planId: 'pro', status: 'Active', createdAt: '2026-03-15', seatCount: 8, domainProvider: 'expertaidtech.in', clientContactName: 'Rohan Mehta', clientOnboardEmail: 'rohan@mehtalogistics.in', adminPassword: 'MehtaLogSecure88' },
       { id: 'ten-3', name: 'Indus Dynamics Trial', subdomain: 'indusdyn', planId: 'free', status: 'Trialing', createdAt: '2026-06-01', seatCount: 2, domainProvider: 'custom', customDomain: 'crm.indusdynamics.in', clientContactName: 'Nikhil Sen', clientOnboardEmail: 'nikhil@indusdynamics.in', adminPassword: 'IndusTrialPower99' }
     ];
+    try {
+      const saved = localStorage.getItem('saas_tenants');
+      const parsed = saved ? JSON.parse(saved) : null;
+      return Array.isArray(parsed) && parsed.length > 0 ? parsed : defaultTenants;
+    } catch {
+      return defaultTenants;
+    }
   });
 
   const [isForgotOpen, setIsForgotOpen] = useState(false);

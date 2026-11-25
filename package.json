@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "tsx server.ts",
-    "build": "vite build && esbuild server.ts --bundle --platform=node --format=cjs --packages=external --sourcemap --outfile=dist/server.cjs && (cp -f public/expert-call-agent-v2.4.2.apk dist/ 2>/dev/null || true)",
-    "start": "node dist/server.cjs",
+    "build": "NODE_ENV=production vite build && esbuild server.ts --bundle --platform=node --format=cjs --packages=external --sourcemap --outfile=dist/server.cjs && (cp -f public/expert-call-agent-v2.4.2.apk dist/ 2>/dev/null || true)",
+    "start": "NODE_ENV=production node dist/server.cjs",
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit"
   },

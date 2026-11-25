@@ -1,11 +1,12 @@
 import express from "express";
 import path from "path";
 import fs from "fs";
-import { createServer as createViteServer } from "vite";
 import { GoogleGenAI } from "@google/genai";
 
-// Ensure process is running with standard port
-const PORT = 3000;
+// Ensure process listens on 3000 behind nginx in dev, or PORT in standalone Cloud Run deployment
+const PORT = process.env.NGINX_PORT
+  ? Number(process.env.DEFAULT_APP_PORT) || 3000
+  : Number(process.env.PORT) || 3000;
 
 // Lazy initialization of Gemini API
 let aiClient: GoogleGenAI | null = null;
@@ -658,22 +659,61 @@ Expert Support Desk`;
   });
 
   // Vite Integration & Resource distribution
-  if (process.env.NODE_ENV !== "production") {
+  const isCompiledCjs =
+    (typeof __filename !== "undefined" && __filename.endsWith(".cjs")) ||
+    Boolean(process.argv[1] && process.argv[1].endsWith(".cjs"));
+  const isProduction = process.env.NODE_ENV === "production" || isCompiledCjs;
+
+  if (!isProduction) {
+    const { createServer: createViteServer } = await import("vite");
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: "spa",
     });
     app.use(vite.middlewares);
   } else {
-    const distPath = path.join(process.cwd(), "dist");
-    app.use(express.static(distPath));
+    const distCandidates = [
+      typeof __dirname !== "undefined" ? __dirname : "",
+      path.join(process.cwd(), "dist"),
+    ].filter(Boolean);
+    const distPath =
+      distCandidates.find((dir) => fs.existsSync(path.join(dir, "index.html"))) ||
+      path.join(process.cwd(), "dist");
+
+    app.use(
+      express.static(distPath, {
+        setHeaders: (res, filePath) => {
+          const base = path.basename(filePath);
+          if (
+            base === "index.html" ||
+            base === "sw.js" ||
+            base === "registerSW.js" ||
+            base === "manifest.webmanifest"
+          ) {
+            res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
+          } else if (filePath.includes(`${path.sep}assets${path.sep}`)) {
+            res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+          }
+        },
+      })
+    );
+
+    // Do not serve index.html for missing API or static asset requests
     app.get("*", (req, res) => {
-      res.sendFile(path.join(distPath, "index.html"));
+      if (
+        req.path.startsWith("/api/") ||
+        req.path.startsWith("/assets/") ||
+        /\.(js|mjs|css|map|png|jpe?g|gif|svg|ico|webp|woff2?|ttf|json|webmanifest|apk)$/i.test(req.path)
+      ) {
+        return res.status(404).send("Not found");
+      }
+      res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
+      return res.sendFile(path.join(distPath, "index.html"));
     });
   }
 
   app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Expert CRM Server Active at http://localhost:${PORT}`);
+    console.log(`Expert CRM Server Active at http://localhost:${PORT} (mode: ${isProduction ? "production" : "development"})`);
   });
 }
 

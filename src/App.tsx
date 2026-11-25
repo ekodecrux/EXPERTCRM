@@ -32,11 +32,19 @@ import {
 
 import { Lead, CallLog, SupportTicket, FieldStaff, Task, Employee, CommsLog, AccessControl, AccessRole } from './types';
 
+function safeJsonParse<T>(key: string, fallback: T): T {
+  try {
+    const saved = localStorage.getItem(key);
+    return saved ? (JSON.parse(saved) as T) : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
 export default function App() {
   // Authentication user session state
   const [userSession, setUserSession] = useState<UserSession | null>(() => {
-    const saved = localStorage.getItem('crm_user_session');
-    return saved ? JSON.parse(saved) : null;
+    return safeJsonParse<UserSession | null>('crm_user_session', null);
   });
 
   // Check if opened as standalone mobile companion app (e.g. via QR code, direct URL, or PWA)
@@ -126,44 +134,25 @@ export default function App() {
   });
 
   // Core Datasets State utilizing standard local storage persistent fallbacks
-  const [leads, setLeads] = useState<Lead[]>(() => {
-    const saved = localStorage.getItem('crm_leads');
-    return saved ? JSON.parse(saved) : INITIAL_LEADS;
-  });
+  const [leads, setLeads] = useState<Lead[]>(() => safeJsonParse('crm_leads', INITIAL_LEADS));
 
   const [callLogs, setCallLogs] = useState<CallLog[]>(() => {
-    const saved = localStorage.getItem('crm_call_logs');
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          return parsed;
-        }
-      } catch (e) {}
-    }
-    return INITIAL_CALL_LOGS;
+    const parsed = safeJsonParse<CallLog[]>('crm_call_logs', []);
+    return Array.isArray(parsed) && parsed.length > 0 ? parsed : INITIAL_CALL_LOGS;
   });
 
-  const [supportTickets, setSupportTickets] = useState<SupportTicket[]>(() => {
-    const saved = localStorage.getItem('crm_support_tickets');
-    return saved ? JSON.parse(saved) : INITIAL_TICKETS;
-  });
+  const [supportTickets, setSupportTickets] = useState<SupportTicket[]>(() => safeJsonParse('crm_support_tickets', INITIAL_TICKETS));
 
-  const [fieldStaff, setFieldStaff] = useState<FieldStaff[]>(() => {
-    const saved = localStorage.getItem('crm_field_staff');
-    return saved ? JSON.parse(saved) : INITIAL_STAFF;
-  });
+  const [fieldStaff, setFieldStaff] = useState<FieldStaff[]>(() => safeJsonParse('crm_field_staff', INITIAL_STAFF));
 
-  const [tasks, setTasks] = useState<Task[]>(() => {
-    const saved = localStorage.getItem('crm_tasks');
-    return saved ? JSON.parse(saved) : INITIAL_TASKS;
-  });
+  const [tasks, setTasks] = useState<Task[]>(() => safeJsonParse('crm_tasks', INITIAL_TASKS));
 
   const [employees, setEmployees] = useState<Employee[]>(() => {
     const saved = localStorage.getItem('crm_employees');
     if (!saved) return INITIAL_EMPLOYEES;
     try {
       const parsed: Employee[] = JSON.parse(saved);
+      if (!Array.isArray(parsed)) return INITIAL_EMPLOYEES;
       const existingNames = new Set(parsed.map(e => e.name.toLowerCase()));
       const existingIds = new Set(parsed.map(e => e.id));
       const merged = [...parsed];
@@ -178,15 +167,11 @@ export default function App() {
     }
   });
 
-  const [commsLogs, setCommsLogs] = useState<CommsLog[]>(() => {
-    const saved = localStorage.getItem('crm_comms_logs');
-    return saved ? JSON.parse(saved) : INITIAL_COMMS;
-  });
+  const [commsLogs, setCommsLogs] = useState<CommsLog[]>(() => safeJsonParse('crm_comms_logs', INITIAL_COMMS));
 
-  const [accessControl, setAccessControl] = useState<AccessControl>(() => {
-    const saved = localStorage.getItem('crm_access_control');
-    return saved ? JSON.parse(saved) : { role: 'Super Admin', permissions: INITIAL_SECURITY.permissions };
-  });
+  const [accessControl, setAccessControl] = useState<AccessControl>(() =>
+    safeJsonParse('crm_access_control', { role: 'Super Admin', permissions: INITIAL_SECURITY.permissions })
+  );
 
   // Global Toasts/feedback message triggers
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'info' | 'warning' } | null>(null);
