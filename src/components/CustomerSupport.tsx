@@ -703,11 +703,11 @@ export default function CustomerSupport({
       {/* Module Title Header Operations Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-3 rounded border border-slate-200">
         <div className="flex items-center gap-2">
-          <div className="p-2 bg-indigo-50 text-indigo-600 rounded">
-            <Headphones className="w-5 h-5 text-indigo-600 shadow-sm" />
+          <div className="p-2 bg-[#eef4fb] text-[#0b74f0] rounded">
+            <Headphones className="w-5 h-5 text-[#0b74f0] shadow-sm" />
           </div>
           <div>
-            <h2 className="text-xs font-bold text-slate-900 uppercase tracking-tight">Enterprise Client Care Desk</h2>
+            <h2 className="text-xs font-bold text-[#082458] uppercase tracking-tight">Enterprise Client Care Desk</h2>
             <p className="text-[10px] text-slate-400">Integrated support console featuring unified account profiles, complaint logging, service dispatches, and SLA ticket monitoring.</p>
           </div>
         </div>
@@ -717,15 +717,15 @@ export default function CustomerSupport({
           <button
             onClick={() => setActiveTab('customers')}
             className={`px-3 py-1 rounded text-[11px] font-bold transition flex items-center gap-1.5 ${
-              activeTab === 'customers' ? 'bg-white text-slate-900 shadow-xs border border-slate-200/50' : 'text-slate-500 hover:text-slate-800'
+              activeTab === 'customers' ? 'bg-white text-[#082458] shadow-xs border border-slate-200/50' : 'text-slate-500 hover:text-[#082458]'
             }`}
           >
-            <Users className="w-3.5 h-3.5 text-indigo-505" /> CRM Accounts
+            <Users className="w-3.5 h-3.5 text-[#0b74f0]" /> CRM Accounts
           </button>
           <button
             onClick={() => setActiveTab('customer_contacts')}
             className={`px-3 py-1 rounded text-[11px] font-bold transition flex items-center gap-1.5 ${
-              activeTab === 'customer_contacts' ? 'bg-white text-slate-900 shadow-xs border border-slate-200/50' : 'text-slate-500 hover:text-slate-800'
+              activeTab === 'customer_contacts' ? 'bg-white text-[#082458] shadow-xs border border-slate-200/50' : 'text-slate-500 hover:text-[#082458]'
             }`}
           >
             <UserCheck className="w-3.5 h-3.5 text-emerald-600" /> Customers & Contacts
@@ -733,7 +733,7 @@ export default function CustomerSupport({
           <button
             onClick={() => setActiveTab('complaints')}
             className={`px-3 py-1 rounded text-[11px] font-bold transition flex items-center gap-1.5 ${
-              activeTab === 'complaints' ? 'bg-white text-slate-900 shadow-xs border border-slate-200/50' : 'text-slate-500 hover:text-slate-800'
+              activeTab === 'complaints' ? 'bg-white text-[#082458] shadow-xs border border-slate-200/50' : 'text-slate-500 hover:text-[#082458]'
             }`}
           >
             <AlertOctagon className="w-3.5 h-3.5 text-red-500" /> Complaints ({complaints.filter(c => c.status !== 'Resolved').length})
@@ -741,7 +741,7 @@ export default function CustomerSupport({
           <button
             onClick={() => setActiveTab('tickets')}
             className={`px-3 py-1 rounded text-[11px] font-bold transition flex items-center gap-1.5 ${
-              activeTab === 'tickets' ? 'bg-white text-slate-900 shadow-xs border border-slate-200/50' : 'text-slate-500 hover:text-slate-800'
+              activeTab === 'tickets' ? 'bg-white text-[#082458] shadow-xs border border-slate-200/50' : 'text-slate-500 hover:text-[#082458]'
             }`}
           >
             <Ticket className="w-3.5 h-3.5 text-amber-500" /> SLA Tickets ({tickets.filter(t => t.status !== 'Resolved').length})
@@ -749,7 +749,7 @@ export default function CustomerSupport({
           <button
             onClick={() => setActiveTab('services')}
             className={`px-3 py-1 rounded text-[11px] font-bold transition flex items-center gap-1.5 ${
-              activeTab === 'services' ? 'bg-white text-slate-900 shadow-xs border border-slate-200/50' : 'text-slate-500 hover:text-slate-800'
+              activeTab === 'services' ? 'bg-white text-[#082458] shadow-xs border border-slate-200/50' : 'text-slate-500 hover:text-[#082458]'
             }`}
           >
             <Wrench className="w-3.5 h-3.5 text-sky-500" /> Service Orders ({services.filter(s => s.status !== 'Fulfilled').length})
@@ -766,12 +766,12 @@ export default function CustomerSupport({
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">Customer Directory Database</h3>
+                  <h3 className="text-xs font-bold text-[#082458] uppercase tracking-wider">Customer Directory Database</h3>
                   <p className="text-[10px] text-slate-400">Search and navigate enrolled accounts</p>
                 </div>
                 <button
                   onClick={() => setIsCustomerModalOpen(true)}
-                  className="px-2 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded text-[10px] font-bold flex items-center gap-1 shadow-xs transition"
+                  className="px-2 py-1 bg-[#0b74f0] hover:bg-[#005be0] text-white rounded text-[10px] font-bold flex items-center gap-1 shadow-xs transition"
                 >
                   <Plus className="w-3 h-3" /> Add Account
                 </button>
@@ -785,7 +785,7 @@ export default function CustomerSupport({
                   placeholder="Search name, company, email..."
                   value={customerSearch}
                   onChange={(e) => setCustomerSearch(e.target.value)}
-                  className="w-full text-xs p-1.5 pl-8 border border-slate-200 bg-slate-50 rounded focus:bg-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                  className="w-full text-xs p-1.5 pl-8 border border-slate-200 bg-slate-50 rounded focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#0b74f0]"
                 />
               </div>
 
@@ -802,8 +802,8 @@ export default function CustomerSupport({
                       onClick={() => setSelectedCustomerId(cust.id)}
                       className={`p-2.5 rounded-lg border text-left cursor-pointer transition ${
                         selectedCustomerId === cust.id 
-                          ? 'bg-slate-900 text-white border-slate-900 shadow-xs' 
-                          : 'bg-white hover:bg-slate-50 text-slate-800 border-slate-200'
+                          ? 'bg-[#041845] text-white border-[#082458] shadow-xs' 
+                          : 'bg-white hover:bg-slate-50 text-[#082458] border-slate-200'
                       }`}
                     >
                       <div className="flex justify-between items-start">
@@ -814,8 +814,8 @@ export default function CustomerSupport({
                           </div>
                         </div>
                         <span className={`text-[8.5px] font-bold px-1.5 py-0.2 rounded font-mono ${
-                          cust.slaTier === 'VIP Platinum' ? 'bg-indigo-950 text-indigo-400 border border-indigo-900' :
-                          cust.slaTier === 'Gold Tier' ? 'bg-amber-100 text-amber-800' : 'bg-slate-150 text-slate-700'
+                          cust.slaTier === 'VIP Platinum' ? 'bg-[#041845] text-[#16c2ff] border border-[#0844a4]' :
+                          cust.slaTier === 'Gold Tier' ? 'bg-amber-100 text-amber-800' : 'bg-slate-200 text-slate-700'
                         }`}>
                           {cust.slaTier}
                         </span>
@@ -843,14 +843,14 @@ export default function CustomerSupport({
                 
                 {/* Account card layout / Profile header */}
                 <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs space-y-3">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-3 border-b border-slate-150">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-3 border-b border-slate-200">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center font-bold text-slate-800 border border-slate-200">
+                      <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center font-bold text-[#082458] border border-slate-200">
                         {selectedCustomer.company.slice(0,2).toUpperCase()}
                       </div>
                       <div>
                         <div className="flex items-center gap-1.5">
-                          <h3 className="text-xs font-extrabold text-slate-900">{selectedCustomer.company}</h3>
+                          <h3 className="text-xs font-extrabold text-[#082458]">{selectedCustomer.company}</h3>
                           <span className="text-[8px] bg-emerald-50 text-emerald-800 border border-emerald-150 px-1 py-0.1 rounded font-bold uppercase">
                             {selectedCustomer.accountStatus}
                           </span>
@@ -862,7 +862,7 @@ export default function CustomerSupport({
                     <div className="text-right">
                       <span className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400 block">SLA Priority Tier</span>
                       <span className={`inline-block text-[10.5px] font-mono font-black border uppercase px-2 py-0.5 rounded ${
-                        selectedCustomer.slaTier === 'VIP Platinum' ? 'bg-indigo-50 text-indigo-800 border-indigo-200 font-black' :
+                        selectedCustomer.slaTier === 'VIP Platinum' ? 'bg-[#eef4fb] text-[#082458] border-[#0b74f0]/25 font-black' :
                         selectedCustomer.slaTier === 'Gold Tier' ? 'bg-amber-50 text-amber-800 border-amber-200' : 'bg-slate-50 text-slate-700 border-slate-200'
                       }`}>
                         {selectedCustomer.slaTier}
@@ -875,7 +875,7 @@ export default function CustomerSupport({
                     <h4 className="text-[9.5px] uppercase font-bold text-slate-400 tracking-wider mb-2">Primary Decision-Maker Contacts</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
                       <div className="space-y-2">
-                        <div className="flex items-center gap-2 bg-slate-50 p-2 rounded-lg border border-slate-150 text-[11px]">
+                        <div className="flex items-center gap-2 bg-slate-50 p-2 rounded-lg border border-slate-200 text-[11px]">
                           <Contact className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                           <div className="truncate">
                             <span className="text-slate-400 block text-[9px] uppercase font-medium leading-none">Decision-Maker</span>
@@ -883,11 +883,11 @@ export default function CustomerSupport({
                             <span className="text-slate-400 block text-[9px] truncate">{selectedCustomer.decisionMakerRole}</span>
                           </div>
                         </div>
-                        <div className="flex items-center gap-2 bg-slate-50 p-2 rounded-lg border border-slate-150 text-[11px]">
+                        <div className="flex items-center gap-2 bg-slate-50 p-2 rounded-lg border border-slate-200 text-[11px]">
                           <Mail className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                           <div className="truncate">
                             <span className="text-slate-400 block text-[9px] uppercase font-medium leading-none">Primary Email</span>
-                            <a href={`mailto:${selectedCustomer.email}`} className="text-indigo-600 hover:underline hover:font-semibold">{selectedCustomer.email}</a>
+                            <a href={`mailto:${selectedCustomer.email}`} className="text-[#0b74f0] hover:underline hover:font-semibold">{selectedCustomer.email}</a>
                           </div>
                         </div>
                       </div>
@@ -899,17 +899,17 @@ export default function CustomerSupport({
                               (window as any).__triggerGlobalDial(selectedCustomer.phone, selectedCustomer.name);
                             }
                           }}
-                          className="flex items-center text-left gap-2 bg-slate-50 p-2 rounded-lg border border-slate-150 hover:bg-slate-100 hover:border-indigo-200 text-[11px] w-full transition cursor-pointer"
+                          className="flex items-center text-left gap-2 bg-slate-50 p-2 rounded-lg border border-slate-200 hover:bg-slate-100 hover:border-[#0b74f0]/40 text-[11px] w-full transition cursor-pointer"
                           title="Click to dial customer via gateway"
                         >
-                          <Phone className="w-3.5 h-3.5 text-indigo-500 shrink-0 animate-pulse" />
+                          <Phone className="w-3.5 h-3.5 text-[#0b74f0] shrink-0 animate-pulse" />
                           <div className="truncate">
                             <span className="text-slate-400 block text-[9px] uppercase font-medium leading-none">Direct Call Number (Click to Dial)</span>
-                            <strong className="text-indigo-600 hover:underline font-bold">{selectedCustomer.phone}</strong>
+                            <strong className="text-[#0b74f0] hover:underline font-bold">{selectedCustomer.phone}</strong>
                             <span className="text-slate-400 block text-[9px] italic font-mono">{selectedCustomer.skypeExtension}</span>
                           </div>
                         </button>
-                        <div className="flex items-center gap-2 bg-slate-50 p-2 rounded-lg border border-slate-150 text-[11px]">
+                        <div className="flex items-center gap-2 bg-slate-50 p-2 rounded-lg border border-slate-200 text-[11px]">
                           <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                           <div className="truncate">
                             <span className="text-slate-400 block text-[9px] uppercase font-medium leading-none">Main Address</span>
@@ -933,10 +933,10 @@ export default function CustomerSupport({
                   ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                       {selectedCustomer.secondaryContacts.map((sec, idx) => (
-                        <div key={idx} className="p-2 border border-slate-150 rounded-lg bg-neutral-50 flex flex-col justify-between">
+                        <div key={idx} className="p-2 border border-slate-200 rounded-lg bg-neutral-50 flex flex-col justify-between">
                           <div>
                             <span className="text-slate-500 font-mono text-[9px] uppercase font-bold tracking-widest">{sec.role}</span>
-                            <p className="font-extrabold text-slate-800 text-[11px] mt-0.5">{sec.name}</p>
+                            <p className="font-extrabold text-[#082458] text-[11px] mt-0.5">{sec.name}</p>
                           </div>
                           <span className="text-[10px] text-slate-500 font-semibold mt-1 font-mono">☎️ {sec.phone}</span>
                         </div>
@@ -978,7 +978,7 @@ export default function CustomerSupport({
                     </div>
                     <button
                       type="submit"
-                      className="px-2.5 py-1 bg-indigo-650 hover:bg-indigo-750 text-white rounded text-[10px] font-bold shrink-0 shadow-xs"
+                      className="px-2.5 py-1 bg-[#0b74f0] hover:bg-[#005be0] text-white rounded text-[10px] font-bold shrink-0 shadow-xs"
                     >
                       Log Link
                     </button>
@@ -1038,7 +1038,7 @@ export default function CustomerSupport({
           
           {/* Customer CRM Database */}
           <div className="lg:col-span-7 bg-white p-3 rounded border border-slate-205 space-y-3 shadow-xs">
-            <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1">
+            <h3 className="text-xs font-bold text-[#082458] uppercase tracking-wider flex items-center gap-1">
               <UserCheck className="w-4 h-4 text-emerald-600" />
               Customer Corporate Database
             </h3>
@@ -1057,7 +1057,7 @@ export default function CustomerSupport({
                   return (
                     <div key={cust.id} className="p-3 bg-slate-50 border border-slate-200 rounded grid grid-cols-2 gap-2 relative">
                       <div>
-                        <h4 className="text-xs font-bold text-slate-900">{cust.name}</h4>
+                        <h4 className="text-xs font-bold text-[#082458]">{cust.name}</h4>
                         <p className="text-[10px] font-medium text-slate-500 uppercase">{cust.company}</p>
                         <p className="text-[9.5px] text-slate-400">Status: Account Active</p>
                       </div>
@@ -1090,13 +1090,13 @@ export default function CustomerSupport({
           <div className="lg:col-span-5 bg-white p-3 rounded border border-slate-200 space-y-4 shadow-xs">
             
             <div className="flex justify-between items-center">
-              <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1">
-                <Clock className="w-4 h-4 text-indigo-600" />
+              <h3 className="text-xs font-bold text-[#082458] uppercase tracking-wider flex items-center gap-1">
+                <Clock className="w-4 h-4 text-[#0b74f0]" />
                 Follow-up Reminders Schedule
               </h3>
               <button 
                 onClick={() => setIsRemFormOpen(true)}
-                className="px-2 py-0.5 bg-indigo-50 text-indigo-700 text-[10px] font-bold rounded border border-indigo-150 hover:bg-indigo-110 transition"
+                className="px-2 py-0.5 bg-[#eef4fb] text-[#0b74f0] text-[10px] font-bold rounded border border-[#0b74f0]/25 hover:bg-[#dceafb] transition"
               >
                 Create Reminder
               </button>
@@ -1117,7 +1117,7 @@ export default function CustomerSupport({
                             onChange={() => setReminders(prev => prev.map(r => r.id === rem.id ? { ...r, isCompleted: !r.isCompleted } : r))}
                             className="rounded border-slate-300"
                           />
-                          <h4 className={`text-xs font-bold ${rem.isCompleted ? 'line-through text-slate-400' : 'text-slate-800'}`}>{rem.clientName}</h4>
+                          <h4 className={`text-xs font-bold ${rem.isCompleted ? 'line-through text-slate-400' : 'text-[#082458]'}`}>{rem.clientName}</h4>
                         </div>
                         <p className="text-[10px] text-slate-600 font-medium mt-1">"{rem.reminderText}"</p>
                       </div>
@@ -1151,18 +1151,18 @@ export default function CustomerSupport({
           {/* Action and statistics operations bar */}
           <div className="bg-white p-3 rounded border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-none">
             <div>
-              <h3 className="text-xs font-bold text-slate-900 uppercase tracking-widest">Enterprise Complaint Ledger</h3>
+              <h3 className="text-xs font-bold text-[#082458] uppercase tracking-widest">Enterprise Complaint Ledger</h3>
               <p className="text-[10px] text-slate-400">Log, triage, investigate and verify critical SLA customer grievances</p>
             </div>
 
             <div className="flex flex-wrap items-center gap-2">
-              <div className="flex items-center gap-1 text-[10.5px] bg-slate-150 p-0.5 rounded border border-slate-200">
+              <div className="flex items-center gap-1 text-[10.5px] bg-slate-200 p-0.5 rounded border border-slate-200">
                 {(['All', 'Unresolved', 'Resolved'] as const).map(f => (
                   <button
                     key={f}
                     onClick={() => setComplaintFilter(f)}
                     className={`px-2 py-0.5 rounded text-[10px] font-bold transition ${
-                      complaintFilter === f ? 'bg-white text-slate-900 shadow-xxs' : 'text-slate-500 hover:text-slate-850'
+                      complaintFilter === f ? 'bg-white text-[#082458] shadow-xxs' : 'text-slate-500 hover:text-[#082458]'
                     }`}
                   >
                     {f}
@@ -1172,7 +1172,7 @@ export default function CustomerSupport({
 
               <button
                 onClick={() => setIsComplaintModalOpen(true)}
-                className="px-2.5 py-1 bg-red-650 hover:bg-red-700 text-white rounded text-[10px] font-bold flex items-center gap-1 shadow-xs transition"
+                className="px-2.5 py-1 bg-rose-600 hover:bg-red-700 text-white rounded text-[10px] font-bold flex items-center gap-1 shadow-xs transition"
               >
                 <Plus className="w-3.5 h-3.5" /> Log Customer Complaint
               </button>
@@ -1193,7 +1193,7 @@ export default function CustomerSupport({
             </div>
 
             {/* Complaint spreadsheet index table */}
-            <div className="overflow-x-auto border border-slate-150 rounded-lg">
+            <div className="overflow-x-auto border border-slate-200 rounded-lg">
               <table className="w-full text-left font-sans text-slate-700 text-xs">
                 <thead className="bg-slate-100 text-slate-500 text-[8.5px] uppercase tracking-wider font-extrabold border-b border-slate-200">
                   <tr>
@@ -1218,16 +1218,16 @@ export default function CustomerSupport({
                   ) : (
                     filteredComplaints.map(comp => (
                       <tr key={comp.id} className="hover:bg-slate-50/50 transition">
-                        <td className="px-3 py-2.5 font-mono font-bold text-red-650">{comp.id}</td>
+                        <td className="px-3 py-2.5 font-mono font-bold text-rose-600">{comp.id}</td>
                         <td className="px-3 py-2.5">
                           <strong>{comp.companyName}</strong>
                           <span className="block text-[9.5px] text-slate-400">{comp.customerName}</span>
                         </td>
-                        <td className="px-3 py-2.5 font-semibold text-slate-650">{comp.category}</td>
+                        <td className="px-3 py-2.5 font-semibold text-slate-600">{comp.category}</td>
                         <td className="px-3 py-2.5">
                           <span className={`px-2 py-0.5 rounded text-[8.5px] font-black uppercase ${
                             comp.priority === 'Critical' ? 'bg-red-950 text-red-400 border border-red-900 animate-pulse' :
-                            comp.priority === 'Major' ? 'bg-amber-100 text-amber-800' : 'bg-slate-150 text-slate-700'
+                            comp.priority === 'Major' ? 'bg-amber-100 text-amber-800' : 'bg-slate-200 text-slate-700'
                           }`}>
                             {comp.priority}
                           </span>
@@ -1237,7 +1237,7 @@ export default function CustomerSupport({
                         <td className="px-3 py-2.5">
                           <span className={`px-1.5 py-0.2 rounded-sm text-[9px] font-bold ${
                             comp.status === 'Resolved' ? 'bg-emerald-50 text-emerald-800 border border-emerald-150' :
-                            comp.status === 'Under Investigation' ? 'bg-amber-50 text-amber-850' : 'bg-red-50 text-red-650'
+                            comp.status === 'Under Investigation' ? 'bg-amber-50 text-amber-850' : 'bg-red-50 text-rose-600'
                           }`}>
                             {comp.status}
                           </span>
@@ -1282,7 +1282,7 @@ export default function CustomerSupport({
         <div className="space-y-4">
           <div className="bg-white p-3 rounded border border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-none">
             <div>
-              <h3 className="text-xs font-bold text-slate-900 uppercase tracking-widest">SLA Support Ticket Tracking</h3>
+              <h3 className="text-xs font-bold text-[#082458] uppercase tracking-widest">SLA Support Ticket Tracking</h3>
               <p className="text-[10px] text-slate-400 font-medium">Conventional support tickets dispatch list with state controls and Gemini auto-resolution draft generation.</p>
             </div>
 
@@ -1332,18 +1332,18 @@ export default function CustomerSupport({
                   filteredTickets.map(ticket => (
                     <div 
                       key={ticket.id}
-                      className="p-3 border border-slate-180 bg-white hover:border-slate-350 rounded-xl space-y-2.5 transition"
+                      className="p-3 border border-slate-200 bg-white hover:border-slate-300 rounded-xl space-y-2.5 transition"
                     >
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                         <div className="flex items-center gap-2">
                           <span className={`px-2 py-0.5 rounded text-[8px] font-extrabold uppercase ${
                             ticket.priority === 'High' ? 'bg-red-500 text-white' :
-                            ticket.priority === 'Medium' ? 'bg-amber-400 text-amber-950' : 'bg-slate-150 text-slate-700'
+                            ticket.priority === 'Medium' ? 'bg-amber-400 text-amber-950' : 'bg-slate-200 text-slate-700'
                           }`}>
                             {ticket.priority} SLA
                           </span>
                           <span className="font-mono text-[10px] font-bold text-slate-400">{ticket.id}</span>
-                          <h4 className="text-[11.5px] font-bold text-slate-900">{ticket.subject}</h4>
+                          <h4 className="text-[11.5px] font-bold text-[#082458]">{ticket.subject}</h4>
                         </div>
 
                         <div className="flex items-center gap-2">
@@ -1366,7 +1366,7 @@ export default function CustomerSupport({
 
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-[10px] text-slate-400">
                         <div>
-                          Company Account Recipient: <strong className="text-slate-800">{ticket.clientName}</strong> &bull; Category: <strong className="text-slate-800">{ticket.category}</strong>
+                          Company Account Recipient: <strong className="text-[#082458]">{ticket.clientName}</strong> &bull; Category: <strong className="text-[#082458]">{ticket.category}</strong>
                           <button
                             onClick={() => {
                               if ((window as any).__triggerGlobalPrint) {
@@ -1377,7 +1377,7 @@ export default function CustomerSupport({
                                 );
                               }
                             }}
-                            className="inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-750 border border-slate-200 rounded text-[9px] font-black cursor-pointer transition ml-2 inline-block align-middle"
+                            className="inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 rounded text-[9px] font-black cursor-pointer transition ml-2 inline-block align-middle"
                             title="Print ticket ledger sheet"
                           >
                             <Printer className="w-2.5 h-2.5 inline mr-0.5" /> Print Copy
@@ -1395,15 +1395,15 @@ export default function CustomerSupport({
                           <button
                             onClick={() => handleSolveWithAI(ticket)}
                             disabled={solvingTicketId === ticket.id}
-                            className="px-2 py-0.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-750 border border-indigo-150 rounded text-[9.5px] font-bold flex items-center gap-1 shadow-xxs transition disabled:opacity-50"
+                            className="px-2 py-0.5 bg-[#eef4fb] hover:bg-[#dceafb] text-[#0b74f0] border border-[#0b74f0]/25 rounded text-[9.5px] font-bold flex items-center gap-1 shadow-xxs transition disabled:opacity-50"
                           >
                             {solvingTicketId === ticket.id ? (
                               <>
-                                <Loader2 className="w-3 h-3 animate-spin text-indigo-600" /> Computing Options...
+                                <Loader2 className="w-3 h-3 animate-spin text-[#0b74f0]" /> Computing Options...
                               </>
                             ) : (
                               <>
-                                <Sparkles className="w-3 h-3 text-indigo-500" /> Draft Resolution with Gemini AI
+                                <Sparkles className="w-3 h-3 text-[#0b74f0]" /> Draft Resolution with Gemini AI
                               </>
                             )}
                           </button>
@@ -1424,7 +1424,7 @@ export default function CustomerSupport({
           
           <div className="bg-white p-3 rounded border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-none">
             <div>
-              <h3 className="text-xs font-bold text-slate-900 uppercase tracking-widest">Enterprise Field Service Orders</h3>
+              <h3 className="text-xs font-bold text-[#082458] uppercase tracking-widest">Enterprise Field Service Orders</h3>
               <p className="text-[10px] text-slate-400">Coordinate deployments, gateway sync processes, diagnosing and physical visits checklists.</p>
             </div>
 
@@ -1456,11 +1456,11 @@ export default function CustomerSupport({
                 </div>
               ) : (
                 filteredServices.map(srv => (
-                  <div key={srv.id} className="p-3 bg-white border border-slate-180 hover:border-slate-350 rounded-xl space-y-3 transition">
+                  <div key={srv.id} className="p-3 bg-white border border-slate-200 hover:border-slate-300 rounded-xl space-y-3 transition">
                     <div className="flex justify-between items-start">
                       <div>
                         <span className="text-[9px] font-mono text-slate-450 tracking-wider">ORDER ID: {srv.id}</span>
-                        <h4 className="text-[11.5px] font-bold text-slate-950 mt-0.5">{srv.serviceType}</h4>
+                        <h4 className="text-[11.5px] font-bold text-[#041845] mt-0.5">{srv.serviceType}</h4>
                         <p className="text-[10px] text-slate-400 font-medium leading-none">{srv.companyName} &bull; {srv.customerName}</p>
                       </div>
 
@@ -1476,18 +1476,18 @@ export default function CustomerSupport({
                       </select>
                     </div>
 
-                    <div className="bg-slate-50 p-2 border border-slate-150 rounded-md text-[10.5px] font-sans text-slate-650 leading-relaxed">
+                    <div className="bg-slate-50 p-2 border border-slate-200 rounded-md text-[10.5px] font-sans text-slate-600 leading-relaxed">
                       <strong>Specific SLA Details:</strong> "{srv.details}"
                     </div>
 
-                    <div className="grid grid-cols-2 gap-2 text-[10px] text-slate-500 border-t border-slate-150/60 pt-2.5">
+                    <div className="grid grid-cols-2 gap-2 text-[10px] text-slate-500 border-t border-slate-200/60 pt-2.5">
                       <div>
                         <span className="text-[8.5px] uppercase font-bold text-slate-400 block leading-none">Schedule Target</span>
-                        <strong className="text-slate-800">{srv.scheduledDate}</strong>
+                        <strong className="text-[#082458]">{srv.scheduledDate}</strong>
                       </div>
                       <div>
                         <span className="text-[8.5px] uppercase font-bold text-slate-400 block leading-none">Assigned Technician</span>
-                        <strong className="text-slate-800">{srv.assignedTech}</strong>
+                        <strong className="text-[#082458]">{srv.assignedTech}</strong>
                       </div>
                     </div>
 
@@ -1509,15 +1509,15 @@ export default function CustomerSupport({
 
       {/* ==================== AI RESOLUTION COMPILER OVERLAY DIALOG ==================== */}
       {activeTicketSolving && (
-        <div className="bg-[#0b1329] text-slate-200 p-5 rounded-2xl border border-slate-800 shadow-2xl space-y-4 font-sans">
-          <div className="flex justify-between items-start pb-2.5 border-b border-slate-800">
+        <div className="bg-[#0b1329] text-slate-200 p-5 rounded-2xl border border-[#1e3a8a]/50 shadow-2xl space-y-4 font-sans">
+          <div className="flex justify-between items-start pb-2.5 border-b border-[#1e3a8a]/50">
             <div>
               <span className="text-[8.5px] uppercase tracking-widest font-black text-amber-400 block">Gemini Ticket Desk Assistant</span>
               <h3 className="text-sm font-extrabold text-white mt-1">Ticket Resolution Diagnostics Panel ({activeTicketSolving.id})</h3>
             </div>
             <button 
               onClick={() => setActiveTicketSolving(null)}
-              className="px-3 py-1 text-[10px] font-semibold text-slate-400 hover:text-white bg-slate-800 rounded-md transition"
+              className="px-3 py-1 text-[10px] font-semibold text-slate-400 hover:text-white bg-[#082458] rounded-md transition"
             >
               Dismiss Panel
             </button>
@@ -1526,7 +1526,7 @@ export default function CustomerSupport({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <span className="text-[9px] font-extrabold text-slate-400 uppercase tracking-widest block">Original Ticket Transcript</span>
-              <div className="bg-slate-900 p-3 h-32 overflow-y-auto rounded-xl border border-slate-850 text-[10.5px] text-slate-300 font-sans leading-relaxed">
+              <div className="bg-[#041845] p-3 h-32 overflow-y-auto rounded-xl border border-[#1e3a8a]/50 text-[10.5px] text-slate-300 font-sans leading-relaxed">
                 <p><strong>Customer:</strong> {activeTicketSolving.clientName}</p>
                 <p className="mt-1"><strong>Subject:</strong> {activeTicketSolving.subject}</p>
                 <p className="mt-2 text-slate-400 italic">" {activeTicketSolving.description} "</p>
@@ -1535,7 +1535,7 @@ export default function CustomerSupport({
 
             <div className="space-y-2">
               <span className="text-[9px] font-extrabold text-amber-400 tracking-widest block uppercase">Gemini Formulated Resolution Proposal</span>
-              <div className="bg-slate-900 p-3 h-32 overflow-y-auto rounded-xl border border-slate-850 text-[10.5px] text-slate-350 font-sans leading-relaxed">
+              <div className="bg-[#041845] p-3 h-32 overflow-y-auto rounded-xl border border-[#1e3a8a]/50 text-[10.5px] text-slate-300 font-sans leading-relaxed">
                 {activeTicketSolving.aiResponseDraft ? (
                   <p>{activeTicketSolving.aiResponseDraft}</p>
                 ) : (
@@ -1546,7 +1546,7 @@ export default function CustomerSupport({
           </div>
 
           {activeTicketSolving.aiResponseDraft && (
-            <div className="flex justify-end gap-2 pt-1 border-t border-slate-850">
+            <div className="flex justify-end gap-2 pt-1 border-t border-[#1e3a8a]/50">
               <button 
                 onClick={() => {
                   onUpdateTicketStatus(activeTicketSolving.id, 'Resolved');
@@ -1565,9 +1565,9 @@ export default function CustomerSupport({
       
       {/* 1. Customer Modal */}
       {isCustomerModalOpen && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 font-sans">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6 border border-slate-150 shadow-2xl space-y-4">
-            <h3 className="text-xs font-bold text-slate-900 uppercase tracking-widest">Enlist New Customer Account</h3>
+        <div className="fixed inset-0 bg-[#041845]/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 font-sans">
+          <div className="bg-white rounded-2xl max-w-lg w-full p-6 border border-slate-200 shadow-2xl space-y-4">
+            <h3 className="text-xs font-bold text-[#082458] uppercase tracking-widest">Enlist New Customer Account</h3>
             
             <form onSubmit={handleCreateCustomer} className="space-y-3.5">
               <div className="grid grid-cols-2 gap-3 text-xs font-medium text-slate-600">
@@ -1625,7 +1625,7 @@ export default function CustomerSupport({
 
               <div className="flex justify-end gap-2 pt-2 border-t text-xs">
                 <button type="button" onClick={()=>setIsCustomerModalOpen(false)} className="px-4 py-2 border rounded-md hover:bg-slate-50">Cancel</button>
-                <button type="submit" className="px-5 py-2 bg-indigo-600 hover:bg-indigo-750 text-white rounded-md font-bold">Register Account</button>
+                <button type="submit" className="px-5 py-2 bg-[#0b74f0] hover:bg-[#005be0] text-white rounded-md font-bold">Register Account</button>
               </div>
             </form>
           </div>
@@ -1634,9 +1634,9 @@ export default function CustomerSupport({
 
       {/* 2. Complaint Modal */}
       {isComplaintModalOpen && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 font-sans">
+        <div className="fixed inset-0 bg-[#041845]/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 font-sans">
           <div className="bg-white rounded-2xl max-w-md w-full p-6 border border-slate-205 shadow-2xl space-y-4">
-            <h3 className="text-xs font-bold text-slate-900 uppercase tracking-widest flex items-center gap-1">
+            <h3 className="text-xs font-bold text-[#082458] uppercase tracking-widest flex items-center gap-1">
               <AlertOctagon className="w-4 h-4 text-red-500 animate-pulse" /> Create Customer Resolution Complaint
             </h3>
 
@@ -1663,7 +1663,7 @@ export default function CustomerSupport({
                 </div>
                 <div>
                   <label className="block text-[9px] font-bold text-slate-400 uppercase mb-1 font-extrabold text-red-550">Triage Priority</label>
-                  <select value={compPrior} onChange={(e)=>setCompPrior(e.target.value as any)} className="w-full border rounded p-1.5 bg-white font-bold text-red-650">
+                  <select value={compPrior} onChange={(e)=>setCompPrior(e.target.value as any)} className="w-full border rounded p-1.5 bg-white font-bold text-rose-600">
                     <option value="Critical">🚨 Critical</option>
                     <option value="Major">⚡ Major</option>
                     <option value="Minor">💤 Minor</option>
@@ -1697,9 +1697,9 @@ export default function CustomerSupport({
 
       {/* 3. Service Request Modal */}
       {isServiceModalOpen && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 font-sans">
+        <div className="fixed inset-0 bg-[#041845]/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 font-sans">
           <div className="bg-white rounded-2xl max-w-md w-full p-6 border border-slate-205 shadow-2xl space-y-4">
-            <h3 className="text-xs font-bold text-slate-900 uppercase tracking-widest flex items-center gap-1">
+            <h3 className="text-xs font-bold text-[#082458] uppercase tracking-widest flex items-center gap-1">
               <Wrench className="w-4 h-4 text-sky-550 animate-pulse" /> Dispatch Field / Technical Service Order
             </h3>
 
@@ -1770,9 +1770,9 @@ export default function CustomerSupport({
 
       {/* 4. Ticket Modal */}
       {isTicketModalOpen && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 font-sans">
+        <div className="fixed inset-0 bg-[#041845]/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 font-sans">
           <div className="bg-white rounded-2xl max-w-md w-full p-6 border border-slate-205 shadow-2xl space-y-4">
-            <h3 className="text-xs font-bold text-slate-900 uppercase tracking-widest flex items-center gap-1">
+            <h3 className="text-xs font-bold text-[#082458] uppercase tracking-widest flex items-center gap-1">
               <Ticket className="w-4 h-4 text-amber-500" /> Raise SLA Customer Technical Ticket
             </h3>
 
@@ -1830,9 +1830,9 @@ export default function CustomerSupport({
 
       {/* 5. REMINDER ADD MODAL */}
       {isRemFormOpen && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 animate-fadeIn font-sans">
+        <div className="fixed inset-0 bg-[#041845]/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 animate-fadeIn font-sans">
           <div className="bg-white rounded-2xl max-w-sm w-full p-5 border border-slate-200 shadow-2xl relative space-y-3">
-            <h3 className="text-xs font-extrabold text-slate-900 uppercase">Schedule New Follow-up Alert</h3>
+            <h3 className="text-xs font-extrabold text-[#082458] uppercase">Schedule New Follow-up Alert</h3>
             <form onSubmit={handleCreateReminder} className="space-y-3 text-xs text-slate-600">
               <div>
                 <label className="block text-slate-400 font-bold text-[9px] uppercase mb-1">Target Account *</label>
@@ -1872,7 +1872,7 @@ export default function CustomerSupport({
 
               <div className="flex justify-end gap-1.5 pt-2 border-t">
                 <button type="button" onClick={() => setIsRemFormOpen(false)} className="px-2.5 py-1 text-slate-500 hover:bg-slate-50 border rounded-md">Cancel</button>
-                <button type="submit" className="px-3.5 py-1 bg-indigo-650 text-white rounded-md font-bold hover:bg-indigo-750 transition">Schedule Reminder</button>
+                <button type="submit" className="px-3.5 py-1 bg-[#0b74f0] text-white rounded-md font-bold hover:bg-[#005be0] transition">Schedule Reminder</button>
               </div>
             </form>
           </div>

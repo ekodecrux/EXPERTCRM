@@ -421,11 +421,11 @@ export default function CallAgentMobileApp({
     <div className={`flex flex-col items-center justify-center ${isStandalone ? 'w-full h-full p-2' : ''}`}>
       
       {/* Phone Mockup Frame */}
-      <div className="w-[360px] sm:w-[380px] h-[720px] bg-slate-950 rounded-[44px] p-3 shadow-2xl border-4 border-slate-800 relative flex flex-col overflow-hidden select-none">
+      <div className="w-[360px] sm:w-[380px] h-[720px] bg-[#031338] rounded-[44px] p-3 shadow-2xl border-4 border-[#1e3a8a]/50 relative flex flex-col overflow-hidden select-none">
         
         {/* Dynamic Island / Bezel Top Notch */}
         <div className="absolute top-4 left-1/2 -translate-x-1/2 w-28 h-5 bg-black rounded-full z-40 flex items-center justify-between px-3">
-          <div className="w-2.5 h-2.5 rounded-full bg-slate-900 border border-slate-700"></div>
+          <div className="w-2.5 h-2.5 rounded-full bg-[#041845] border border-[#1e3a8a]/60"></div>
           <div className="flex items-center gap-1">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
             <span className="text-[8px] font-mono text-emerald-450 font-bold">5G</span>
@@ -433,7 +433,7 @@ export default function CallAgentMobileApp({
         </div>
 
         {/* Phone Glass Inner Screen */}
-        <div className="flex-1 bg-slate-900 rounded-[36px] overflow-hidden flex flex-col relative text-white border border-slate-800/80">
+        <div className="flex-1 bg-[#041845] rounded-[36px] overflow-hidden flex flex-col relative text-white border border-[#1e3a8a]/50/80">
           
           {/* Top Mobile Status Bar */}
           <div className="h-10 pt-2 px-5 flex items-center justify-between text-[11px] font-semibold text-slate-300 z-30 shrink-0">
@@ -468,12 +468,12 @@ export default function CallAgentMobileApp({
           )}
 
           {/* Agent Authorization Status Banner */}
-          <div className="px-3.5 py-1.5 bg-slate-950/80 border-b border-slate-800 flex items-center justify-between shrink-0">
+          <div className="px-3.5 py-1.5 bg-[#031338]/80 border-b border-[#1e3a8a]/50 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-2 min-w-0">
               <img 
                 src={currentAgent.avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face"} 
                 alt={currentAgent.name} 
-                className="w-6 h-6 rounded-full border border-indigo-400 object-cover shrink-0"
+                className="w-6 h-6 rounded-full border border-[#38bdf8] object-cover shrink-0"
               />
               <div className="min-w-0">
                 <div className="flex items-center gap-1">
@@ -498,10 +498,10 @@ export default function CallAgentMobileApp({
               }}
               className={`text-[9.5px] font-bold px-2 py-0.5 rounded-full border focus:outline-none cursor-pointer ${
                 agentStatus === 'Available' ? 'bg-emerald-950 text-emerald-300 border-emerald-600' :
-                agentStatus === 'On Call' ? 'bg-indigo-950 text-indigo-300 border-indigo-600' :
+                agentStatus === 'On Call' ? 'bg-[#041845] text-[#16c2ff] border-[#0b74f0]' :
                 agentStatus === 'Wrap-up' ? 'bg-amber-950 text-amber-300 border-amber-600' :
                 agentStatus === 'Break' ? 'bg-purple-950 text-purple-300 border-purple-600' :
-                'bg-slate-800 text-slate-400 border-slate-700'
+                'bg-[#082458] text-slate-400 border-[#1e3a8a]/60'
               }`}
             >
               <option value="Available">🟢 Available</option>
@@ -512,7 +512,7 @@ export default function CallAgentMobileApp({
           </div>
 
           {/* Auto-Sync Pulse Bar */}
-          <div className="px-3.5 py-1 bg-indigo-950/40 border-b border-indigo-900/40 flex items-center justify-between text-[8.5px] text-indigo-300">
+          <div className="px-3.5 py-1 bg-[#041845]/40 border-b border-[#0844a4]/40 flex items-center justify-between text-[8.5px] text-[#16c2ff]">
             <span className="flex items-center gap-1">
               <Zap className="w-2.5 h-2.5 text-amber-400 animate-pulse" />
               <span>Auto-Sync to Manager Desktop:</span>
@@ -525,14 +525,14 @@ export default function CallAgentMobileApp({
           
           {/* 1. ACTIVE CALLING OR CONNECTED VIEW */}
           {callState === 'calling' || callState === 'connected' ? (
-            <div className="flex-1 p-5 flex flex-col justify-between items-center text-center bg-gradient-to-b from-slate-900 via-indigo-950/40 to-slate-950 relative overflow-hidden">
+            <div className="flex-1 p-5 flex flex-col justify-between items-center text-center bg-gradient-to-b from-[#041845] via-[#082458]/40 to-[#031338] relative overflow-hidden">
               
               {/* Pulsing waves */}
-              <div className="w-28 h-28 rounded-full bg-indigo-600/20 absolute -top-8 -right-8 blur-2xl animate-pulse"></div>
+              <div className="w-28 h-28 rounded-full bg-[#0b74f0]/20 absolute -top-8 -right-8 blur-2xl animate-pulse"></div>
               
               {/* Target info */}
               <div className="mt-4 space-y-1.5 z-10">
-                <span className="px-2 py-0.5 rounded-full bg-slate-800/90 border border-slate-700 text-[9.5px] font-mono text-indigo-300 inline-block uppercase tracking-wider">
+                <span className="px-2 py-0.5 rounded-full bg-[#082458]/90 border border-[#1e3a8a]/60 text-[9.5px] font-mono text-[#16c2ff] inline-block uppercase tracking-wider">
                   {callState === 'calling' ? 'Ringing Remote Line...' : 'Call Active & Encrypted'}
                 </span>
                 <h3 className="text-lg font-black text-white">{dialContactName || 'Client Prospect'}</h3>
@@ -557,7 +557,7 @@ export default function CallAgentMobileApp({
                 {[12, 28, 45, 18, 55, 30, 48, 22, 38, 14, 50, 20].map((h, i) => (
                   <div 
                     key={i} 
-                    className="flex-1 bg-gradient-to-t from-indigo-500 to-sky-400 rounded-full transition-all duration-150"
+                    className="flex-1 bg-gradient-to-t from-[#0b78f4] to-sky-400 rounded-full transition-all duration-150"
                     style={{ 
                       height: callState === 'connected' ? `${Math.max(6, (h * (0.4 + (i % 3) * 0.3)))}px` : '6px',
                       opacity: isOnHold ? 0.3 : 1
@@ -572,7 +572,7 @@ export default function CallAgentMobileApp({
                   <button
                     onClick={() => setIsMuted(!isMuted)}
                     className={`h-11 rounded-full flex flex-col items-center justify-center gap-0.5 text-[9px] font-medium transition ${
-                      isMuted ? 'bg-rose-500 text-white' : 'bg-slate-800/80 text-slate-300 hover:bg-slate-700'
+                      isMuted ? 'bg-rose-500 text-white' : 'bg-[#082458]/80 text-slate-300 hover:bg-[#0b347a]'
                     }`}
                   >
                     {isMuted ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
@@ -582,7 +582,7 @@ export default function CallAgentMobileApp({
                   <button
                     onClick={() => setIsSpeaker(!isSpeaker)}
                     className={`h-11 rounded-full flex flex-col items-center justify-center gap-0.5 text-[9px] font-medium transition ${
-                      isSpeaker ? 'bg-sky-500 text-white' : 'bg-slate-800/80 text-slate-300 hover:bg-slate-700'
+                      isSpeaker ? 'bg-sky-500 text-white' : 'bg-[#082458]/80 text-slate-300 hover:bg-[#0b347a]'
                     }`}
                   >
                     {isSpeaker ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
@@ -592,7 +592,7 @@ export default function CallAgentMobileApp({
                   <button
                     onClick={() => setIsOnHold(!isOnHold)}
                     className={`h-11 rounded-full flex flex-col items-center justify-center gap-0.5 text-[9px] font-medium transition ${
-                      isOnHold ? 'bg-amber-500 text-white' : 'bg-slate-800/80 text-slate-300 hover:bg-slate-700'
+                      isOnHold ? 'bg-amber-500 text-white' : 'bg-[#082458]/80 text-slate-300 hover:bg-[#0b347a]'
                     }`}
                   >
                     <Pause className="w-4 h-4" />
@@ -613,11 +613,11 @@ export default function CallAgentMobileApp({
             </div>
           ) : callState === 'disposition' ? (
             /* 2. POST-CALL DISPOSITION & AUTO-SYNC VIEW */
-            <div className="flex-1 p-4 flex flex-col justify-between overflow-y-auto bg-slate-900">
+            <div className="flex-1 p-4 flex flex-col justify-between overflow-y-auto bg-[#041845]">
               <div className="space-y-3">
                 
                 {/* Header Summary */}
-                <div className="bg-slate-950 p-3 rounded-2xl border border-slate-800 text-center">
+                <div className="bg-[#031338] p-3 rounded-2xl border border-[#1e3a8a]/50 text-center">
                   <span className="text-[9px] uppercase font-bold tracking-wider text-emerald-450 block">Call Concluded</span>
                   <h4 className="text-sm font-bold text-white mt-0.5">{dialContactName || 'Client Prospect'}</h4>
                   <p className="text-[10px] font-mono text-slate-400">{dialNumber} • Duration: {formatTime(callSeconds)}</p>
@@ -643,8 +643,8 @@ export default function CallAgentMobileApp({
                         onClick={() => setDisposition(disp as any)}
                         className={`p-2 rounded-xl text-left font-medium border transition ${
                           disposition === disp 
-                            ? 'bg-indigo-600 text-white border-indigo-500 font-bold shadow' 
-                            : 'bg-slate-800/60 text-slate-300 border-slate-700 hover:bg-slate-800'
+                            ? 'bg-[#0b74f0] text-white border-[#0b74f0] font-bold shadow' 
+                            : 'bg-[#082458]/60 text-slate-300 border-[#1e3a8a]/60 hover:bg-[#082458]'
                         }`}
                       >
                         {disp}
@@ -663,7 +663,7 @@ export default function CallAgentMobileApp({
                     value={callNotes}
                     onChange={(e) => setCallNotes(e.target.value)}
                     placeholder="E.g., Client wants custom proposal sent by tomorrow..."
-                    className="w-full text-[11px] p-2 rounded-xl bg-slate-950 border border-slate-700 focus:outline-none focus:border-indigo-500 text-white placeholder-slate-500"
+                    className="w-full text-[11px] p-2 rounded-xl bg-[#031338] border border-[#1e3a8a]/60 focus:outline-none focus:border-[#0b74f0] text-white placeholder-slate-500"
                   />
                   
                   {/* Quick Note Chips */}
@@ -676,7 +676,7 @@ export default function CallAgentMobileApp({
                       <button
                         key={chip}
                         onClick={() => setCallNotes(prev => prev ? `${prev}. ${chip}` : chip)}
-                        className="text-[9px] px-2 py-0.5 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700"
+                        className="text-[9px] px-2 py-0.5 rounded-full bg-[#082458] hover:bg-[#0b347a] text-slate-300 border border-[#1e3a8a]/60"
                       >
                         +{chip}
                       </button>
@@ -693,7 +693,7 @@ export default function CallAgentMobileApp({
                   className={`w-full py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-lg transition active:scale-98 ${
                     syncingState === 'synced'
                       ? 'bg-emerald-600 text-white'
-                      : 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-indigo-900/40'
+                      : 'bg-[#0b74f0] hover:bg-[#005be0] text-white shadow-[#0b74f0]/40'
                   }`}
                 >
                   {syncingState === 'syncing' ? (
@@ -728,7 +728,7 @@ export default function CallAgentMobileApp({
                 <div className="flex-1 p-3 flex flex-col justify-between overflow-y-auto">
                   
                   {/* Display Field */}
-                  <div className="bg-slate-950 p-2.5 rounded-2xl border border-slate-800 text-center relative">
+                  <div className="bg-[#031338] p-2.5 rounded-2xl border border-[#1e3a8a]/50 text-center relative">
                     <span className="text-[8px] font-mono text-slate-400 block text-left">DIAL TARGET:</span>
                     <input 
                       type="text" 
@@ -740,7 +740,7 @@ export default function CallAgentMobileApp({
                       }}
                       className="w-full bg-transparent text-center text-lg font-mono font-bold text-white focus:outline-none placeholder-slate-600 tracking-wider"
                     />
-                    <span className="text-[9.5px] text-indigo-400 font-semibold block truncate">
+                    <span className="text-[9.5px] text-[#16c2ff] font-semibold block truncate">
                       {dialContactName || 'Direct Dial Number'}
                     </span>
                     {dialNumber && (
@@ -775,7 +775,7 @@ export default function CallAgentMobileApp({
                           setDialNumber(prev => prev + k);
                           if (!dialContactName) setDialContactName('Manual Keypad Input');
                         }}
-                        className="h-11 rounded-2xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 flex flex-col items-center justify-center transition active:scale-95"
+                        className="h-11 rounded-2xl bg-[#082458]/80 hover:bg-[#0b347a]/80 border border-[#1e3a8a]/60/60 flex flex-col items-center justify-center transition active:scale-95"
                       >
                         <span className="text-sm font-bold text-white">{k}</span>
                         {sub && <span className="text-[7px] text-slate-400 font-bold tracking-widest">{sub}</span>}
@@ -792,7 +792,7 @@ export default function CallAgentMobileApp({
                       className={`w-14 h-14 rounded-full flex items-center justify-center text-white shadow-xl transition-transform active:scale-95 ${
                         dialNumber 
                           ? 'bg-emerald-600 hover:bg-emerald-500 shadow-emerald-900/50 cursor-pointer' 
-                          : 'bg-slate-800 text-slate-500 cursor-not-allowed'
+                          : 'bg-[#082458] text-slate-500 cursor-not-allowed'
                       }`}
                       title="Initiate Outbound Call"
                     >
@@ -824,13 +824,13 @@ export default function CallAgentMobileApp({
                     {leads.map((lead) => (
                       <div 
                         key={lead.id} 
-                        className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 hover:border-indigo-500/50 transition flex items-center justify-between gap-2"
+                        className="p-2.5 rounded-xl bg-[#031338] border border-[#1e3a8a]/50 hover:border-[#0b74f0]/40/50 transition flex items-center justify-between gap-2"
                       >
                         <div className="min-w-0">
                           <h5 className="text-[11px] font-bold text-white truncate">{lead.name}</h5>
                           <p className="text-[9.5px] text-slate-400 truncate">{lead.company} • {lead.phone}</p>
                           <div className="flex items-center gap-1.5 mt-0.5">
-                            <span className="text-[8px] px-1.5 py-0.2 rounded bg-indigo-950 text-indigo-300 font-bold border border-indigo-800">
+                            <span className="text-[8px] px-1.5 py-0.2 rounded bg-[#041845] text-[#16c2ff] font-bold border border-[#0844a4]">
                               {lead.status}
                             </span>
                             <span className="text-[8px] text-emerald-400 font-mono">₹{lead.value.toLocaleString()}</span>
@@ -866,7 +866,7 @@ export default function CallAgentMobileApp({
                     {mobileCallHistory.map((log) => (
                       <div 
                         key={log.id} 
-                        className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between gap-2"
+                        className="p-2.5 rounded-xl bg-[#031338] border border-[#1e3a8a]/50 flex items-center justify-between gap-2"
                       >
                         <div className="min-w-0">
                           <div className="flex items-center gap-1.5">
@@ -878,14 +878,14 @@ export default function CallAgentMobileApp({
                             </span>
                           </div>
                           <p className="text-[9px] text-slate-400 font-mono">{log.phone} • {log.time}</p>
-                          <span className="text-[8px] text-indigo-300 bg-indigo-950/60 px-1.5 py-0.2 rounded border border-indigo-900 inline-block mt-0.5">
+                          <span className="text-[8px] text-[#16c2ff] bg-[#041845]/60 px-1.5 py-0.2 rounded border border-[#0844a4] inline-block mt-0.5">
                             {log.disposition}
                           </span>
                         </div>
 
                         <button
                           onClick={() => handleStartCall(log.phone, log.clientName)}
-                          className="w-7 h-7 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center shrink-0"
+                          className="w-7 h-7 rounded-full bg-[#082458] hover:bg-[#0b347a] text-slate-300 flex items-center justify-center shrink-0"
                           title="Call back"
                         >
                           <Phone className="w-3 h-3" />
@@ -901,7 +901,7 @@ export default function CallAgentMobileApp({
                 <div className="flex-1 p-3 overflow-y-auto space-y-3 text-[10px]">
                   
                   {/* Switch Agent for testing */}
-                  <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
+                  <div className="p-3 rounded-2xl bg-[#031338] border border-[#1e3a8a]/50 space-y-2">
                     <span className="font-bold text-slate-300 uppercase tracking-wider block text-[9px]">
                       Switch Active Mobile Agent (Testing):
                     </span>
@@ -912,8 +912,8 @@ export default function CallAgentMobileApp({
                           onClick={() => onSelectAgent && onSelectAgent(ag.id)}
                           className={`w-full p-1.5 rounded-xl text-left flex items-center justify-between border transition ${
                             ag.id === currentAgent.id 
-                              ? 'bg-indigo-900/50 border-indigo-500 text-white font-bold' 
-                              : 'bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800'
+                              ? 'bg-[#082458]/50 border-[#0b74f0] text-white font-bold' 
+                              : 'bg-[#041845] border-[#1e3a8a]/50 text-slate-300 hover:bg-[#082458]'
                           }`}
                         >
                           <div className="min-w-0">
@@ -922,27 +922,27 @@ export default function CallAgentMobileApp({
                               {ag.isAuthorized ? '✓ Authorized' : '✗ Revoked'}
                             </span>
                           </div>
-                          {ag.id === currentAgent.id && <Check className="w-3.5 h-3.5 text-indigo-400" />}
+                          {ag.id === currentAgent.id && <Check className="w-3.5 h-3.5 text-[#16c2ff]" />}
                         </button>
                       ))}
                     </div>
                   </div>
 
                   {/* Device Specification Card */}
-                  <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800 space-y-1.5 text-slate-300">
+                  <div className="p-3 rounded-2xl bg-[#031338] border border-[#1e3a8a]/50 space-y-1.5 text-slate-300">
                     <div className="flex items-center justify-between">
                       <span className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Mobile Device Specs</span>
                       <span className="text-[8px] font-mono text-emerald-450 bg-emerald-950 px-1.5 py-0.2 rounded border border-emerald-800">CONNECTED</span>
                     </div>
-                    <div className="flex justify-between border-b border-slate-800/80 pb-1">
+                    <div className="flex justify-between border-b border-[#1e3a8a]/50/80 pb-1">
                       <span className="text-slate-400">Model:</span>
                       <strong className="text-white">{currentAgent.device}</strong>
                     </div>
-                    <div className="flex justify-between border-b border-slate-800/80 pb-1">
+                    <div className="flex justify-between border-b border-[#1e3a8a]/50/80 pb-1">
                       <span className="text-slate-400">Device ID:</span>
                       <strong className="font-mono text-slate-300">{currentAgent.deviceId}</strong>
                     </div>
-                    <div className="flex justify-between border-b border-slate-800/80 pb-1">
+                    <div className="flex justify-between border-b border-[#1e3a8a]/50/80 pb-1">
                       <span className="text-slate-400">Mobile App Build:</span>
                       <strong className="text-sky-400">{currentAgent.appVersion}</strong>
                     </div>
@@ -953,8 +953,8 @@ export default function CallAgentMobileApp({
                   </div>
 
                   {/* Install PWA / APK / HTML release center */}
-                  <div className="p-3 rounded-2xl bg-indigo-950/40 border border-indigo-900/60 text-center space-y-2">
-                    <div className="flex items-center justify-center gap-1.5 text-indigo-300">
+                  <div className="p-3 rounded-2xl bg-[#041845]/40 border border-[#0844a4]/60 text-center space-y-2">
+                    <div className="flex items-center justify-center gap-1.5 text-[#16c2ff]">
                       <Smartphone className="w-4 h-4" />
                       <h5 className="font-bold text-white text-xs">Install On Your Smartphone</h5>
                     </div>
@@ -980,7 +980,7 @@ export default function CallAgentMobileApp({
                           setDownloadStatus("Downloading expert-call-agent-v2.4.2.apk");
                           setTimeout(() => setDownloadStatus(null), 4000);
                         }}
-                        className="py-1.5 px-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-[9px] flex items-center justify-center gap-1 border border-slate-700 transition active:scale-95 cursor-pointer"
+                        className="py-1.5 px-2 rounded-xl bg-[#082458] hover:bg-[#0b347a] text-white font-bold text-[9px] flex items-center justify-center gap-1 border border-[#1e3a8a]/60 transition active:scale-95 cursor-pointer"
                         title="Download Android APK package"
                       >
                         <Download className="w-3 h-3 text-emerald-400" /> 
@@ -993,7 +993,7 @@ export default function CallAgentMobileApp({
                           setDownloadStatus(res.message);
                           setTimeout(() => setDownloadStatus(null), 4000);
                         }}
-                        className="py-1.5 px-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-[9px] flex items-center justify-center gap-1 border border-slate-700 transition active:scale-95 cursor-pointer"
+                        className="py-1.5 px-2 rounded-xl bg-[#082458] hover:bg-[#0b347a] text-white font-bold text-[9px] flex items-center justify-center gap-1 border border-[#1e3a8a]/60 transition active:scale-95 cursor-pointer"
                         title="Download standalone offline HTML web app"
                       >
                         <FileText className="w-3 h-3 text-sky-400" /> 
@@ -1012,11 +1012,11 @@ export default function CallAgentMobileApp({
               )}
 
               {/* Bottom Mobile Tab Navigation Bar */}
-              <div className="h-14 bg-slate-950 border-t border-slate-800 flex items-center justify-around px-2 shrink-0">
+              <div className="h-14 bg-[#031338] border-t border-[#1e3a8a]/50 flex items-center justify-around px-2 shrink-0">
                 <button
                   onClick={() => setMobileTab('dialer')}
                   className={`flex flex-col items-center gap-0.5 text-[9px] font-bold transition ${
-                    mobileTab === 'dialer' ? 'text-indigo-400' : 'text-slate-400 hover:text-slate-200'
+                    mobileTab === 'dialer' ? 'text-[#16c2ff]' : 'text-slate-400 hover:text-slate-200'
                   }`}
                 >
                   <Phone className="w-4 h-4" />
@@ -1026,7 +1026,7 @@ export default function CallAgentMobileApp({
                 <button
                   onClick={() => setMobileTab('leads')}
                   className={`flex flex-col items-center gap-0.5 text-[9px] font-bold transition ${
-                    mobileTab === 'leads' ? 'text-indigo-400' : 'text-slate-400 hover:text-slate-200'
+                    mobileTab === 'leads' ? 'text-[#16c2ff]' : 'text-slate-400 hover:text-slate-200'
                   }`}
                 >
                   <Users className="w-4 h-4" />
@@ -1036,7 +1036,7 @@ export default function CallAgentMobileApp({
                 <button
                   onClick={() => setMobileTab('history')}
                   className={`flex flex-col items-center gap-0.5 text-[9px] font-bold transition ${
-                    mobileTab === 'history' ? 'text-indigo-400' : 'text-slate-400 hover:text-slate-200'
+                    mobileTab === 'history' ? 'text-[#16c2ff]' : 'text-slate-400 hover:text-slate-200'
                   }`}
                 >
                   <History className="w-4 h-4" />
@@ -1046,7 +1046,7 @@ export default function CallAgentMobileApp({
                 <button
                   onClick={() => setMobileTab('settings')}
                   className={`flex flex-col items-center gap-0.5 text-[9px] font-bold transition ${
-                    mobileTab === 'settings' ? 'text-indigo-400' : 'text-slate-400 hover:text-slate-200'
+                    mobileTab === 'settings' ? 'text-[#16c2ff]' : 'text-slate-400 hover:text-slate-200'
                   }`}
                 >
                   <Settings className="w-4 h-4" />
@@ -1058,7 +1058,7 @@ export default function CallAgentMobileApp({
           )}
 
           {/* Android / iPhone Bottom Home Bar Indicator */}
-          <div className="h-4 bg-slate-950 flex items-center justify-center shrink-0">
+          <div className="h-4 bg-[#031338] flex items-center justify-center shrink-0">
             <div className="w-24 h-1 bg-slate-700 rounded-full"></div>
           </div>
 

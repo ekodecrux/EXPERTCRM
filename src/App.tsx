@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { 
   Users, Target, Phone, Headphones, MapPin, CheckSquare, 
   CreditCard, MessageSquare, Lock, LayoutDashboard, ChevronRight, 
-  Menu, Search, Bell, Mail, Settings, ChevronDown, LogOut, Check, Star, Sparkles,
-  PhoneCall, PhoneOff
+  Menu, Search, Bell, Settings, ChevronDown, LogOut, Sparkles,
+  PhoneCall, PhoneOff, Home, UserPlus
 } from 'lucide-react';
 
 // Subcomponents import
@@ -124,6 +124,10 @@ export default function App() {
   // Navigation active state
   const [activeTab, setActiveTab] = useState<string>('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [headerSearch, setHeaderSearch] = useState('');
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [openClientOnboarding, setOpenClientOnboarding] = useState(false);
 
   // SaaS multi-tenant states
   const [saasPlanId, setSaasPlanId] = useState<string>(() => {
@@ -616,33 +620,33 @@ export default function App() {
   // Master Sidebar List Items
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, permission: 'viewDashboard' },
-    { id: 'saas', label: 'SaaS Plan & Tenants', icon: Sparkles, permission: 'viewDashboard' },
-    { id: 'leads', label: 'Lead & Sales Management', icon: Target, permission: 'manageLeads' },
-    { id: 'calling', label: 'Calling Management', icon: Phone, permission: 'manageCalls' },
-    { id: 'support', label: 'Customer Support Management', icon: Headphones, permission: 'manageSupport' },
-    { id: 'staff', label: 'Field & Staff Management', icon: MapPin, permission: 'manageStaff' },
-    { id: 'tasks', label: 'Task & Activity Management', icon: CheckSquare, permission: 'manageTasks' },
-    { id: 'payroll', label: 'Payroll & HR Management', icon: CreditCard, permission: 'manageHR' },
-    { id: 'comms', label: 'Communication Management', icon: MessageSquare, permission: 'manageComms' },
-    { id: 'security', label: 'Security & Access Control', icon: Lock, permission: 'manageSecurity' },
+    { id: 'saas', label: 'Tenants', icon: Sparkles, permission: 'viewDashboard' },
+    { id: 'leads', label: 'Lead & Sales', icon: Target, permission: 'manageLeads' },
+    { id: 'calling', label: 'Calling', icon: Phone, permission: 'manageCalls' },
+    { id: 'support', label: 'Customer Support', icon: Headphones, permission: 'manageSupport' },
+    { id: 'staff', label: 'Field & Staff', icon: MapPin, permission: 'manageStaff' },
+    { id: 'tasks', label: 'Task & Activity', icon: CheckSquare, permission: 'manageTasks' },
+    { id: 'payroll', label: 'Payroll & HR', icon: CreditCard, permission: 'manageHR' },
+    { id: 'comms', label: 'Communication', icon: MessageSquare, permission: 'manageComms' },
+    { id: 'security', label: 'Security & Access', icon: Lock, permission: 'manageSecurity' },
   ];
 
   // Dedicated Mobile Companion App view (e.g. agent scanned QR code, clicked direct link, or opened PWA)
   if (mobileMode.active) {
     return (
-      <div className="min-h-screen w-screen bg-slate-950 text-white flex flex-col font-sans antialiased overflow-x-hidden">
+      <div className="min-h-screen w-screen bg-[#031338] text-white flex flex-col font-sans antialiased overflow-x-hidden">
         {/* Top Mobile Companion Navigation Bar */}
-        <header className="h-14 bg-slate-900 border-b border-slate-800 px-3 sm:px-5 flex items-center justify-between shrink-0 z-50">
+        <header className="h-14 bg-[#041845] border-b border-[#1e3a8a]/50 px-3 sm:px-5 flex items-center justify-between shrink-0 z-50">
           <div className="flex items-center gap-2.5">
             <CRMLogo size="xs" darkTheme={true} showBorder={false} />
             <div>
               <div className="flex items-center gap-1.5">
                 <span className="text-xs font-black tracking-wider text-white">EXPERT CALL AGENT</span>
-                <span className="px-1.5 py-0.5 rounded bg-indigo-500/20 border border-indigo-500/40 text-indigo-300 font-mono text-[9px] font-bold">
+                <span className="px-1.5 py-0.5 rounded bg-[#0b74f0]/25 border border-[#16c2ff]/40 text-[#16c2ff] font-mono text-[9px] font-bold">
                   Mobile Companion
                 </span>
               </div>
-              <p className="text-[10px] text-sky-400 font-mono">
+              <p className="text-[10px] text-[#16c2ff] font-mono">
                 Agent: {callAgents.find(a => a.id === mobileMode.agentId)?.name || 'Authorized Agent'}
               </p>
             </div>
@@ -660,7 +664,7 @@ export default function App() {
                 window.history.pushState({}, '', url.pathname);
                 setMobileMode({ active: false, agentId: 'AGT-101', token: '' });
               }}
-              className="text-[10.5px] font-bold py-1.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition cursor-pointer"
+              className="text-[10.5px] font-bold py-1.5 px-3 rounded-xl bg-[#082458] hover:bg-[#0b347a] text-sky-100 border border-[#1e3a8a] transition cursor-pointer"
               title="Return to Desktop CRM"
             >
               Desktop CRM Portal
@@ -697,53 +701,138 @@ export default function App() {
     return <Login onLoginSuccess={handleLoginSuccess} />;
   }
 
+  const visibleNavItems = navItems.filter(
+    (item) => item.id !== 'saas' || accessControl.role === 'Super Admin'
+  );
+  const activeNavItem = visibleNavItems.find((n) => n.id === activeTab) || visibleNavItems[0];
+  const ActiveHeaderIcon = activeTab === 'dashboard' ? Home : (activeNavItem?.icon || Home);
+
+  const notificationFeed = [
+    ...supportTickets
+      .filter((t) => t.status !== 'Resolved')
+      .slice(0, 3)
+      .map((t) => ({
+        id: `tkt-${t.id}`,
+        title: `Ticket #${t.id}: ${t.subject}`,
+        meta: `${t.clientName} • ${t.priority}`,
+        targetTab: 'support',
+      })),
+    ...tasks
+      .filter((t) => t.status !== 'Completed')
+      .slice(0, 2)
+      .map((t) => ({
+        id: `tsk-${t.id}`,
+        title: t.title,
+        meta: `${t.assignedTo || 'Team'} • ${t.status}`,
+        targetTab: 'tasks',
+      })),
+  ].slice(0, 5);
+
+  const trimmedSearch = headerSearch.trim().toLowerCase();
+  const matchedNavResults = trimmedSearch
+    ? visibleNavItems.filter((item) => item.label.toLowerCase().includes(trimmedSearch))
+    : [];
+  const matchedLeadResults = trimmedSearch
+    ? leads
+        .filter(
+          (l) =>
+            l.name.toLowerCase().includes(trimmedSearch) ||
+            l.company.toLowerCase().includes(trimmedSearch)
+        )
+        .slice(0, 4)
+    : [];
+
+  const avatarInitials = (() => {
+    const raw = (userSession?.name || 'Admin').trim();
+    if (/super\s*admin/i.test(raw) || /admin/i.test(raw)) return 'AD';
+    const parts = raw.split(/\s+/).filter(Boolean);
+    if (parts.length >= 2) return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
+    return raw.slice(0, 2).toUpperCase();
+  })();
+
   return (
-    <div id="app-root-container" className="flex h-screen w-screen bg-[#F1F5F9] overflow-hidden font-sans antialiased text-slate-800">
+    <div id="app-root-container" className="flex h-screen w-screen bg-[#eef4fb] overflow-hidden font-sans antialiased text-[#082458]">
       
       {/* Floating System-Wide Notifications Toast */}
       {toast && (
         <div 
-          className={`fixed top-4 right-4 z-50 p-3 rounded bg-slate-900 border border-slate-800 text-white shadow-xl flex items-center gap-3 animate-slideDown`}
+          className="fixed top-4 right-4 z-50 px-3.5 py-2.5 rounded-xl bg-[#082458] border border-[#16c2ff]/35 text-white shadow-xl flex items-center gap-3 animate-slideDown"
         >
-          <div className="p-0.5 px-1.5 rounded bg-indigo-500 text-white font-extrabold text-[10px] uppercase">SYSTEM</div>
-          <span className="text-[11px] font-medium">{toast.message}</span>
+          <div className="px-2 py-0.5 rounded-md bg-gradient-to-r from-[#0b78f4] to-[#005be0] text-white font-bold text-[10px] uppercase tracking-wider">Notice</div>
+          <span className="text-xs font-medium">{toast.message}</span>
         </div>
       )}
 
-      {/* Primary Left Navigation Panel - High Density Slate-900 theme */}
+      {/* Primary Left Navigation Panel - Login Midnight Navy Gradient without Logo */}
       <aside 
         id="side-nav"
-        className={`${sidebarOpen ? 'w-60' : 'w-0 lg:w-16'} bg-[#0F172A] text-slate-100 flex flex-col justify-between shrink-0 transition-all duration-300 z-40 relative h-full border-r border-[#1E293B]`}
+        className={`${sidebarOpen ? 'w-60' : 'w-0 lg:w-16'} bg-gradient-to-b from-[#041845] via-[#082458] to-[#031338] text-slate-100 flex flex-col justify-between shrink-0 transition-all duration-300 z-40 relative h-full border-r border-[#0b2b6b]/70 overflow-hidden`}
       >
-        <div>
-          {/* Logo Brand Header Block */}
-          <div className="p-3 border-b border-[#1E293B] flex items-center gap-2.5">
-            <CRMLogo size="sm" darkTheme={true} showBorder={true} className="shrink-0" />
-            
-            {sidebarOpen && (
-              <div className="min-w-0">
-                <h1 className="text-sm font-black tracking-wider leading-none text-white flex items-center gap-1">
-                  EXPERT <span className="text-sky-400">CRM</span>
-                </h1>
-                <p className="text-[9px] text-cyan-400 font-extrabold uppercase tracking-widest mt-1 truncate max-w-[130px]" title={workspaceName}>{workspaceName}</p>
+        {/* Subtle Architectural Skyline Backdrop */}
+        <svg
+          viewBox="0 0 240 120"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+          className="absolute bottom-0 left-0 w-full h-36 opacity-25 pointer-events-none select-none"
+        >
+          <defs>
+            <linearGradient id="skylineGlow" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#16c2ff" stopOpacity="0.45" />
+              <stop offset="100%" stopColor="#031338" stopOpacity="0.95" />
+            </linearGradient>
+          </defs>
+          <path
+            d="M0 120 L0 86 L12 86 L12 62 L24 62 L24 78 L34 78 L34 40 L48 40 L48 72 L58 72 L58 48 L74 48 L74 84 L84 84 L84 26 L98 26 L98 68 L112 68 L112 52 L126 52 L126 76 L138 76 L138 34 L154 34 L154 70 L168 70 L168 58 L182 58 L182 82 L196 82 L196 44 L212 44 L212 74 L226 74 L226 60 L240 60 L240 120 Z"
+            fill="url(#skylineGlow)"
+          />
+        </svg>
+
+        <div className="relative z-10 flex-1 overflow-y-auto">
+          {/* Sidebar Brand Logo Slot */}
+          <div className={`${sidebarOpen ? (accessControl.role === 'Super Admin' ? 'px-3 pt-3 pb-2.5' : 'px-4 py-4') : 'px-2 py-3.5'} border-b border-white/10 flex items-center justify-between min-h-[64px]`}>
+            {sidebarOpen ? (
+              accessControl.role === 'Super Admin' ? (
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('dashboard')}
+                  className="w-full text-left cursor-pointer group focus:outline-none"
+                  title="Go to Dashboard"
+                >
+                  <img
+                    src="/assets/aistudio/image_b9ab6578.png"
+                    alt="Expert CRM — Manage • Grow • Succeed"
+                    className="w-full h-auto rounded-lg object-contain transition-transform duration-200 group-hover:scale-[1.01]"
+                  />
+                </button>
+              ) : (
+                <div className="min-w-0">
+                  <p className="text-xs font-extrabold tracking-wide text-white truncate">
+                    {workspaceName}
+                  </p>
+                  <p className="text-[10px] font-medium text-[#16c2ff] truncate mt-0.5">
+                    {accessControl.role}
+                  </p>
+                </div>
+              )
+            ) : (
+              <div className="w-full flex justify-center">
+                <span className="text-[11px] font-bold text-[#16c2ff] tracking-wider">CRM</span>
               </div>
             )}
           </div>
 
           {/* Navigation Links Index */}
-          <nav className="p-2 space-y-1 mt-2">
-            {navItems
-              .filter(item => item.id !== 'saas' || accessControl.role === 'Super Admin')
-              .map(item => {
-                const Icon = item.icon;
+          <nav className="p-2.5 space-y-1 mt-1">
+            {visibleNavItems.map(item => {
+              const Icon = item.icon;
               const isSelected = activeTab === item.id;
-              // In this demo environment, Security & Access Control remains always openable to prevent lockouts during role impersonation testing.
               const permitted = item.id === 'security' ? true : hasAccess(item.permission as any);
 
               return (
                 <button
                   key={item.id}
                   id={`nav-item-${item.id}`}
+                  type="button"
                   onClick={() => {
                     if (permitted) {
                       setActiveTab(item.id);
@@ -751,113 +840,260 @@ export default function App() {
                       showToast(`Role "${accessControl.role}" restricted. Adjust permissions in Security panel.`, "warning");
                     }
                   }}
-                  className={`w-full flex items-center gap-2.5 px-2.5 py-1.5 rounded text-left text-[11px] font-bold tracking-wide transition-all ${
+                  title={!sidebarOpen ? item.label : undefined}
+                  className={`w-full flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl text-left text-[12.5px] transition-all cursor-pointer ${
                     isSelected 
-                      ? 'bg-slate-800 text-indigo-400 border-l-2 border-indigo-500 font-extrabold shadow-sm' 
-                      : 'text-slate-400 hover:bg-slate-800/50 hover:text-white'
-                  } ${!permitted ? 'opacity-30 cursor-not-allowed justify-between' : ''}`}
+                      ? 'bg-gradient-to-r from-[#0b78f4] to-[#005be0] text-white font-semibold shadow-[0_6px_18px_rgba(11,116,240,0.38)]' 
+                      : 'text-slate-200/85 hover:bg-white/10 hover:text-white font-medium'
+                  } ${!permitted ? 'opacity-35 cursor-not-allowed' : ''}`}
                 >
-                  <div className="flex items-center gap-2.5 min-w-0">
-                    <Icon className="w-4 h-4 shrink-0" />
+                  <div className="flex items-center gap-3 min-w-0">
+                    <Icon className={`w-4 h-4 shrink-0 ${isSelected ? 'text-white' : 'text-[#38bdf8]/90'}`} />
                     {sidebarOpen && <span className="truncate">{item.label}</span>}
                   </div>
                   
-                  {sidebarOpen && permitted && <ChevronRight className="w-3 h-3 ml-auto text-slate-600" />}
-                  {sidebarOpen && !permitted && <Lock className="w-3 h-3 text-slate-600 shrink-0" />}
+                  {sidebarOpen && !permitted && <Lock className="w-3.5 h-3.5 text-slate-400 shrink-0" />}
+                  {sidebarOpen && permitted && (item.id === 'saas' || item.id === 'calling') && (
+                    <ChevronRight className={`w-3.5 h-3.5 shrink-0 ${isSelected ? 'text-white' : 'text-slate-400'}`} />
+                  )}
                 </button>
               );
             })}
           </nav>
         </div>
 
-        {/* User Account Info Bar bottom */}
-        <div className="p-3 border-t border-[#1E293B] bg-[#090D16]/40 shrink-0">
-          <div className="flex items-center justify-between gap-1">
-            <div className="flex items-center gap-2 min-w-0">
-              <img 
-                src={userSession?.avatar || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&h=150&fit=crop&crop=face"} 
-                alt={userSession?.name || "Admin User"} 
-                className="w-8 h-8 rounded-full border border-indigo-500/50 object-cover shrink-0"
-                referrerPolicy="no-referrer"
-              />
-              {sidebarOpen && (
-                <div className="min-w-0">
-                  <h4 className="text-[11px] font-extrabold text-white truncate">{userSession?.name || "Admin User"}</h4>
-                  <p className="text-[9px] text-[#10b981] font-bold truncate">{userSession?.role || "Administrator"}</p>
-                </div>
-              )}
-            </div>
-            
-            {sidebarOpen && (
-              <button 
+        {/* Clean Sidebar Footer (Version + Quick Logout) */}
+        <div className="relative z-10 px-4 py-3.5 border-t border-white/10 flex items-center justify-between gap-2 shrink-0">
+          {sidebarOpen ? (
+            <>
+              <div className="flex items-center gap-2 text-xs text-slate-300/90 font-semibold">
+                <span className="w-2 h-2 rotate-45 bg-[#16c2ff] inline-block rounded-[1px]" />
+                <span>v1.0.0</span>
+              </div>
+              <button
+                type="button"
                 onClick={handleLogout}
-                className="p-1.5 hover:bg-slate-800 text-slate-400 hover:text-rose-400 rounded transition shrink-0"
-                title="Log Out Security Session"
+                className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-sky-100 hover:text-white bg-white/10 hover:bg-white/20 px-2.5 py-1 rounded-lg transition cursor-pointer"
+                title="Log Out"
               >
                 <LogOut className="w-3.5 h-3.5" />
+                <span>Logout</span>
               </button>
-            )}
-          </div>
+            </>
+          ) : (
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="mx-auto p-1.5 text-sky-100 hover:text-white hover:bg-white/15 rounded-lg transition cursor-pointer"
+              title="Log Out"
+            >
+              <LogOut className="w-4 h-4" />
+            </button>
+          )}
         </div>
       </aside>
 
       {/* Main Workspace Frame container */}
       <main id="main-frame" className="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
         
-        {/* Top Floating Dashboard Header */}
-        <header id="app-header" className="h-12 bg-white border-b border-slate-200 flex items-center justify-between px-4 shrink-0 select-none z-30">
-          <div className="flex items-center gap-3">
+        {/* Top White Header Bar */}
+        <header id="app-header" className="h-16 bg-white border-b border-slate-200/80 shadow-[0_1px_3px_rgba(8,36,88,0.05)] flex items-center justify-between px-4 sm:px-6 shrink-0 select-none z-30">
+          <div className="flex items-center gap-3 min-w-0">
             <button 
               id="sidebar-trigger" 
+              type="button"
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="p-1 hover:bg-slate-50 text-slate-500 rounded transition shrink-0"
+              className="p-2 hover:bg-[#eef4fb] text-[#082458] rounded-lg transition shrink-0 cursor-pointer"
+              aria-label="Toggle sidebar"
             >
-              <Menu className="w-4.5 h-4.5" />
+              <Menu className="w-5 h-5" />
             </button>
-            <h2 className="text-xs font-extrabold text-slate-900 tracking-tight uppercase">
-              {navItems.find(n => n.id === activeTab)?.label}
-            </h2>
+            <div className="flex items-center gap-2 min-w-0">
+              <ActiveHeaderIcon className="w-4.5 h-4.5 text-[#0b74f0] shrink-0" />
+              <h2 className="text-base font-bold text-[#082458] tracking-tight truncate">
+                {activeNavItem?.label || 'Dashboard'}
+              </h2>
+            </div>
           </div>
 
-          <div className="flex items-center gap-3">
-            {/* Install App Quick Action */}
-            <PWAInstallButton variant="secondary" label="Install Mobile App" className="hidden sm:inline-flex" />
+          <div className="flex items-center gap-3 sm:gap-4">
+            {/* Super Admin Direct Client Onboarding CTA */}
+            {accessControl.role === 'Super Admin' && (
+              <button
+                type="button"
+                onClick={() => {
+                  setOpenClientOnboarding(true);
+                  setActiveTab('saas');
+                }}
+                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-[#0b78f4] to-[#005be0] hover:from-[#0768d8] hover:to-[#004ec4] text-white text-xs font-semibold shadow-xs transition cursor-pointer whitespace-nowrap shrink-0"
+              >
+                <UserPlus className="w-3.5 h-3.5" />
+                <span>Client Onboarding</span>
+              </button>
+            )}
 
-            {/* Search Input Box */}
-            <div className="relative hidden md:block w-60">
-              <Search className="absolute left-2.5 top-2 w-3.5 h-3.5 text-slate-400" />
+            {/* Install App Quick Action */}
+            <PWAInstallButton variant="secondary" label="Install App" className="hidden xl:inline-flex" />
+
+            {/* Interactive Global Search */}
+            <div className="relative hidden md:block w-56 lg:w-72">
+              <Search className="absolute left-3.5 top-2.5 w-4 h-4 text-[#082458]/50 pointer-events-none" />
               <input 
                 type="text" 
-                placeholder="Quick lookup..." 
-                className="w-full text-[11px] p-1.5 pl-8 bg-slate-50 border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:bg-white transition"
+                value={headerSearch}
+                onChange={(e) => setHeaderSearch(e.target.value)}
+                placeholder="Search here..." 
+                className="w-full text-xs py-2 pl-9 pr-4 bg-[#f8fafc] border border-slate-200 rounded-full text-[#082458] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-[#0b74f0] focus:bg-white transition"
               />
+              {trimmedSearch && (
+                <div className="absolute right-0 mt-2 w-72 bg-white rounded-xl border border-slate-200 shadow-xl py-2 z-50">
+                  {matchedNavResults.length === 0 && matchedLeadResults.length === 0 ? (
+                    <p className="px-3.5 py-2 text-xs text-slate-500">No matching modules or leads</p>
+                  ) : (
+                    <>
+                      {matchedNavResults.map((nav) => (
+                        <button
+                          key={nav.id}
+                          type="button"
+                          onClick={() => {
+                            if (nav.id === 'security' || hasAccess(nav.permission as any)) {
+                              setActiveTab(nav.id);
+                            }
+                            setHeaderSearch('');
+                          }}
+                          className="w-full px-3.5 py-2 text-left text-xs font-semibold text-[#082458] hover:bg-[#eef4fb] hover:text-[#0b74f0] flex items-center justify-between cursor-pointer"
+                        >
+                          <span>{nav.label}</span>
+                          <span className="text-[10px] text-slate-400">Module</span>
+                        </button>
+                      ))}
+                      {matchedLeadResults.map((lead) => (
+                        <button
+                          key={lead.id}
+                          type="button"
+                          onClick={() => {
+                            setActiveTab('leads');
+                            setHeaderSearch('');
+                          }}
+                          className="w-full px-3.5 py-2 text-left text-xs text-[#082458] hover:bg-[#eef4fb] flex items-center justify-between cursor-pointer"
+                        >
+                          <span className="font-medium truncate">{lead.company || lead.name}</span>
+                          <span className="text-[10px] text-emerald-600 font-semibold ml-2 shrink-0">{lead.status}</span>
+                        </button>
+                      ))}
+                    </>
+                  )}
+                </div>
+              )}
             </div>
 
-            {/* Notification Rings */}
-            <div className="flex items-center gap-2.5 font-semibold text-slate-600">
-              <div className="relative cursor-pointer hover:text-slate-950 transition p-1">
-                <Bell className="w-4 h-4" />
-                <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 bg-rose-500 text-white text-[8px] font-black rounded-full flex items-center justify-center border border-white">
-                  5
-                </span>
-              </div>
-              
-              <div className="relative cursor-pointer hover:text-slate-950 transition p-1">
-                <Mail className="w-4 h-4" />
-                <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 bg-rose-500 text-white text-[8px] font-black rounded-full flex items-center justify-center border border-white">
-                  3
-                </span>
-              </div>
+            {/* Notification Bell with Dropdown */}
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => {
+                  setNotificationsOpen((prev) => !prev);
+                  setUserMenuOpen(false);
+                }}
+                className="relative p-2 text-[#082458] hover:bg-[#eef4fb] rounded-full transition cursor-pointer"
+                aria-label="Notifications"
+              >
+                <Bell className="w-5 h-5" />
+                {notificationFeed.length > 0 && (
+                  <span className="absolute top-0.5 right-0.5 min-w-[17px] h-[17px] px-1 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-white tabular-nums">
+                    {notificationFeed.length}
+                  </span>
+                )}
+              </button>
 
-              <div className="cursor-pointer hover:text-slate-910 transition p-1 hidden sm:block">
-                <Settings className="w-5 h-5" />
-              </div>
+              {notificationsOpen && (
+                <div className="absolute right-0 mt-2 w-80 bg-white rounded-2xl border border-slate-200 shadow-xl overflow-hidden z-50">
+                  <div className="px-4 py-2.5 bg-gradient-to-r from-[#041845] to-[#082458] text-white flex items-center justify-between">
+                    <span className="text-xs font-bold">Notifications</span>
+                    <span className="text-[11px] text-[#16c2ff] tabular-nums">{notificationFeed.length} active</span>
+                  </div>
+                  <div className="divide-y divide-slate-100 max-h-64 overflow-y-auto">
+                    {notificationFeed.length === 0 ? (
+                      <p className="p-4 text-xs text-slate-500 text-center">All caught up</p>
+                    ) : (
+                      notificationFeed.map((notif) => (
+                        <button
+                          key={notif.id}
+                          type="button"
+                          onClick={() => {
+                            setActiveTab(notif.targetTab);
+                            setNotificationsOpen(false);
+                          }}
+                          className="w-full px-4 py-2.5 text-left hover:bg-[#eef4fb]/70 transition cursor-pointer block"
+                        >
+                          <p className="text-xs font-semibold text-[#082458] truncate">{notif.title}</p>
+                          <p className="text-[11px] text-slate-500 mt-0.5 truncate">{notif.meta}</p>
+                        </button>
+                      ))
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* User Avatar Initials Pill & Dropdown */}
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => {
+                  setUserMenuOpen((prev) => !prev);
+                  setNotificationsOpen(false);
+                }}
+                className="flex items-center gap-1.5 rounded-full p-0.5 pr-1 hover:bg-[#eef4fb] transition cursor-pointer"
+                aria-label="Account menu"
+              >
+                <span className="w-9 h-9 rounded-full bg-gradient-to-br from-[#0b78f4] to-[#005be0] text-white font-bold text-xs flex items-center justify-center shadow-sm">
+                  {avatarInitials}
+                </span>
+                <ChevronDown className="w-3.5 h-3.5 text-[#082458]" />
+              </button>
+
+              {userMenuOpen && (
+                <div className="absolute right-0 mt-2 w-60 bg-white rounded-2xl border border-slate-200 shadow-xl overflow-hidden z-50">
+                  <div className="px-4 py-3 border-b border-slate-100 bg-[#eef4fb]/60">
+                    <p className="text-xs font-bold text-[#082458] truncate">{userSession?.name || 'Super Admin'}</p>
+                    <p className="text-[11px] text-slate-500 truncate">{userSession?.email}</p>
+                    <span className="inline-block mt-1.5 px-2 py-0.5 rounded-md bg-[#eef4fb] text-[#0b74f0] border border-[#0b74f0]/20 text-[10px] font-bold">
+                      {accessControl.role}
+                    </span>
+                  </div>
+                  <div className="p-1.5 space-y-0.5">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setActiveTab('security');
+                        setUserMenuOpen(false);
+                      }}
+                      className="w-full px-3 py-2 text-left text-xs font-medium text-[#082458] hover:bg-[#eef4fb] rounded-xl flex items-center gap-2 cursor-pointer"
+                    >
+                      <Settings className="w-3.5 h-3.5 text-[#0b74f0]" />
+                      Security &amp; Access
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setUserMenuOpen(false);
+                        handleLogout();
+                      }}
+                      className="w-full px-3 py-2 text-left text-xs font-semibold text-rose-600 hover:bg-rose-50 rounded-xl flex items-center gap-2 cursor-pointer"
+                    >
+                      <LogOut className="w-3.5 h-3.5" />
+                      Sign Out
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </header>
 
         {/* Dynamic Inner Workspace Panel scrolling viewport */}
-        <section id="workspace-scroller" className="flex-1 overflow-y-auto p-6 md:p-8">
+        <section id="workspace-scroller" className="flex-1 overflow-y-auto p-4 sm:p-5 lg:p-6 bg-[#eef4fb]">
           {activeTab === 'dashboard' && (
             <Dashboard 
               leads={leads}
@@ -867,6 +1103,7 @@ export default function App() {
               tasks={tasks}
               employees={employees}
               commsLogs={commsLogs}
+              userRole={accessControl.role}
               onNavigate={(tab) => {
                 const navItem = navItems.find(n => n.id === tab);
                 if (navItem && hasAccess(navItem.permission as any)) {
@@ -884,6 +1121,10 @@ export default function App() {
               onCreateTaskOpen={() => { setActiveTab('tasks'); }}
               onAddEmployeeOpen={() => { setActiveTab('payroll'); }}
               onProcessPayroll={() => { setActiveTab('payroll'); }}
+              onClientOnboardingOpen={() => {
+                setOpenClientOnboarding(true);
+                setActiveTab('saas');
+              }}
             />
           )}
 
@@ -894,6 +1135,8 @@ export default function App() {
               onWorkspaceChange={setWorkspaceName}
               activeWorkspace={workspaceName}
               showToast={showToast}
+              openOnboarding={openClientOnboarding}
+              onOnboardingOpened={() => setOpenClientOnboarding(false)}
             />
           )}
 
@@ -977,36 +1220,6 @@ export default function App() {
             />
           )}
         </section>
-
-        {/* Global Footer Row (Matching layout screen bottom perfectly) */}
-        <footer id="app-footer-row" className="bg-white border-t border-slate-150 p-4 px-6 text-slate-500 shrink-0 select-none hidden sm:block">
-          <div className="grid grid-cols-4 gap-6 text-center divide-x divide-slate-100 max-w-7xl mx-auto">
-            <div className="px-2">
-              <h5 className="text-[10px] font-black text-slate-800 uppercase tracking-widest flex items-center justify-center gap-1">
-                <Check className="w-3.5 h-3.5 text-emerald-500" /> Centralized Data
-              </h5>
-              <p className="text-[9px] text-slate-400 mt-0.5">All your business data in one place</p>
-            </div>
-            <div className="px-2">
-              <h5 className="text-[10px] font-black text-slate-800 uppercase tracking-widest flex items-center justify-center gap-1">
-                <Check className="w-3.5 h-3.5 text-emerald-500" /> Improve Productivity
-              </h5>
-              <p className="text-[9px] text-slate-400 mt-0.5">Streamline your core sales pipelines</p>
-            </div>
-            <div className="px-2">
-              <h5 className="text-[10px] font-black text-slate-800 uppercase tracking-widest flex items-center justify-center gap-1">
-                <Check className="w-3.5 h-3.5 text-emerald-500" /> Better Customer Relationship
-              </h5>
-              <p className="text-[9px] text-slate-400 mt-0.5">Enhance client engagement and SLA</p>
-            </div>
-            <div className="px-2">
-              <h5 className="text-[10px] font-black text-slate-800 uppercase tracking-widest flex items-center justify-center gap-1">
-                <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" /> Data-Driven Decisions
-              </h5>
-              <p className="text-[9px] text-slate-400 mt-0.5">Make smarter business decisions with AI</p>
-            </div>
-          </div>
-        </footer>
       </main>
 
       {/* Global Printing and Clipboard Copy/Export Center */}
@@ -1021,7 +1234,7 @@ export default function App() {
 
       {/* Global Real-time Call Overlays */}
       {globalCall && globalCall.activeCallStatus === 'ringing' && globalCall.callDirection === 'Incoming' && (
-        <div id="global-incoming-call-hud" className="fixed top-18 right-4 z-[9999] w-92 bg-slate-950/95 border border-emerald-500/80 rounded shadow-2xl p-4 text-white animate-pulse backdrop-blur-md">
+        <div id="global-incoming-call-hud" className="fixed top-18 right-4 z-[9999] w-92 bg-[#041845]/95 border border-emerald-500/80 rounded-2xl shadow-2xl p-4 text-white animate-pulse backdrop-blur-md">
           <div className="flex items-start gap-3">
             <div className="p-3 bg-emerald-950 border border-emerald-500 rounded-full text-emerald-400">
               <PhoneCall className="w-5 h-5" />
@@ -1030,8 +1243,8 @@ export default function App() {
               <span className="text-[10px] font-mono tracking-widest text-emerald-400 font-bold uppercase block">
                 🔔 Live Incoming CRM Call
               </span>
-              <h4 className="text-sm font-extrabold tracking-tight text-slate-100">{globalCall.dialName}</h4>
-              <p className="text-[10px] font-mono text-slate-400">{globalCall.dialNumber}</p>
+              <h4 className="text-sm font-extrabold tracking-tight text-white">{globalCall.dialName}</h4>
+              <p className="text-[10px] font-mono text-sky-200">{globalCall.dialNumber}</p>
               <span className="inline-block text-[8px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-emerald-900/40 text-emerald-300 border border-emerald-800">
                 VIP Incoming Trunk Proxy
               </span>
@@ -1047,9 +1260,9 @@ export default function App() {
                   }
                 }, 40);
               }}
-              className="py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-[11px] font-bold uppercase tracking-wider flex items-center justify-center gap-1 border border-emerald-500 shadow-sm shadow-emerald-900/50 cursor-pointer"
+              className="py-1.5 bg-gradient-to-r from-[#14b886] to-[#069468] hover:opacity-95 text-white rounded-lg text-[11px] font-bold uppercase tracking-wider flex items-center justify-center gap-1 shadow-sm cursor-pointer"
             >
-              <Phone className="w-3.5 h-3.5" /> Answer & Stream
+              <Phone className="w-3.5 h-3.5" /> Answer &amp; Stream
             </button>
             <button
               onClick={() => {
@@ -1057,7 +1270,7 @@ export default function App() {
                   (window as any).__crmDeclineCall();
                 }
               }}
-              className="py-1.5 bg-red-650 hover:bg-red-700 text-white rounded text-[11px] font-bold uppercase tracking-wider flex items-center justify-center gap-1 border border-red-750 cursor-pointer"
+              className="py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-[11px] font-bold uppercase tracking-wider flex items-center justify-center gap-1 border border-rose-500 cursor-pointer"
             >
               <PhoneOff className="w-3.5 h-3.5" /> Decline
             </button>
@@ -1067,17 +1280,17 @@ export default function App() {
 
       {/* Global Background Active Call Status Strip */}
       {globalCall && globalCall.activeCallStatus === 'connected' && activeTab !== 'calling' && (
-        <div id="global-active-call-strip" className="fixed bottom-4 right-4 z-[9998] w-80 bg-slate-950/95 border border-indigo-500/80 rounded-lg shadow-xl p-3 text-white backdrop-blur-md flex items-center justify-between">
+        <div id="global-active-call-strip" className="fixed bottom-4 right-4 z-[9998] w-80 bg-[#041845]/95 border border-[#0b74f0]/80 rounded-2xl shadow-xl p-3 text-white backdrop-blur-md flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <div className="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-ping" />
             <div>
-              <span className="text-[8px] font-mono tracking-wider text-indigo-400 font-bold uppercase block">
+              <span className="text-[8px] font-mono tracking-wider text-[#16c2ff] font-bold uppercase block">
                 ☎️ Connected
               </span>
-              <h4 className="text-[11px] font-bold text-slate-200 truncate max-w-[140px]">
+              <h4 className="text-[11px] font-bold text-white truncate max-w-[140px]">
                 {globalCall.dialName}
               </h4>
-              <span className="text-[10px] font-mono text-slate-400">
+              <span className="text-[10px] font-mono text-sky-200">
                 {formatCallTime(globalCall.callDuration)}
               </span>
             </div>
@@ -1085,7 +1298,7 @@ export default function App() {
           <div className="flex gap-1.5">
             <button
               onClick={() => setActiveTab('calling')}
-              className="px-2.5 py-1 bg-indigo-600 hover:bg-indigo-700 text-white text-[10px] font-bold rounded uppercase tracking-wider border border-indigo-500 cursor-pointer"
+              className="px-2.5 py-1 bg-gradient-to-r from-[#0b78f4] to-[#005be0] hover:from-[#0768d8] hover:to-[#004ec4] text-white text-[10px] font-bold rounded-lg uppercase tracking-wider cursor-pointer"
               title="Maximize calling panel"
             >
               Maximize
@@ -1096,7 +1309,7 @@ export default function App() {
                   (window as any).__crmEndCall();
                 }
               }}
-              className="p-1 bg-red-600 hover:bg-red-700 text-white rounded border border-red-700 cursor-pointer"
+              className="p-1 bg-rose-600 hover:bg-rose-700 text-white rounded-lg border border-rose-500 cursor-pointer"
               title="Hangup Call"
             >
               <PhoneOff className="w-3.5 h-3.5" />

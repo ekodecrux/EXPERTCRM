@@ -554,9 +554,9 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
     <div id="leads-manager-view" className="space-y-4">
       
       {/* 15 Features Top Title Hero Bar */}
-      <div className="bg-gradient-to-r from-indigo-900 to-slate-900 text-white p-4 rounded border border-indigo-950 flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+      <div className="bg-gradient-to-r from-[#082458] to-[#041845] text-white p-4 rounded border border-[#1e3a8a]/50 flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
         <div>
-          <h1 className="text-sm font-bold uppercase tracking-widest text-indigo-400">Leads & Sales Funnel Desk</h1>
+          <h1 className="text-sm font-bold uppercase tracking-widest text-[#16c2ff]">Leads & Sales Funnel Desk</h1>
           <p className="text-[11px] text-slate-300 mt-1 max-w-2xl leading-relaxed">
             All-in-one corporate pipeline suite: Manage live leads, quotations dispatch, invoice billing pipelines, 
             opportunity tags, staff assignments, reminders schedules, and support ticketing.
@@ -565,9 +565,9 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
 
         <button 
           onClick={triggerMockWebhookCapture}
-          className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded text-[11px] font-bold flex items-center gap-1.5 transition whitespace-nowrap border border-indigo-500 shadow-sm"
+          className="px-3 py-1.5 bg-[#0b74f0] hover:bg-[#005be0] text-white rounded text-[11px] font-bold flex items-center gap-1.5 transition whitespace-nowrap border border-[#0b74f0] shadow-sm"
         >
-          <Sparkles className="w-3.5 h-3.5 text-indigo-300 animate-pulse" />
+          <Sparkles className="w-3.5 h-3.5 text-[#16c2ff] animate-pulse" />
           Simulate Hook Capture
         </button>
       </div>
@@ -577,7 +577,7 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
         <button
           onClick={() => setActiveTab('pipeline')}
           className={`px-3 py-2 rounded text-xs font-bold border transition duration-150 flex items-center justify-center gap-1.5 ${
-            activeTab === 'pipeline' ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+            activeTab === 'pipeline' ? 'bg-[#0b74f0] text-white border-[#0b74f0]' : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
           }`}
         >
           <TrendingUp className="w-4 h-4" /> Pipeline Sandbox
@@ -586,7 +586,7 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
         <button
           onClick={() => setActiveTab('billing')}
           className={`px-3 py-2 rounded text-xs font-bold border transition duration-150 flex items-center justify-center gap-1.5 ${
-            activeTab === 'billing' ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+            activeTab === 'billing' ? 'bg-[#0b74f0] text-white border-[#0b74f0]' : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
           }`}
         >
           <FileText className="w-4 h-4" /> Quotes & Invoices
@@ -594,7 +594,7 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
         <button
           onClick={() => setActiveTab('forecast_support')}
           className={`px-3 py-2 rounded text-xs font-bold border transition duration-150 flex items-center justify-center gap-1.5 ${
-            activeTab === 'forecast_support' ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+            activeTab === 'forecast_support' ? 'bg-[#0b74f0] text-white border-[#0b74f0]' : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
           }`}
         >
           <MessageSquare className="w-4 h-4" /> Forecasts & Support
@@ -609,7 +609,7 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
             <input 
               type="text" 
               placeholder="Query name, brand, or email..."
-              className="w-full pl-8 pr-3 py-1 text-xs border border-slate-200 rounded bg-slate-50 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              className="w-full pl-8 pr-3 py-1 text-xs border border-slate-200 rounded bg-slate-50 focus:outline-none focus:ring-1 focus:ring-[#0b74f0]"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -636,7 +636,7 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
             <button
               onClick={() => setActiveView('kanban')}
               className={`flex-1 text-[11px] font-semibold py-1 rounded border transition ${
-                activeView === 'kanban' ? 'bg-slate-800 text-white border-slate-800' : 'bg-white border-slate-200'
+                activeView === 'kanban' ? 'bg-[#082458] text-white border-[#1e3a8a]/50' : 'bg-white border-slate-200'
               }`}
             >
               Kanban
@@ -644,14 +644,14 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
             <button
               onClick={() => setActiveView('list')}
               className={`flex-1 text-[11px] font-semibold py-1 rounded border transition ${
-                activeView === 'list' ? 'bg-slate-800 text-white border-slate-800' : 'bg-white border-slate-200'
+                activeView === 'list' ? 'bg-[#082458] text-white border-[#1e3a8a]/50' : 'bg-white border-slate-200'
               }`}
             >
               Spreadsheet
             </button>
             <button
               onClick={() => setIsFormOpen(true)}
-              className="px-2.5 bg-indigo-600 text-white rounded text-[11px] font-bold border border-indigo-700 flex items-center justify-center hover:bg-indigo-750"
+              className="px-2.5 bg-[#0b74f0] text-white rounded text-[11px] font-bold border border-[#0b74f0] flex items-center justify-center hover:bg-[#005be0]"
             >
               <Plus className="w-3.5 h-3.5" />
             </button>
@@ -667,7 +667,7 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
           <div className="bg-white p-3 rounded border border-slate-200 grid grid-cols-2 md:grid-cols-4 gap-4">
             <div>
               <span className="text-[10px] uppercase font-bold text-slate-400">Total Deals Size</span>
-              <h4 className="text-sm font-extrabold text-slate-800 mt-0.5">₹{rawPipelineTotalValue.toLocaleString('en-IN')}</h4>
+              <h4 className="text-sm font-extrabold text-[#082458] mt-0.5">₹{rawPipelineTotalValue.toLocaleString('en-IN')}</h4>
             </div>
             <div>
               <span className="text-[10px] uppercase font-bold text-slate-400">Conversion Rate (Won)</span>
@@ -677,13 +677,13 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
             </div>
             <div>
               <span className="text-[10px] uppercase font-bold text-slate-400">Qualified Pipeline Size</span>
-              <h4 className="text-sm font-extrabold text-slate-800 mt-0.5">
+              <h4 className="text-sm font-extrabold text-[#082458] mt-0.5">
                 ₹{leads.filter(l => l.status !== 'New Leads' && l.status !== 'Won').reduce((acc, l) => acc + l.value, 0).toLocaleString('en-IN')}
               </h4>
             </div>
             <div>
               <span className="text-[10px] uppercase font-bold text-slate-400">Total Contacts Saved</span>
-              <h4 className="text-sm font-extrabold text-slate-800 mt-0.5">{leads.length} Entities</h4>
+              <h4 className="text-sm font-extrabold text-[#082458] mt-0.5">{leads.length} Entities</h4>
             </div>
           </div>
 
@@ -698,19 +698,19 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
                     <div className="flex justify-between items-center mb-1">
                       <div className="flex items-center gap-1">
                         <span className={`w-2 h-2 rounded-full ${
-                          stage === 'New Leads' ? 'bg-indigo-500' :
+                          stage === 'New Leads' ? 'bg-[#0b74f0]' :
                           stage === 'Qualification' ? 'bg-amber-400' :
                           stage === 'Proposal' ? 'bg-blue-500' :
                           stage === 'Negotiation' ? 'bg-purple-500' : 'bg-emerald-500'
                         }`} />
-                        <h3 className="text-[11px] font-bold text-slate-800 truncate">{stage}</h3>
+                        <h3 className="text-[11px] font-bold text-[#082458] truncate">{stage}</h3>
                       </div>
                       <span className="text-[10px] font-bold text-slate-500 bg-slate-200/60 px-1.5 rounded">{stageLeads.length}</span>
                     </div>
 
                     <div className="bg-white rounded p-1 border border-slate-200 text-[9.5px] text-slate-500 flex justify-between mb-2">
                       <span>Deal Value:</span>
-                      <span className="font-bold text-slate-800">₹{stageSum.toLocaleString('en-IN')}</span>
+                      <span className="font-bold text-[#082458]">₹{stageSum.toLocaleString('en-IN')}</span>
                     </div>
 
                     <div className="flex-1 overflow-y-auto space-y-2 pr-0.5">
@@ -736,16 +736,16 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
                                 </span>
                               </div>
 
-                              <h4 className="text-[11px] font-semibold text-slate-900 truncate mt-1">{lead.name}</h4>
+                              <h4 className="text-[11px] font-semibold text-[#082458] truncate mt-1">{lead.name}</h4>
                               <p className="text-[9.5px] text-slate-400 truncate">{lead.company}</p>
 
                               <div className="text-[9.5px] text-slate-400 flex items-center gap-1 border-t border-slate-100 pt-1">
-                                <UserCheck className="w-3 h-3 text-indigo-400" />
+                                <UserCheck className="w-3 h-3 text-[#16c2ff]" />
                                 <span className="truncate">{meta?.assignedTo || 'Unassigned'}</span>
                               </div>
 
                               <div className="flex justify-between items-center mt-1">
-                                <span className="text-[11px] font-bold text-indigo-650">₹{lead.value.toLocaleString('en-IN')}</span>
+                                <span className="text-[11px] font-bold text-[#0b74f0]">₹{lead.value.toLocaleString('en-IN')}</span>
                                 <div className="flex gap-1">
                                   <button 
                                     onClick={() => {
@@ -776,17 +776,17 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
                                         (window as any).__triggerGlobalDial(lead.phone, lead.name);
                                       }
                                     }}
-                                    className="p-0.5 bg-indigo-50 border border-indigo-200 rounded hover:bg-indigo-100 text-indigo-600"
+                                    className="p-0.5 bg-[#eef4fb] border border-[#0b74f0]/25 rounded hover:bg-[#dceafb] text-[#0b74f0]"
                                     title="Dial Lead via WebRTC Proxy"
                                   >
                                     <Phone className="w-3 h-3" />
                                   </button>
                                   <button 
                                     onClick={() => generateAIInsight(lead)} 
-                                    className="p-0.5 bg-slate-50 border border-slate-200 rounded hover:bg-indigo-50"
+                                    className="p-0.5 bg-slate-50 border border-slate-200 rounded hover:bg-[#dceafb]"
                                     title="AI Sales Insight"
                                   >
-                                    <Sparkles className="w-3 h-3 text-indigo-505" />
+                                    <Sparkles className="w-3 h-3 text-[#0b74f0]" />
                                   </button>
                                   {lead.status !== 'Won' && (
                                     <button 
@@ -835,14 +835,14 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
                     <th className="px-3 py-2 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-150">
+                <tbody className="divide-y divide-slate-200">
                   {filteredLeads.map(lead => {
                     const meta = extraMeta[lead.id];
                     return (
                       <tr key={lead.id} className="hover:bg-slate-50 transition">
                         <td className="px-3 py-2 font-mono font-bold text-slate-400 text-[10px]">{lead.id}</td>
                         <td className="px-3 py-2">
-                          <h4 className="font-bold text-slate-900 text-[11px]">{lead.name}</h4>
+                          <h4 className="font-bold text-[#082458] text-[11px]">{lead.name}</h4>
                           <span className="text-slate-400 text-[9.5px]">{lead.company}</span>
                         </td>
                         <td className="px-3 py-2">
@@ -855,10 +855,10 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
                                 (window as any).__triggerGlobalDial(lead.phone, lead.name);
                               }
                             }}
-                            className="text-[10px] text-indigo-650 hover:text-indigo-800 hover:underline flex items-center gap-1 cursor-pointer font-semibold bg-transparent border-none p-0 mt-0.5 text-left"
+                            className="text-[10px] text-[#0b74f0] hover:text-[#005be0] hover:underline flex items-center gap-1 cursor-pointer font-semibold bg-transparent border-none p-0 mt-0.5 text-left"
                             title="Dial this lead immediately"
                           >
-                            <Phone className="w-3 h-3 text-indigo-500 shrink-0" /> {lead.phone || 'N/A'}
+                            <Phone className="w-3 h-3 text-[#0b74f0] shrink-0" /> {lead.phone || 'N/A'}
                           </button>
                         </td>
                         <td className="px-3 py-2">
@@ -895,7 +895,7 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
                             ))}
                           </select>
                         </td>
-                        <td className="px-3 py-2 font-bold text-indigo-650">₹{lead.value.toLocaleString('en-IN')}</td>
+                        <td className="px-3 py-2 font-bold text-[#0b74f0]">₹{lead.value.toLocaleString('en-IN')}</td>
                         <td className="px-3 py-2 text-right">
                           <div className="flex justify-end gap-1">
                             <button 
@@ -916,14 +916,14 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
                                   );
                                 }
                               }}
-                              className="px-2 py-0.5 text-[9px] font-bold text-slate-650 bg-slate-50 border border-slate-200 rounded hover:bg-slate-100 flex items-center gap-0.5"
+                              className="px-2 py-0.5 text-[9px] font-bold text-slate-600 bg-slate-50 border border-slate-200 rounded hover:bg-slate-100 flex items-center gap-0.5"
                               title="Print Roster Copy"
                             >
                               <Printer className="w-3 h-3" /> Print
                             </button>
                             <button 
                               onClick={() => generateAIInsight(lead)}
-                              className="px-2 py-0.5 text-[9px] font-bold text-indigo-600 bg-indigo-50 border border-indigo-150 rounded"
+                              className="px-2 py-0.5 text-[9px] font-bold text-[#0b74f0] bg-[#eef4fb] border border-[#0b74f0]/25 rounded"
                             >
                               AI Insight
                             </button>
@@ -954,13 +954,13 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
           {/* Quotes Creator & Tracker */}
           <div className="lg:col-span-6 bg-white p-3 rounded border border-slate-200 space-y-3">
             <div className="flex justify-between items-center border-b border-slate-100 pb-2">
-              <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1">
-                <FileText className="w-4 h-4 text-indigo-600" />
+              <h3 className="text-xs font-bold text-[#082458] uppercase tracking-wider flex items-center gap-1">
+                <FileText className="w-4 h-4 text-[#0b74f0]" />
                 Quotation Dispatch Desk
               </h3>
               <button 
                 onClick={() => setIsQuoteCreatorOpen(true)}
-                className="px-2.5 py-1 bg-indigo-600 hover:bg-indigo-700 text-white text-[10px] font-bold rounded flex items-center gap-1"
+                className="px-2.5 py-1 bg-[#0b74f0] hover:bg-[#005be0] text-white text-[10px] font-bold rounded flex items-center gap-1"
               >
                 <Plus className="w-3.5 h-3.5" /> Compose Quote
               </button>
@@ -972,13 +972,13 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
                   <div className="flex justify-between items-start">
                     <div>
                       <span className="text-[9.5px] font-mono font-bold text-slate-400">{quote.id}</span>
-                      <h4 className="text-xs font-black text-slate-800">{quote.clientName}</h4>
+                      <h4 className="text-xs font-black text-[#082458]">{quote.clientName}</h4>
                       <p className="text-[10px] text-slate-400 uppercase font-medium">{quote.companyName}</p>
                     </div>
 
                     <span className={`text-[8.5px] font-bold uppercase px-1.5 rounded ${
                       quote.status === 'Accepted' ? 'bg-emerald-100 text-emerald-800' :
-                      quote.status === 'Sent' ? 'bg-indigo-100 text-indigo-700' : 'bg-slate-200 text-slate-600'
+                      quote.status === 'Sent' ? 'bg-[#dceafb] text-[#0b74f0]' : 'bg-slate-200 text-slate-600'
                     }`}>
                       {quote.status}
                     </span>
@@ -1008,7 +1008,7 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
                   <div className="flex justify-between items-center text-[10px] pt-1">
                     <span className="text-slate-400">Subtotal: <span className="text-slate-600">₹{quote.subtotal.toLocaleString('en-IN')}</span></span>
                     <span className="text-slate-400">Discount: <span className="text-slate-600">{quote.discountPct}%</span></span>
-                    <span className="font-bold text-indigo-750">Net Total: ₹{quote.total.toLocaleString('en-IN')}</span>
+                    <span className="font-bold text-[#0b74f0]">Net Total: ₹{quote.total.toLocaleString('en-IN')}</span>
                   </div>
 
                   <div className="border-t border-slate-200 pt-2 flex justify-end gap-1.5">
@@ -1031,7 +1031,7 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
                     {quote.status === 'Draft' && (
                       <button 
                         onClick={() => setQuotations(prev => prev.map(q => q.id === quote.id ? { ...q, status: 'Sent' as const } : q))}
-                        className="px-2 py-0.5 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-150 font-bold text-[9px] rounded uppercase flex items-center gap-1"
+                        className="px-2 py-0.5 bg-[#eef4fb] text-[#0b74f0] hover:bg-[#dceafb] border border-[#0b74f0]/25 font-bold text-[9px] rounded uppercase flex items-center gap-1"
                       >
                         <Send className="w-3 h-3" /> Send Quote
                       </button>
@@ -1067,7 +1067,7 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
 
           {/* Invoices Vault */}
           <div className="lg:col-span-6 bg-white p-3 rounded border border-slate-200 space-y-3">
-            <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1 border-b pb-2">
+            <h3 className="text-xs font-bold text-[#082458] uppercase tracking-wider flex items-center gap-1 border-b pb-2">
               <CreditCard className="w-4 h-4 text-emerald-600" />
               Invoices Vault & General Ledger
             </h3>
@@ -1087,7 +1087,7 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
                   </div>
 
                   <div>
-                    <h4 className="text-xs font-bold text-slate-900">{inv.clientName}</h4>
+                    <h4 className="text-xs font-bold text-[#082458]">{inv.clientName}</h4>
                     <p className="text-[10px] text-slate-500 font-bold uppercase">{inv.companyName}</p>
                     <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-[9.5px] text-slate-500 mt-0.5">
                       <span>Due timeline: {inv.dueDate}</span>
@@ -1106,7 +1106,7 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
                   </div>
 
                   <div className="border-t border-slate-200 pt-2 flex flex-wrap justify-between items-center gap-2">
-                    <span className="text-xs font-extrabold text-slate-800">Net: ₹{inv.totalAmount.toLocaleString('en-IN')}</span>
+                    <span className="text-xs font-extrabold text-[#082458]">Net: ₹{inv.totalAmount.toLocaleString('en-IN')}</span>
                     <div className="flex flex-wrap gap-1.5">
                       {inv.status === 'Unpaid' && (
                         <button 
@@ -1145,32 +1145,32 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
           
           {/* Sales Forecasting Weighted Model */}
           <div className="lg:col-span-6 bg-white p-3 rounded border border-slate-200 space-y-4">
-            <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1 border-b pb-2">
-              <TrendingUp className="w-4 h-4 text-indigo-600" />
+            <h3 className="text-xs font-bold text-[#082458] uppercase tracking-wider flex items-center gap-1 border-b pb-2">
+              <TrendingUp className="w-4 h-4 text-[#0b74f0]" />
               Corporate Sales Forecasting Calculations
             </h3>
 
-            <div className="p-3 bg-indigo-50 border border-indigo-100 rounded space-y-3">
+            <div className="p-3 bg-[#eef4fb] border border-[#0b74f0]/25 rounded space-y-3">
               <div>
                 <span className="text-[10px] uppercase font-bold text-slate-400">Weighted Forecasted Revenue</span>
-                <h4 className="text-lg font-black text-indigo-900 mt-0.5">₹{expectedTotalValue.toLocaleString('en-IN')}</h4>
-                <p className="text-[9px] text-indigo-500 italic mt-0.5">
+                <h4 className="text-lg font-black text-[#082458] mt-0.5">₹{expectedTotalValue.toLocaleString('en-IN')}</h4>
+                <p className="text-[9px] text-[#0b74f0] italic mt-0.5">
                   Calculated dynamically: Sum(Deal value * Probability coefficient corresponding to opportunity tier).
                 </p>
               </div>
 
-              <div className="grid grid-cols-3 gap-2 pt-2 border-t border-indigo-150">
+              <div className="grid grid-cols-3 gap-2 pt-2 border-t border-[#0b74f0]/25">
                 <div className="bg-white p-2 rounded text-center">
                   <span className="text-[9px] text-red-500 font-bold block">🔥 Hot Rating</span>
-                  <span className="text-xs font-bold text-slate-850">90% Prob.</span>
+                  <span className="text-xs font-bold text-[#082458]">90% Prob.</span>
                 </div>
                 <div className="bg-white p-2 rounded text-center">
                   <span className="text-[9px] text-amber-500 font-bold block">⚡ Warm Rating</span>
-                  <span className="text-xs font-bold text-slate-850">55% Prob.</span>
+                  <span className="text-xs font-bold text-[#082458]">55% Prob.</span>
                 </div>
                 <div className="bg-white p-2 rounded text-center">
                   <span className="text-[9px] text-slate-400 font-bold block">❄️ Cold Rating</span>
-                  <span className="text-xs font-bold text-slate-850">15% Prob.</span>
+                  <span className="text-xs font-bold text-[#082458]">15% Prob.</span>
                 </div>
               </div>
             </div>
@@ -1196,13 +1196,13 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
           {/* Customer CRM Support Ticketing Desk */}
           <div className="lg:col-span-6 bg-white p-3 rounded border border-slate-200 space-y-3">
             <div className="flex justify-between items-center border-b pb-2">
-              <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1">
+              <h3 className="text-xs font-bold text-[#082458] uppercase tracking-wider flex items-center gap-1">
                 <MessageSquare className="w-4 h-4 text-emerald-600" />
                 Linked Support Tickets Queue
               </h3>
               <button 
                 onClick={() => setIsTicketFormOpen(true)}
-                className="px-2 py-0.5 bg-indigo-50 border border-indigo-150 text-indigo-700 text-[10px] font-bold rounded"
+                className="px-2 py-0.5 bg-[#eef4fb] border border-[#0b74f0]/25 text-[#0b74f0] text-[10px] font-bold rounded"
               >
                 Log Ticket
               </button>
@@ -1221,7 +1221,7 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
                   </div>
 
                   <div>
-                    <h4 className="text-xs font-bold text-slate-900">{t.subject}</h4>
+                    <h4 className="text-xs font-bold text-[#082458]">{t.subject}</h4>
                     <p className="text-[10px] text-slate-600 italic">"Client: {t.clientName}"</p>
                     <p className="text-[10px] text-slate-505 leading-relaxed mt-1">{t.description}</p>
                   </div>
@@ -1230,7 +1230,7 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
                     <span className="text-[9.5px] font-bold bg-[#E8F5E9] text-emerald-800 px-1.5 rounded uppercase">{t.status}</span>
                     <button 
                       onClick={() => setSupportTickets(prev => prev.map(st => st.id === t.id ? { ...st, status: 'Resolved' as const } : st))}
-                      className="text-[9.5px] text-indigo-600 hover:underline font-bold"
+                      className="text-[9.5px] text-[#0b74f0] hover:underline font-bold"
                     >
                       Resolve Status
                     </button>
@@ -1248,13 +1248,13 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
 
       {/* 1. MOCK INTEGRATED PDF PRINT VIEW INVOICE */}
       {viewingInvoice && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 animate-fadeIn">
+        <div className="fixed inset-0 bg-[#041845]/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 animate-fadeIn">
           <div className="bg-white rounded max-w-lg w-full p-6 border border-slate-300 shadow-2xl relative space-y-4">
             
             <div className="flex justify-between items-start border-b border-slate-100 pb-3">
               <div>
                 <span className="text-emerald-700 text-xs font-bold uppercase tracking-widest bg-emerald-50 px-2 py-0.5 rounded">FORMAL CORPORATE INVOICE</span>
-                <h3 className="text-md font-bold text-slate-800 mt-1">{viewingInvoice.id}</h3>
+                <h3 className="text-md font-bold text-[#082458] mt-1">{viewingInvoice.id}</h3>
               </div>
               <button onClick={() => setViewingInvoice(null)} className="p-1 hover:bg-slate-100 rounded">
                 <X className="w-5 h-5 text-slate-400" />
@@ -1264,14 +1264,14 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
             <div className="grid grid-cols-2 gap-4 text-[10px] text-slate-600 font-sans">
               <div>
                 <p className="font-extrabold uppercase text-[9px] text-slate-400">ISSUED TO:</p>
-                <p className="font-bold text-slate-800 text-[11px]">{viewingInvoice.clientName}</p>
+                <p className="font-bold text-[#082458] text-[11px]">{viewingInvoice.clientName}</p>
                 <p>{viewingInvoice.companyName}</p>
                 <p className="text-slate-500 font-mono mt-0.5">
                   Mobile: {getCustomerPhoneForInvoice(viewingInvoice.clientName, viewingInvoice.companyName) || 'Not Registered'}
                 </p>
               </div>
               <div className="text-right">
-                <p className="font-extrabold uppercase text-[9px] text-slate-400 font-bold text-slate-800">EXP CRM INC.</p>
+                <p className="font-extrabold uppercase text-[9px] text-slate-400 font-bold text-[#082458]">EXP CRM INC.</p>
                 <p>Enterprise Business Suite 401B</p>
                 <p>Tech Hub Sector V, Delhi</p>
               </div>
@@ -1279,7 +1279,7 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
 
             <div className="border border-slate-200 rounded overflow-hidden text-[10px]">
               <table className="w-full text-left">
-                <thead className="bg-slate-50 font-bold border-b border-slate-150">
+                <thead className="bg-slate-50 font-bold border-b border-slate-200">
                   <tr>
                     <th className="px-3 py-1.5">Specified Pipeline Deliverable</th>
                     <th className="px-3 py-1.5 text-right">Sum Raw Price</th>
@@ -1298,9 +1298,9 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
                     <td className="px-3 py-2 text-right font-bold text-slate-400">GST (Taxes 18%)</td>
                     <td className="px-3 py-2 text-right">+₹{viewingInvoice.taxAmount.toLocaleString('en-IN')}</td>
                   </tr>
-                  <tr className="bg-slate-50 font-extrabold text-[11px] text-slate-900 border-t">
+                  <tr className="bg-slate-50 font-extrabold text-[11px] text-[#082458] border-t">
                     <td className="px-3 py-2 text-right">NET TOTAL DUE</td>
-                    <td className="px-3 py-2 text-right text-indigo-700">₹{viewingInvoice.totalAmount.toLocaleString('en-IN')}</td>
+                    <td className="px-3 py-2 text-right text-[#0b74f0]">₹{viewingInvoice.totalAmount.toLocaleString('en-IN')}</td>
                   </tr>
                 </tbody>
               </table>
@@ -1340,7 +1340,7 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
                     window.print();
                   }
                 }}
-                className="flex-1 py-2 px-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow whitespace-nowrap shrink-0 cursor-pointer"
+                className="flex-1 py-2 px-3 bg-[#0b74f0] hover:bg-[#005be0] text-white rounded text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow whitespace-nowrap shrink-0 cursor-pointer"
               >
                 <Printer className="w-4 h-4" /> Trigger Print
               </button>
@@ -1358,14 +1358,14 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
 
       {/* 1B. WHATSAPP POS BILL SOFT COPY DISPATCH MODAL */}
       {whatsAppBillModal && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 animate-fadeIn">
+        <div className="fixed inset-0 bg-[#041845]/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 animate-fadeIn">
           <div className="bg-white rounded-xl max-w-lg w-full p-5 border border-slate-200 shadow-2xl relative space-y-4 max-h-[92vh] overflow-y-auto">
             <div className="flex justify-between items-start border-b border-slate-100 pb-3">
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[#128C7E]">
                   WhatsApp POS Bill Dispatch
                 </span>
-                <h3 className="text-sm font-extrabold text-slate-900 mt-0.5">
+                <h3 className="text-sm font-extrabold text-[#082458] mt-0.5">
                   Send Soft Copy — {whatsAppBillModal.invoice.id}
                 </h3>
                 <p className="text-[11px] text-slate-500">
@@ -1422,7 +1422,7 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
                         : null
                     );
                   }}
-                  className="w-full pl-9 pr-3 py-2 border border-slate-200 rounded-lg text-xs font-mono font-semibold text-slate-800 focus:border-[#128C7E] outline-none"
+                  className="w-full pl-9 pr-3 py-2 border border-slate-200 rounded-lg text-xs font-mono font-semibold text-[#082458] focus:border-[#128C7E] outline-none"
                 />
               </div>
             </div>
@@ -1437,7 +1437,7 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
                 onChange={(e) =>
                   setWhatsAppBillModal((prev) => (prev ? { ...prev, message: e.target.value } : null))
                 }
-                className="w-full p-3 border border-slate-200 rounded-lg bg-slate-50 text-[11px] font-mono text-slate-800 leading-relaxed focus:bg-white focus:border-[#128C7E] outline-none"
+                className="w-full p-3 border border-slate-200 rounded-lg bg-slate-50 text-[11px] font-mono text-[#082458] leading-relaxed focus:bg-white focus:border-[#128C7E] outline-none"
               />
             </div>
 
@@ -1478,11 +1478,11 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
 
       {/* 2. QUOTATION COMPOSER MODAL OVERLAY */}
       {isQuoteCreatorOpen && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 animate-fadeIn">
+        <div className="fixed inset-0 bg-[#041845]/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 animate-fadeIn">
           <div className="bg-white rounded max-w-lg w-full p-5 border border-slate-200 shadow-2xl relative space-y-4 max-h-[90vh] overflow-y-auto">
             
             <div className="flex justify-between items-center border-b pb-2">
-              <h3 className="text-xs font-black text-slate-900 uppercase tracking-tight">Draft Interactive Corporate Quotation</h3>
+              <h3 className="text-xs font-black text-[#082458] uppercase tracking-tight">Draft Interactive Corporate Quotation</h3>
               <button onClick={() => setIsQuoteCreatorOpen(false)}>
                 <X className="w-5 h-5 text-slate-400" />
               </button>
@@ -1510,7 +1510,7 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
                   <button 
                     type="button"
                     onClick={() => setQItems(prev => [...prev, { desc: 'Premium Cloud support add-on license', qty: 1, cost: 15000 }])}
-                    className="text-indigo-650 hover:underline font-bold text-[10px]"
+                    className="text-[#0b74f0] hover:underline font-bold text-[10px]"
                   >
                     + Add Item Line
                   </button>
@@ -1569,7 +1569,7 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
                 <label className="block text-slate-500 font-bold uppercase text-[9px] mb-1">Preferred Discount percentage: {qDiscount}%</label>
                 <input 
                   type="range" min={0} max={40}
-                  className="w-full accent-indigo-600"
+                  className="w-full accent-[#0b74f0]"
                   value={qDiscount}
                   onChange={(e) => setQDiscount(Number(e.target.value))}
                 />
@@ -1585,7 +1585,7 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
                 </button>
                 <button 
                   type="submit"
-                  className="px-4 py-1.5 bg-indigo-650 text-white font-bold rounded hover:bg-indigo-750"
+                  className="px-4 py-1.5 bg-[#0b74f0] text-white font-bold rounded hover:bg-[#005be0]"
                 >
                   Save Draft Quote
                 </button>
@@ -1600,9 +1600,9 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
 
       {/* 4. MANUAL CREATE TICKET MODAL */}
       {isTicketFormOpen && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-[#041845]/60 backdrop-blur-xs flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded max-w-sm w-full p-4 border border-slate-200 shadow-2xl relative space-y-3">
-            <h3 className="text-xs font-bold uppercase tracking-tight text-slate-900">Create Lead Helpdesk Ticket</h3>
+            <h3 className="text-xs font-bold uppercase tracking-tight text-[#082458]">Create Lead Helpdesk Ticket</h3>
             <form onSubmit={handleCreateTicket} className="space-y-3 text-xs">
               <div>
                 <label className="block text-[9px] uppercase text-slate-400 font-bold mb-1">Associated Pipeline Contact *</label>
@@ -1639,7 +1639,7 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
 
               <div className="flex justify-end gap-1.5 pt-2">
                 <button type="button" onClick={() => setIsTicketFormOpen(false)} className="px-2.5 py-1 text-slate-500 border rounded">Cancel</button>
-                <button type="submit" className="px-3.5 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded font-bold">Lodge SLA Ticket</button>
+                <button type="submit" className="px-3.5 py-1 bg-[#0b74f0] hover:bg-[#005be0] text-white rounded font-bold">Lodge SLA Ticket</button>
               </div>
             </form>
           </div>
@@ -1648,9 +1648,9 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
 
       {/* 5. CREATE NEW SALES LEAD MODAL */}
       {isFormOpen && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 animate-fadeIn">
+        <div className="fixed inset-0 bg-[#041845]/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 animate-fadeIn">
           <div className="bg-white rounded max-w-md w-full p-5 border border-slate-200 shadow-2xl relative space-y-3">
-            <h3 className="text-xs font-extrabold uppercase text-slate-900 tracking-tight">Create Manual Sales Lead</h3>
+            <h3 className="text-xs font-extrabold uppercase text-[#082458] tracking-tight">Create Manual Sales Lead</h3>
             
             <form onSubmit={handleCreateLead} className="space-y-3 text-xs">
               <div className="grid grid-cols-2 gap-3">
@@ -1766,7 +1766,7 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
 
               <div className="flex justify-end gap-1.5 border-t pt-3">
                 <button type="button" onClick={() => setIsFormOpen(false)} className="px-3 py-1.5 border hover:bg-slate-50 rounded">Cancel</button>
-                <button type="submit" className="px-4 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded">Add CRM Lead</button>
+                <button type="submit" className="px-4 py-1.5 bg-[#0b74f0] hover:bg-[#005be0] text-white font-bold rounded">Add CRM Lead</button>
               </div>
             </form>
           </div>
@@ -1775,10 +1775,10 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
 
       {/* --- AI INSIGHT MODAL BAR FROM BOTTOM --- */}
       {inspectedLeadInsight && (
-        <div className="bg-[#0f172a] text-slate-100 p-4 rounded border border-indigo-950 shadow-2xl relative select-none animate-fadeIn">
-          <div className="flex justify-between items-start mb-3 border-b border-indigo-900/50 pb-2">
+        <div className="bg-[#041845] text-slate-100 p-4 rounded border border-[#1e3a8a]/50 shadow-2xl relative select-none animate-fadeIn">
+          <div className="flex justify-between items-start mb-3 border-b border-[#0844a4]/50 pb-2">
             <div className="flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-indigo-400 animate-spin" />
+              <Sparkles className="w-5 h-5 text-[#16c2ff] animate-spin" />
               <div>
                 <h3 className="text-xs font-black text-white uppercase tracking-tight">AI Diagnostic Pipeline Insight</h3>
                 <p className="text-[10px] text-slate-400">Targeting Account ID: {inspectedLeadInsight.id}</p>
@@ -1787,7 +1787,7 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
             
             <button 
               onClick={() => setInspectedLeadInsight(null)}
-              className="text-slate-400 hover:text-white font-bold text-xs bg-slate-800 px-2.5 py-1 rounded-md"
+              className="text-slate-400 hover:text-white font-bold text-xs bg-[#082458] px-2.5 py-1 rounded-md"
             >
               Dismiss
             </button>
@@ -1795,7 +1795,7 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
 
           <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
             
-            <div className="md:col-span-3 flex flex-col items-center justify-center bg-slate-900/50 p-2.5 rounded border border-indigo-900">
+            <div className="md:col-span-3 flex flex-col items-center justify-center bg-[#041845]/50 p-2.5 rounded border border-[#0844a4]">
               <span className="text-[9px] uppercase tracking-wider font-extrabold text-slate-400 mb-1">Close Chance</span>
               <div className="relative w-16 h-16 flex items-center justify-center">
                 <svg className="w-full h-full transform -rotate-90">
@@ -1812,7 +1812,7 @@ export default function LeadsManager({ leads, onAddLead, onUpdateLeadStatus, onS
 
             <div className="md:col-span-9 space-y-3">
               <div>
-                <h4 className="text-[9px] font-black uppercase text-indigo-400 tracking-wider">Tailored Sales Elevator Pitch</h4>
+                <h4 className="text-[9px] font-black uppercase text-[#16c2ff] tracking-wider">Tailored Sales Elevator Pitch</h4>
                 <p className="text-[11px] text-slate-200 leading-relaxed mt-0.5">{inspectedLeadInsight.pitch}</p>
               </div>
 

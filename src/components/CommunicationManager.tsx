@@ -682,14 +682,14 @@ export default function CommunicationManager({
       {/* Visual Toast Overlay */}
       {toast && (
         <div className={`fixed bottom-5 right-5 border p-4.5 rounded-xl text-white flex items-start gap-3 shadow-2xl z-50 animate-bounce max-w-sm ${
-          toast.type === 'success' ? 'bg-slate-900 border-emerald-500' :
+          toast.type === 'success' ? 'bg-[#041845] border-emerald-500' :
           toast.type === 'error' ? 'bg-rose-950 border-rose-500' :
-          toast.type === 'info' ? 'bg-indigo-950 border-indigo-400' : 'bg-slate-900 border-yellow-500'
+          toast.type === 'info' ? 'bg-[#041845] border-[#38bdf8]' : 'bg-[#041845] border-yellow-500'
         }`}>
           <div className="pt-0.5">
             {toast.type === 'success' ? <CheckCircle className="w-5 h-5 text-emerald-400 shrink-0" /> :
              toast.type === 'error' ? <Lock className="w-5 h-5 text-rose-400 shrink-0" /> :
-             toast.type === 'info' ? <Wifi className="w-5 h-5 text-indigo-400 shrink-0 animate-pulse" /> : <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0" />}
+             toast.type === 'info' ? <Wifi className="w-5 h-5 text-[#16c2ff] shrink-0 animate-pulse" /> : <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0" />}
           </div>
           <div className="space-y-0.5">
             <span className="text-[10px] font-black uppercase text-slate-400 block tracking-wider">
@@ -706,18 +706,18 @@ export default function CommunicationManager({
       {/* Main Administrative Comm Header */}
       <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-xxs flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="p-3 bg-slate-900 text-indigo-400 rounded-2xl shadow-sm">
+          <div className="p-3 bg-[#041845] text-[#16c2ff] rounded-2xl shadow-sm">
             <MessageSquare className="w-6 h-6 shrink-0" />
           </div>
           <div>
-            <h1 className="text-md font-black text-slate-900 tracking-tight">Enterprise Multi-Channel Communications</h1>
+            <h1 className="text-md font-black text-[#082458] tracking-tight">Enterprise Multi-Channel Communications</h1>
             <p className="text-xs text-slate-400">SMTP mailboxes setup, custom Twilio/Meta integration, live alerts test sandbox, and visual workflows dispatcher.</p>
           </div>
         </div>
 
         {/* Global Security Role Label Badge */}
-        <div className="bg-slate-50 border border-slate-150 p-2.5 rounded-xl max-w-sm flex items-center gap-2.5 shadow-6 font-mono self-start md:self-auto">
-          <Shield className="w-4.5 h-4.5 text-indigo-500" />
+        <div className="bg-slate-50 border border-slate-200 p-2.5 rounded-xl max-w-sm flex items-center gap-2.5 shadow-6 font-mono self-start md:self-auto">
+          <Shield className="w-4.5 h-4.5 text-[#0b74f0]" />
           <div className="text-[10px] font-bold">
             <span className="text-slate-400 uppercase font-black block tracking-wider leading-none">Security Scope Layer</span>
             <span className="text-slate-700 font-extrabold flex items-center gap-1 mt-0.5">
@@ -732,16 +732,16 @@ export default function CommunicationManager({
         <button
           onClick={() => setActiveTab('overview')}
           className={`px-4 py-2.5 rounded-xl text-xs font-black transition-all flex items-center gap-2 ${
-            activeTab === 'overview' ? 'bg-white text-slate-950 shadow-sm font-extrabold' : 'text-slate-500 hover:text-slate-900'
+            activeTab === 'overview' ? 'bg-white text-[#041845] shadow-sm font-extrabold' : 'text-slate-500 hover:text-[#082458]'
           }`}
         >
-          <BarChart2 className="w-4 h-4 text-indigo-500" /> Reports & Analytics
+          <BarChart2 className="w-4 h-4 text-[#0b74f0]" /> Reports & Analytics
         </button>
 
         <button
           onClick={() => setActiveTab('email')}
           className={`px-4 py-2.5 rounded-xl text-xs font-black transition-all flex items-center gap-2 ${
-            activeTab === 'email' ? 'bg-white text-slate-950 shadow-sm font-extrabold' : 'text-slate-500 hover:text-slate-900'
+            activeTab === 'email' ? 'bg-white text-[#041845] shadow-sm font-extrabold' : 'text-slate-500 hover:text-[#082458]'
           }`}
         >
           <Mail className="w-4 h-4 text-sky-500" /> SMS & Email Integrations
@@ -750,7 +750,7 @@ export default function CommunicationManager({
         <button
           onClick={() => setActiveTab('mobile')}
           className={`px-4 py-2.5 rounded-xl text-xs font-black transition-all flex items-center gap-2 ${
-            activeTab === 'mobile' ? 'bg-white text-slate-950 shadow-sm font-extrabold' : 'text-slate-500 hover:text-slate-900'
+            activeTab === 'mobile' ? 'bg-white text-[#041845] shadow-sm font-extrabold' : 'text-slate-500 hover:text-[#082458]'
           }`}
         >
           <Smartphone className="w-4 h-4 text-emerald-500 animate-pulse" /> Mobile Messaging Demo
@@ -759,7 +759,7 @@ export default function CommunicationManager({
         <button
           onClick={() => setActiveTab('notifications')}
           className={`px-4 py-2.5 rounded-xl text-xs font-black transition-all flex items-center gap-2 ${
-            activeTab === 'notifications' ? 'bg-white text-slate-950 shadow-sm font-extrabold' : 'text-slate-500 hover:text-slate-900'
+            activeTab === 'notifications' ? 'bg-white text-[#041845] shadow-sm font-extrabold' : 'text-slate-500 hover:text-[#082458]'
           }`}
         >
           <Volume2 className="w-4 h-4 text-amber-500" /> Notifications Sandbox
@@ -768,7 +768,7 @@ export default function CommunicationManager({
         <button
           onClick={() => setActiveTab('automation')}
           className={`px-4 py-2.5 rounded-xl text-xs font-black transition-all flex items-center gap-2 ${
-            activeTab === 'automation' ? 'bg-white text-slate-950 shadow-sm font-extrabold' : 'text-slate-500 hover:text-slate-900'
+            activeTab === 'automation' ? 'bg-white text-[#041845] shadow-sm font-extrabold' : 'text-slate-500 hover:text-[#082458]'
           }`}
         >
           <Sliders className="w-4 h-4 text-purple-500" /> Workflow Automations
@@ -777,7 +777,7 @@ export default function CommunicationManager({
         <button
           onClick={() => setActiveTab('cloud')}
           className={`px-4 py-2.5 rounded-xl text-xs font-black transition-all flex items-center gap-2 ${
-            activeTab === 'cloud' ? 'bg-white text-slate-950 shadow-sm font-extrabold' : 'text-slate-500 hover:text-slate-900'
+            activeTab === 'cloud' ? 'bg-white text-[#041845] shadow-sm font-extrabold' : 'text-slate-500 hover:text-[#082458]'
           }`}
         >
           <Server className="w-4 h-4 text-rose-500" /> Cloud Services & Realtime
@@ -797,7 +797,7 @@ export default function CommunicationManager({
                 <div className="space-y-1">
                   <span className="text-[9.5px] font-black text-slate-400 uppercase tracking-widest block">Outbound Dispatch Volumes</span>
                   <div className="flex items-baseline gap-1.5">
-                    <span className="text-md font-black text-slate-900">1,482</span>
+                    <span className="text-md font-black text-[#082458]">1,482</span>
                     <span className="text-[10px] font-black text-emerald-600 font-mono">+12.4%</span>
                   </div>
                 </div>
@@ -814,7 +814,7 @@ export default function CommunicationManager({
                 <div className="space-y-1">
                   <span className="text-[9.5px] font-black text-slate-400 uppercase tracking-widest block">SLA Delivery Rate</span>
                   <div className="flex items-baseline gap-1.5">
-                    <span className="text-md font-black text-slate-900">99.8%</span>
+                    <span className="text-md font-black text-[#082458]">99.8%</span>
                     <span className="text-[10px] font-black text-emerald-600 font-mono">optimal</span>
                   </div>
                 </div>
@@ -831,7 +831,7 @@ export default function CommunicationManager({
                 <div className="space-y-1">
                   <span className="text-[9.5px] font-black text-slate-400 uppercase tracking-widest block">Average Response Delay</span>
                   <div className="flex items-baseline gap-1.5">
-                    <span className="text-md font-black text-slate-900">1.4 min</span>
+                    <span className="text-md font-black text-[#082458]">1.4 min</span>
                     <span className="text-[10px] font-black text-amber-500 font-mono">-18s lower</span>
                   </div>
                 </div>
@@ -848,8 +848,8 @@ export default function CommunicationManager({
                 <div className="space-y-1">
                   <span className="text-[9.5px] font-black text-slate-400 uppercase tracking-widest block">AI Copywriter Conversion</span>
                   <div className="flex items-baseline gap-1.5">
-                    <span className="text-md font-black text-slate-900">41.2%</span>
-                    <span className="text-[10px] font-black text-indigo-600 font-mono">+8.1% gain</span>
+                    <span className="text-md font-black text-[#082458]">41.2%</span>
+                    <span className="text-[10px] font-black text-[#0b74f0] font-mono">+8.1% gain</span>
                   </div>
                 </div>
                 <div className="p-1.5 bg-purple-50 text-purple-600 rounded-lg">
@@ -864,10 +864,10 @@ export default function CommunicationManager({
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             
             {/* Outbound Channel Distribution Bar-Chart */}
-            <div className="lg:col-span-6 bg-white p-5 rounded-2xl border border-slate-150/70 shadow-xxs">
+            <div className="lg:col-span-6 bg-white p-5 rounded-2xl border border-slate-200/70 shadow-xxs">
               <div className="flex justify-between items-center pb-3 border-b border-slate-50 mb-4">
                 <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">Message Open & Engagement Rates</span>
-                <span className="text-[10px] font-mono font-bold bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded border border-indigo-150">Active SLA metrics</span>
+                <span className="text-[10px] font-mono font-bold bg-[#eef4fb] text-[#0b74f0] px-2 py-0.5 rounded border border-[#0b74f0]/25">Active SLA metrics</span>
               </div>
 
               {/* Styled horizontal volume performance meters */}
@@ -878,7 +878,7 @@ export default function CommunicationManager({
                     <span className="font-extrabold text-slate-700 flex items-center gap-1.5">
                       <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" /> WhatsApp Campaign Channel
                     </span>
-                    <span className="font-bold text-slate-500">96.2% Opened <span className="text-slate-350 ml-1">/ 44% Clicks</span></span>
+                    <span className="font-bold text-slate-500">96.2% Opened <span className="text-slate-300 ml-1">/ 44% Clicks</span></span>
                   </div>
                   <div className="h-2.5 bg-slate-100 rounded-full overflow-hidden flex">
                     <div className="bg-emerald-500 h-full rounded-full" style={{ width: '96.2%' }} />
@@ -890,7 +890,7 @@ export default function CommunicationManager({
                     <span className="font-extrabold text-slate-700 flex items-center gap-1.5">
                       <span className="w-2.5 h-2.5 rounded-full bg-amber-500" /> Twilio SMS Dispatch Channel
                     </span>
-                    <span className="font-bold text-slate-500">91.8% Opened <span className="text-slate-350 ml-1 text-xs">/ 18% Clicks</span></span>
+                    <span className="font-bold text-slate-500">91.8% Opened <span className="text-slate-300 ml-1 text-xs">/ 18% Clicks</span></span>
                   </div>
                   <div className="h-2.5 bg-slate-100 rounded-full overflow-hidden flex">
                     <div className="bg-amber-500 h-full rounded-full" style={{ width: '91.8%' }} />
@@ -902,7 +902,7 @@ export default function CommunicationManager({
                     <span className="font-extrabold text-slate-700 flex items-center gap-1.5">
                       <span className="w-2.5 h-2.5 rounded-full bg-sky-500" /> Standard SMTP Email (Gmail SMTP)
                     </span>
-                    <span className="font-bold text-slate-500">48.5% Opened <span className="text-slate-350 ml-1 text-xs">/ 35% Clicks</span></span>
+                    <span className="font-bold text-slate-500">48.5% Opened <span className="text-slate-300 ml-1 text-xs">/ 35% Clicks</span></span>
                   </div>
                   <div className="h-2.5 bg-slate-100 rounded-full overflow-hidden flex">
                     <div className="bg-sky-500 h-full rounded-full" style={{ width: '48.5%' }} />
@@ -912,17 +912,17 @@ export default function CommunicationManager({
               </div>
 
               <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-200 mt-5 text-[10.5px] text-slate-500 flex gap-2 items-start font-medium">
-                <Info className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
+                <Info className="w-4 h-4 text-[#0b74f0] shrink-0 mt-0.5" />
                 <p>Delivery open factors updated every 15 minutes. WhatsApp is currently delivering the highest relative lead conversion and CTA answers.</p>
               </div>
             </div>
 
             {/* Timeframe graph visualization */}
-            <div className="lg:col-span-6 bg-white p-5 rounded-2xl border border-slate-150/70 shadow-xxs">
+            <div className="lg:col-span-6 bg-white p-5 rounded-2xl border border-slate-200/70 shadow-xxs">
               <div className="flex justify-between items-center pb-3 border-b border-slate-50 mb-4">
                 <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">Total Dispatch Funnel Conversions (24 Hours)</span>
                 <select 
-                  className="p-1 px-2 border border-slate-205 rounded bg-white text-xxs font-extrabold text-slate-650"
+                  className="p-1 px-2 border border-slate-205 rounded bg-white text-xxs font-extrabold text-slate-600"
                   value={selectedAnalyticsTimeframe}
                   onChange={(e) => setSelectedAnalyticsTimeframe(e.target.value as any)}
                 >
@@ -933,25 +933,25 @@ export default function CommunicationManager({
               </div>
 
               {/* Styled CSS Column bar representations */}
-              <div className="relative h-44 flex items-end justify-between px-6 pt-5 bg-slate-50/50 rounded-xl border border-slate-150 shadow-inner">
+              <div className="relative h-44 flex items-end justify-between px-6 pt-5 bg-slate-50/50 rounded-xl border border-slate-200 shadow-inner">
                 
                 <div className="flex flex-col items-center gap-2 flex-1">
-                  <div className="w-8.5 bg-indigo-200 hover:bg-indigo-300 transition-all rounded-t-lg shadow-sm" style={{ height: '110px' }}>
-                    <div className="text-[9px] font-extrabold text-indigo-800 text-center -mt-5">1,241</div>
+                  <div className="w-8.5 bg-[#cfe3fb] hover:bg-[#93c5fd] transition-all rounded-t-lg shadow-sm" style={{ height: '110px' }}>
+                    <div className="text-[9px] font-extrabold text-[#082458] text-center -mt-5">1,241</div>
                   </div>
                   <span className="text-[9.5px] font-extrabold text-slate-500">Addressed</span>
                 </div>
 
                 <div className="flex flex-col items-center gap-2 flex-1">
-                  <div className="w-8.5 bg-indigo-400 hover:bg-indigo-500 transition-all rounded-t-lg shadow-sm animate-pulse" style={{ height: '94px' }}>
-                    <div className="text-[9px] font-extrabold text-indigo-950 text-center -mt-5 font-bold">1,012</div>
+                  <div className="w-8.5 bg-[#38bdf8] hover:bg-[#005be0] transition-all rounded-t-lg shadow-sm animate-pulse" style={{ height: '94px' }}>
+                    <div className="text-[9px] font-extrabold text-[#082458] text-center -mt-5 font-bold">1,012</div>
                   </div>
                   <span className="text-[9.5px] font-extrabold text-slate-500">Delivered</span>
                 </div>
 
                 <div className="flex flex-col items-center gap-2 flex-1">
-                  <div className="w-8.5 bg-indigo-600 hover:bg-indigo-700 transition-all rounded-t-lg shadow-sm" style={{ height: '70px' }}>
-                    <div className="text-[9px] font-extrabold text-indigo-50 text-center -mt-5">782</div>
+                  <div className="w-8.5 bg-[#0b74f0] hover:bg-[#005be0] transition-all rounded-t-lg shadow-sm" style={{ height: '70px' }}>
+                    <div className="text-[9px] font-extrabold text-sky-100 text-center -mt-5">782</div>
                   </div>
                   <span className="text-[9.5px] font-extrabold text-slate-500">Engaged</span>
                 </div>
@@ -960,7 +960,7 @@ export default function CommunicationManager({
                   <div className="w-8.5 bg-amber-400 hover:bg-amber-505 transition-all rounded-t-lg shadow-sm" style={{ height: '42px' }}>
                     <div className="text-[9px] font-extrabold text-amber-950 text-center -mt-5 font-black">412</div>
                   </div>
-                  <span className="text-[9.5px] font-black text-slate-900">Won Lead</span>
+                  <span className="text-[9.5px] font-black text-[#082458]">Won Lead</span>
                 </div>
 
               </div>
@@ -972,7 +972,7 @@ export default function CommunicationManager({
                 </div>
                 <div className="text-center p-2 rounded bg-slate-50 border border-slate-200/50">
                   <span className="text-[9px] text-slate-400 uppercase tracking-wider block font-black">AI Auto Response Rate</span>
-                  <p className="text-xs font-black text-indigo-600">84.5% SLA Match</p>
+                  <p className="text-xs font-black text-[#0b74f0]">84.5% SLA Match</p>
                 </div>
               </div>
 
@@ -991,14 +991,14 @@ export default function CommunicationManager({
           <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-xxs">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-slate-100 pb-4 mb-4">
               <div>
-                <h3 className="text-xs font-black text-slate-900 uppercase">Cloud SMTP Gateway Settings</h3>
+                <h3 className="text-xs font-black text-[#082458] uppercase">Cloud SMTP Gateway Settings</h3>
                 <p className="text-xs text-slate-400">Configure corporate server relays to send actual outbound proposal emails from your own accounts.</p>
               </div>
               <button 
                 onClick={handleSMTPTesting}
-                className="px-3.5 py-1.5 border border-slate-205 text-xs font-extrabold bg-slate-50 rounded-xl hover:bg-slate-150 transition-all flex items-center gap-2"
+                className="px-3.5 py-1.5 border border-slate-205 text-xs font-extrabold bg-slate-50 rounded-xl hover:bg-slate-200 transition-all flex items-center gap-2"
               >
-                {emailCredentials.status === 'Verifying' ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RefreshCw className="w-3.5 h-3.5 text-indigo-600" />} Test SMTP Connection
+                {emailCredentials.status === 'Verifying' ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RefreshCw className="w-3.5 h-3.5 text-[#0b74f0]" />} Test SMTP Connection
               </button>
             </div>
 
@@ -1057,7 +1057,7 @@ export default function CommunicationManager({
                       key={fol}
                       onClick={() => setActiveEmailFolder(fol)}
                       className={`py-1 text-[9.5px] font-black uppercase rounded-lg transition-all ${
-                        activeEmailFolder === fol ? 'bg-white text-slate-900 shadow-xxs' : 'text-slate-500'
+                        activeEmailFolder === fol ? 'bg-white text-[#082458] shadow-xxs' : 'text-slate-500'
                       }`}
                     >
                       {fol}
@@ -1082,11 +1082,11 @@ export default function CommunicationManager({
                       key={mail.id}
                       onClick={() => setSelectedEmailId(mail.id)}
                       className={`p-3.5 rounded-xl border cursor-pointer hover:bg-slate-50 transition-all ${
-                        selectedEmailId === mail.id ? 'bg-indigo-50/30 border-indigo-200' : 'border-slate-150'
+                        selectedEmailId === mail.id ? 'bg-[#eef4fb]/30 border-[#0b74f0]/25' : 'border-slate-200'
                       }`}
                     >
                       <div className="flex justify-between items-start mb-1 text-xs">
-                        <span className={`font-black text-slate-900 ${!mail.read ? 'underline decoration-indigo-400 decoration-2' : ''}`}>{mail.sender}</span>
+                        <span className={`font-black text-[#082458] ${!mail.read ? 'underline decoration-[#0b74f0] decoration-2' : ''}`}>{mail.sender}</span>
                         <span className="text-[9.5px] text-slate-400 font-bold">{mail.date}</span>
                       </div>
                       <p className="text-[11px] text-slate-755 font-bold truncate">{mail.subject}</p>
@@ -1096,22 +1096,22 @@ export default function CommunicationManager({
                 </div>
               </div>
 
-              <div className="border-t border-slate-100 pt-3 mt-4 flex items-center justify-between text-[11px] text-indigo-600 font-extrabold pr-1">
+              <div className="border-t border-slate-100 pt-3 mt-4 flex items-center justify-between text-[11px] text-[#0b74f0] font-extrabold pr-1">
                 <span>Incoming Sync Status: Real-time active</span>
                 <span className="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-ping" />
               </div>
             </div>
 
             {/* Email detail viewer AND AI reply option */}
-            <div className="lg:col-span-8 bg-white p-5 rounded-2xl border border-slate-150/70 shadow-xxs flex flex-col justify-between">
+            <div className="lg:col-span-8 bg-white p-5 rounded-2xl border border-slate-200/70 shadow-xxs flex flex-col justify-between">
               {currentEmail ? (
                 <div className="space-y-4">
                   {/* Subject and sender */}
                   <div className="pb-3.5 border-b border-slate-100 flex justify-between items-start">
                     <div className="space-y-1">
-                      <h3 className="font-extrabold text-slate-900 text-sm leading-snug">{currentEmail.subject}</h3>
+                      <h3 className="font-extrabold text-[#082458] text-sm leading-snug">{currentEmail.subject}</h3>
                       <div className="text-xs text-slate-500 font-semibold">
-                        From: <span className="text-slate-800 font-black">{currentEmail.sender}</span> <span className="font-mono text-slate-400">&lt;{currentEmail.emailAddress}&gt;</span>
+                        From: <span className="text-[#082458] font-black">{currentEmail.sender}</span> <span className="font-mono text-slate-400">&lt;{currentEmail.emailAddress}&gt;</span>
                       </div>
                     </div>
                     <span className="text-xxs font-mono font-bold text-slate-400 bg-slate-100 px-2.5 py-1 rounded-md border border-slate-200">
@@ -1120,13 +1120,13 @@ export default function CommunicationManager({
                   </div>
 
                   {/* Mail description details body */}
-                  <div className="bg-slate-50/50 p-4.5 rounded-xl border border-slate-150 font-serif text-[11.5px] text-slate-700 leading-relaxed whitespace-pre-line max-h-52 overflow-y-auto">
+                  <div className="bg-slate-50/50 p-4.5 rounded-xl border border-slate-200 font-serif text-[11.5px] text-slate-700 leading-relaxed whitespace-pre-line max-h-52 overflow-y-auto">
                     {currentEmail.body}
                   </div>
 
                   {/* Reply with AI Copywriter workspace */}
                   <div className="bg-slate-50 border border-slate-205 p-4 rounded-xl space-y-4.5">
-                    <span className="text-[10px] font-black uppercase text-indigo-600 tracking-wider flex items-center gap-1.5">
+                    <span className="text-[10px] font-black uppercase text-[#0b74f0] tracking-wider flex items-center gap-1.5">
                       <Sparkles className="w-4 h-4" /> AI REPLY ASSISTANT (Powered by Gemini API)
                     </span>
 
@@ -1188,7 +1188,7 @@ export default function CommunicationManager({
                       <button
                         type="submit"
                         disabled={generatingDraft}
-                        className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm transition"
+                        className="w-full py-2.5 bg-[#0b74f0] hover:bg-[#005be0] text-white rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm transition"
                       >
                         {generatingDraft ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />} Draft Email response with Gemini
                       </button>
@@ -1197,14 +1197,14 @@ export default function CommunicationManager({
 
                     {/* Output and approve controls */}
                     {composedDraftText && (
-                      <div className="pt-4 border-t border-slate-150 space-y-3">
+                      <div className="pt-4 border-t border-slate-200 space-y-3">
                         <span className="text-[10px] font-black uppercase text-emerald-600 tracking-wider block">Generated Reply Draft</span>
                         <div className="bg-white p-3 rounded-lg border border-slate-200 font-serif text-[11px] text-slate-700 max-h-44 overflow-y-auto whitespace-pre-line">
                           {composedDraftText}
                         </div>
                         <div className="flex justify-end gap-2 text-xxs">
                           <button onClick={() => setComposedDraftText('')} className="px-3.5 py-1.5 border border-slate-200 text-slate-500 rounded font-bold">Discard</button>
-                          <button onClick={handleSendDraft} className="px-4 py-1.5 bg-indigo-600 text-white rounded font-extrabold flex items-center gap-1"><Send className="w-3.5 h-3.5" /> Send & Archive Log</button>
+                          <button onClick={handleSendDraft} className="px-4 py-1.5 bg-[#0b74f0] text-white rounded font-extrabold flex items-center gap-1"><Send className="w-3.5 h-3.5" /> Send & Archive Log</button>
                         </div>
                       </div>
                     )}
@@ -1235,34 +1235,34 @@ export default function CommunicationManager({
               <div className="p-4 bg-slate-50 border border-slate-205 rounded-xl space-y-4.5">
                 
                 <div className="text-xs space-y-3 font-medium">
-                  <div className="space-y-1 bg-white p-2.5 rounded-lg border border-slate-150">
+                  <div className="space-y-1 bg-white p-2.5 rounded-lg border border-slate-200">
                     <span className="text-slate-450 font-bold block text-[9px] uppercase">Account TW_API_SID:</span>
                     <input 
                       type="text" 
                       value={twilioConfig.accountSid} 
                       onChange={(e) => setTwilioConfig(prev => ({ ...prev, accountSid: e.target.value }))}
-                      className="w-full bg-slate-50 border border-slate-200 rounded p-1 font-mono text-[10px] text-slate-800"
+                      className="w-full bg-slate-50 border border-slate-200 rounded p-1 font-mono text-[10px] text-[#082458]"
                     />
                   </div>
-                  <div className="space-y-1 bg-white p-2.5 rounded-lg border border-slate-150">
+                  <div className="space-y-1 bg-white p-2.5 rounded-lg border border-slate-200">
                     <span className="text-slate-450 font-bold block text-[9px] uppercase">Verified Outbound SMS:</span>
                     <input 
                       type="text" 
                       value={twilioConfig.number} 
                       onChange={(e) => setTwilioConfig(prev => ({ ...prev, number: e.target.value }))}
-                      className="w-full bg-slate-50 border border-slate-200 rounded p-1 font-mono text-[10px] text-slate-800 font-semibold"
+                      className="w-full bg-slate-50 border border-slate-200 rounded p-1 font-mono text-[10px] text-[#082458] font-semibold"
                     />
                   </div>
-                  <div className="space-y-1 bg-white p-2.5 rounded-lg border border-slate-150">
+                  <div className="space-y-1 bg-white p-2.5 rounded-lg border border-slate-200">
                     <span className="text-slate-450 font-bold block text-[9px] uppercase">WhatsApp Cloud Number:</span>
                     <input 
                       type="text" 
                       value={twilioConfig.whatsappMetaNumber} 
                       onChange={(e) => setTwilioConfig(prev => ({ ...prev, whatsappMetaNumber: e.target.value }))}
-                      className="w-full bg-slate-50 border border-slate-200 rounded p-1 font-mono text-[10px] text-slate-800 font-semibold"
+                      className="w-full bg-slate-50 border border-slate-200 rounded p-1 font-mono text-[10px] text-[#082458] font-semibold"
                     />
                   </div>
-                  <div className="flex justify-between items-center bg-white p-2 rounded-lg border border-slate-150">
+                  <div className="flex justify-between items-center bg-white p-2 rounded-lg border border-slate-200">
                     <span className="text-slate-455 font-bold text-[9px] uppercase">Twilio Wallet Balance:</span>
                     <div className="flex items-center gap-1.5">
                       <span className="text-[10px] font-bold text-slate-400">$</span>
@@ -1286,7 +1286,7 @@ export default function CommunicationManager({
                     onClick={() => {
                       localStorage.setItem('crm_twilio_config', JSON.stringify(twilioConfig));
                     }}
-                    className="px-2.5 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded text-[10px] font-bold transition"
+                    className="px-2.5 py-1 bg-[#0b74f0] hover:bg-[#005be0] text-white rounded text-[10px] font-bold transition"
                   >
                     Apply Config
                   </button>
@@ -1301,19 +1301,19 @@ export default function CommunicationManager({
                 <button 
                   onClick={() => { setMobileActiveLeadId('sid'); setMobileChannel('WhatsApp'); }}
                   className={`p-2.5 rounded-xl border text-left transition-all ${
-                    mobileActiveLeadId === 'sid' ? 'bg-indigo-50 border-indigo-200 shadow-xxs' : 'bg-slate-50 hover:bg-slate-100'
+                    mobileActiveLeadId === 'sid' ? 'bg-[#eef4fb] border-[#0b74f0]/25 shadow-xxs' : 'bg-slate-50 hover:bg-slate-100'
                   }`}
                 >
-                  <span className="block text-slate-800 font-black">Siddharth Sen</span>
+                  <span className="block text-[#082458] font-black">Siddharth Sen</span>
                   <span className="text-slate-400 uppercase tracking-widest text-[9px] mt-0.5 block">WhatsApp thread</span>
                 </button>
                 <button 
                   onClick={() => { setMobileActiveLeadId('aman'); setMobileChannel('SMS'); }}
                   className={`p-2.5 rounded-xl border text-left transition-all ${
-                    mobileActiveLeadId === 'aman' ? 'bg-indigo-50 border-indigo-200 shadow-xxs' : 'bg-slate-50 hover:bg-slate-100'
+                    mobileActiveLeadId === 'aman' ? 'bg-[#eef4fb] border-[#0b74f0]/25 shadow-xxs' : 'bg-slate-50 hover:bg-slate-100'
                   }`}
                 >
-                  <span className="block text-slate-800 font-black">Aman Varma</span>
+                  <span className="block text-[#082458] font-black">Aman Varma</span>
                   <span className="text-slate-400 uppercase tracking-widest text-[9px] mt-0.5 block">Twilio SMS thread</span>
                 </button>
               </div>
@@ -1327,10 +1327,10 @@ export default function CommunicationManager({
           {/* HIGH-FIDELITY CSS MOBILE APP EMULATOR MOCKUP */}
           <div className="lg:col-span-7 flex justify-center items-center py-4 bg-slate-50 border border-slate-200 rounded-2xl relative overflow-hidden">
             
-            <div className="w-80 bg-slate-900 rounded-[40px] p-3 border-4 border-slate-800 shadow-2xl relative">
+            <div className="w-80 bg-[#041845] rounded-[40px] p-3 border-4 border-[#1e3a8a]/50 shadow-2xl relative">
               {/* Speaker Notch */}
-              <div className="absolute top-4 left-1/2 -translate-x-1/2 w-24 h-4.5 bg-slate-900 rounded-full z-20 flex justify-center items-center">
-                <div className="w-10 h-1 bg-slate-800 rounded-full" />
+              <div className="absolute top-4 left-1/2 -translate-x-1/2 w-24 h-4.5 bg-[#041845] rounded-full z-20 flex justify-center items-center">
+                <div className="w-10 h-1 bg-[#082458] rounded-full" />
               </div>
 
               {/* Mobile Screen Container */}
@@ -1350,7 +1350,7 @@ export default function CommunicationManager({
 
                 {/* Mobile Active Header */}
                 <div className={`p-3 text-white flex items-center justify-between shadow-6 ${
-                  mobileChannel === 'WhatsApp' ? 'bg-emerald-600' : 'bg-slate-900'
+                  mobileChannel === 'WhatsApp' ? 'bg-emerald-600' : 'bg-[#041845]'
                 }`}>
                   <div className="flex items-center gap-2">
                     <div className="w-7 h-7 bg-white/20 rounded-full flex items-center justify-center font-black">
@@ -1379,8 +1379,8 @@ export default function CommunicationManager({
                     }`}>
                       <div className={`p-2.5 rounded-2xl shadow-xxs text-xs ${
                         msg.type === 'outgoing' 
-                          ? 'bg-slate-100 text-slate-800 rounded-tr-none' 
-                          : 'bg-white text-slate-800 rounded-tl-none'
+                          ? 'bg-slate-100 text-[#082458] rounded-tr-none' 
+                          : 'bg-white text-[#082458] rounded-tl-none'
                       }`}>
                         <p className="leading-snug font-medium pr-1 whitespace-pre-line">{msg.text}</p>
                         <span className="text-[8.5px] text-slate-400 font-bold block text-right mt-1.5 leading-none">{msg.time}</span>
@@ -1404,7 +1404,7 @@ export default function CommunicationManager({
                   <button 
                     type="submit"
                     className={`p-2 rounded-full text-white shrink-0 shadow ${
-                      mobileChannel === 'WhatsApp' ? 'bg-emerald-600 hover:bg-emerald-700' : 'bg-slate-900 hover:bg-slate-850'
+                      mobileChannel === 'WhatsApp' ? 'bg-emerald-600 hover:bg-emerald-700' : 'bg-[#041845] hover:bg-[#082458]'
                     }`}
                   >
                     <SendHorizontal className="w-3.5 h-3.5" />
@@ -1415,7 +1415,7 @@ export default function CommunicationManager({
             </div>
 
             {/* Glowing signal rings background decorations */}
-            <div className="absolute top-1/2 left-0 -translate-y-1/2 w-32 h-32 bg-indigo-50 rounded-full blur-3xl opacity-30 select-none pointer-events-none" />
+            <div className="absolute top-1/2 left-0 -translate-y-1/2 w-32 h-32 bg-[#eef4fb] rounded-full blur-3xl opacity-30 select-none pointer-events-none" />
             <div className="absolute bottom-5 right-5 w-44 h-44 bg-emerald-100 rounded-full blur-3xl opacity-20 select-none pointer-events-none" />
           </div>
 
@@ -1433,15 +1433,15 @@ export default function CommunicationManager({
               <div className="flex items-center gap-1.5 pb-2.5 border-b border-slate-100 mb-4">
                 <Volume2 className="w-5 h-5 text-amber-500" />
                 <div>
-                  <h3 className="text-xs font-black text-slate-900 uppercase">Enterprise Notification dispatcher</h3>
+                  <h3 className="text-xs font-black text-[#082458] uppercase">Enterprise Notification dispatcher</h3>
                   <p className="text-xs text-slate-400 mt-0.5">Define template alerts that can trigger on real CRM actions. Dynamic variables are supported.</p>
                 </div>
               </div>
 
               {/* Template designer table */}
-              <div className="overflow-x-auto rounded-xl border border-slate-150 bg-white">
+              <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
                 <table className="w-full text-left text-xs bg-white">
-                  <thead className="bg-slate-50 text-slate-500 font-extrabold uppercase text-[8.5px] border-b border-slate-150">
+                  <thead className="bg-slate-50 text-slate-500 font-extrabold uppercase text-[8.5px] border-b border-slate-200">
                     <tr>
                       <th className="p-3">Template Reference</th>
                       <th className="p-3">Alert Content Layout</th>
@@ -1453,7 +1453,7 @@ export default function CommunicationManager({
                     {notificationTemplates.map(nt => (
                       <tr key={nt.id} className="hover:bg-slate-50/60 transition">
                         <td className="p-3">
-                          <span className="text-slate-900 font-extrabold block">{nt.name}</span>
+                          <span className="text-[#082458] font-extrabold block">{nt.name}</span>
                           <span className="font-mono text-slate-400 text-[9.5px]">{nt.id}</span>
                         </td>
                         <td className="p-3">
@@ -1470,7 +1470,7 @@ export default function CommunicationManager({
                         <td className="p-3 text-right">
                           <button
                             onClick={() => handleTestTrigger(nt.id, 'sid')}
-                            className="p-1 px-2.5 bg-indigo-50 border border-indigo-150 text-indigo-700 font-black rounded-lg text-[9.5px] hover:bg-indigo-100 transition"
+                            className="p-1 px-2.5 bg-[#eef4fb] border border-[#0b74f0]/25 text-[#0b74f0] font-black rounded-lg text-[9.5px] hover:bg-[#dceafb] transition"
                           >
                             Send Test Alert
                           </button>
@@ -1527,9 +1527,9 @@ export default function CommunicationManager({
                   </span>
                   <button
                     type="submit"
-                    className="px-4 py-1.5 bg-slate-900 hover:bg-slate-800 text-white font-extrabold rounded-xl text-xxs flex items-center gap-1"
+                    className="px-4 py-1.5 bg-[#041845] hover:bg-[#082458] text-white font-extrabold rounded-xl text-xxs flex items-center gap-1"
                   >
-                    <Plus className="w-3.5 h-3.5 text-indigo-400" /> Register Template
+                    <Plus className="w-3.5 h-3.5 text-[#16c2ff]" /> Register Template
                   </button>
                 </div>
               </form>
@@ -1537,9 +1537,9 @@ export default function CommunicationManager({
           </div>
 
           {/* Test log terminal list trigger outputs right */}
-          <div className="lg:col-span-12 xl:col-span-5 bg-[#0a0f1d] text-slate-100 p-5 rounded-2xl border border-slate-800 shadow-xl flex flex-col justify-between">
+          <div className="lg:col-span-12 xl:col-span-5 bg-[#0a0f1d] text-slate-100 p-5 rounded-2xl border border-[#1e3a8a]/50 shadow-xl flex flex-col justify-between">
             <div>
-              <div className="pb-3 border-b border-slate-800 mb-4 flex justify-between items-center.">
+              <div className="pb-3 border-b border-[#1e3a8a]/50 mb-4 flex justify-between items-center.">
                 <div>
                   <span className="text-[9.5px] font-mono font-bold text-slate-500 block uppercase tracking-wider">MOCK ALERT MONITOR TERMINAL</span>
                   <p className="text-xs text-slate-400 mt-1">Simulated webhook payloads fired from user clicks.</p>
@@ -1551,7 +1551,7 @@ export default function CommunicationManager({
               <div className="space-y-3 max-h-[360px] overflow-y-auto pr-1">
                 {notificationTestOutput.length > 0 ? (
                   notificationTestOutput.map((out, index) => (
-                    <div key={index} className="p-3 bg-slate-900 rounded-lg border border-slate-800 font-mono text-[10px] text-slate-300 break-words leading-relaxed flex gap-2">
+                    <div key={index} className="p-3 bg-[#041845] rounded-lg border border-[#1e3a8a]/50 font-mono text-[10px] text-slate-300 break-words leading-relaxed flex gap-2">
                       <span className="text-amber-500 font-black shrink-0">▶</span>
                       <span>{out}</span>
                     </div>
@@ -1564,7 +1564,7 @@ export default function CommunicationManager({
               </div>
             </div>
 
-            <div className="border-t border-slate-800 pt-4 mt-5 flex items-center justify-between text-[10px] text-slate-500 font-mono pr-1 select-none">
+            <div className="border-t border-[#1e3a8a]/50 pt-4 mt-5 flex items-center justify-between text-[10px] text-slate-500 font-mono pr-1 select-none">
               <span>ACTIVE WEBSOCKET GATEWAY</span>
               <span className="text-emerald-400 font-bold flex items-center gap-1.5">
                 <span className="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-ping" /> SECURE CONSOLE
@@ -1582,18 +1582,18 @@ export default function CommunicationManager({
           <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-xxs">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-slate-100 pb-4 mb-5">
               <div>
-                <h3 className="text-xs font-black text-slate-900 uppercase">Interactive System Workflow Architect</h3>
+                <h3 className="text-xs font-black text-[#082458] uppercase">Interactive System Workflow Architect</h3>
                 <p className="text-xs text-slate-400 mt-0.5">Automatically listen to database events and dispatch corresponding notification chains without human intervention.</p>
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-[10px] font-black uppercase text-slate-400">Select active blueprint:</span>
-                <div className="flex bg-slate-100 p-1 rounded-xl border border-slate-150">
+                <div className="flex bg-slate-100 p-1 rounded-xl border border-slate-200">
                   {workflows.map(wf => (
                     <button
                       key={wf.id}
                       onClick={() => setActiveWorkflowId(wf.id)}
                       className={`px-3 py-1 text-xs font-black uppercase rounded-lg transition-all ${
-                        activeWorkflowId === wf.id ? 'bg-white text-slate-900 shadow-xxs' : 'text-slate-500 hover:text-slate-900'
+                        activeWorkflowId === wf.id ? 'bg-white text-[#082458] shadow-xxs' : 'text-slate-500 hover:text-[#082458]'
                       }`}
                     >
                       {wf.id}
@@ -1611,7 +1611,7 @@ export default function CommunicationManager({
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-50 border border-slate-200/60 p-4 rounded-xl">
                   <div className="space-y-1">
                     <div className="flex items-center gap-2.5">
-                      <h4 className="font-extrabold text-slate-900 text-sm">{selectedWorkflow.name}</h4>
+                      <h4 className="font-extrabold text-[#082458] text-sm">{selectedWorkflow.name}</h4>
                       <span className={`px-2 py-0.5 rounded text-[9.5px] font-black uppercase border ${
                         selectedWorkflow.status === 'Active' ? 'bg-emerald-50 text-emerald-600 border-emerald-150' : 'bg-slate-100 text-slate-400 border-slate-205'
                       }`}>
@@ -1628,7 +1628,7 @@ export default function CommunicationManager({
                     </div>
                     <div className="text-right border-l border-slate-200 pl-4">
                       <span className="text-[9px] text-slate-400 uppercase tracking-widest block font-black">CTR Open Rate</span>
-                      <span className="text-indigo-600 font-black">{selectedWorkflow.conversion}% CTR</span>
+                      <span className="text-[#0b74f0] font-black">{selectedWorkflow.conversion}% CTR</span>
                     </div>
                     <div className="border-l border-slate-200 pl-4 flex gap-1.5">
                       <button
@@ -1644,16 +1644,16 @@ export default function CommunicationManager({
                 </div>
 
                 {/* Workflow structural visual nodes timeline */}
-                <div className="relative pt-3 pb-8 pl-5 space-y-6 border-l-2 border-dashed border-indigo-200/50 ml-5 text-xs text-slate-700">
+                <div className="relative pt-3 pb-8 pl-5 space-y-6 border-l-2 border-dashed border-[#0b74f0]/25/50 ml-5 text-xs text-slate-700">
                   
                   {/* Absolute Trigger start banner */}
-                  <div className="absolute -left-[14px] top-0 bg-indigo-600 outline outline-4 outline-white text-white p-2.5 rounded-xl flex items-center justify-center font-bold shadow-md">
+                  <div className="absolute -left-[14px] top-0 bg-[#0b74f0] outline outline-4 outline-white text-white p-2.5 rounded-xl flex items-center justify-center font-bold shadow-md">
                     <Zap className="w-4.5 h-4.5 text-amber-300" />
                   </div>
                   
                   <div className="pl-6 pt-1.5">
                     <span className="text-[9.5px] font-black text-slate-400 uppercase tracking-widest block">Entry Event Handler (Trig)</span>
-                    <h5 className="font-extrabold text-slate-900 mt-0.5">Database Sync State Detected: "Lead Phase Won"</h5>
+                    <h5 className="font-extrabold text-[#082458] mt-0.5">Database Sync State Detected: "Lead Phase Won"</h5>
                   </div>
 
                   {/* Mapping steps loops */}
@@ -1661,11 +1661,11 @@ export default function CommunicationManager({
                     <div key={st.id} className="relative pl-6 space-y-1 group">
                       
                       {/* Visual indicator connect */}
-                      <div className="absolute -left-[30px] top-1.5 bg-white border-2 border-indigo-400 text-indigo-600 w-6.5 h-6.5 rounded-full flex items-center justify-center font-bold text-xxs shadow-sm">
+                      <div className="absolute -left-[30px] top-1.5 bg-white border-2 border-[#38bdf8] text-[#0b74f0] w-6.5 h-6.5 rounded-full flex items-center justify-center font-bold text-xxs shadow-sm">
                         {index + 1}
                       </div>
 
-                      <div className="bg-white hover:bg-slate-50/50 p-3.5 rounded-2xl border border-slate-150 shadow-xxs transition flex items-center justify-between gap-4">
+                      <div className="bg-white hover:bg-slate-50/50 p-3.5 rounded-2xl border border-slate-200 shadow-xxs transition flex items-center justify-between gap-4">
                         <div className="flex items-start gap-3">
                           <div className={`p-2 rounded-full shrink-0 ${
                             st.type === 'delay' ? 'bg-amber-50 text-amber-600' :
@@ -1680,7 +1680,7 @@ export default function CommunicationManager({
                           </div>
 
                           <div className="space-y-0.5">
-                            <span className="font-black text-slate-800 block text-xs">{st.title}</span>
+                            <span className="font-black text-[#082458] block text-xs">{st.title}</span>
                             <span className="text-[11px] text-slate-400 font-bold block">{st.summary}</span>
                           </div>
                         </div>
@@ -1688,7 +1688,7 @@ export default function CommunicationManager({
                         {/* Remove or edit action */}
                         <button
                           onClick={() => handleRemoveWorkflowStep(selectedWorkflow.id, st.id)}
-                          className="p-1 text-slate-350 hover:text-rose-500 transition tooltip"
+                          className="p-1 text-slate-300 hover:text-rose-500 transition tooltip"
                           title="Delete automation step block"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -1702,9 +1702,9 @@ export default function CommunicationManager({
                   <div className="pt-3 pl-6 flex items-center gap-1.5 select-none text-xxs font-bold">
                     <button
                       onClick={() => handleAddWorkflowStep(selectedWorkflow.id)}
-                      className="px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl flex items-center gap-1 shadow-sm transition"
+                      className="px-3.5 py-1.5 bg-[#041845] hover:bg-[#082458] text-white rounded-xl flex items-center gap-1 shadow-sm transition"
                     >
-                      <Plus className="w-3.5 h-3.5 text-indigo-400" /> Insert Automation Step
+                      <Plus className="w-3.5 h-3.5 text-[#16c2ff]" /> Insert Automation Step
                     </button>
                     <span className="text-slate-400 font-medium">Auto-align active sequences on change</span>
                   </div>
@@ -1725,7 +1725,7 @@ export default function CommunicationManager({
           {/* Cloud latency inspectors and speed gauges left */}
           <div className="lg:col-span-5 bg-white p-5 rounded-2xl border border-slate-100 shadow-xxs flex flex-col justify-between space-y-6">
             <div className="space-y-4">
-              <span className="text-[10px] font-black uppercase text-slate-405 tracking-wider font-sans block">Distributed Cloud Access Nodes</span>
+              <span className="text-[10px] font-black uppercase text-slate-400 tracking-wider font-sans block">Distributed Cloud Access Nodes</span>
               <p className="text-xs text-slate-500 leading-normal font-sans font-medium">ExpertCRM runs containerized micro-servers across multi-regional cloud networks for instant client data synchronization.</p>
 
               <div className="space-y-3.5">
@@ -1734,7 +1734,7 @@ export default function CommunicationManager({
                     <div className="flex items-center gap-2 font-sans text-xs">
                       <Globe className="w-4 h-4 text-slate-500 shrink-0" />
                       <div>
-                        <span className="block font-black text-slate-800">{node.region}</span>
+                        <span className="block font-black text-[#082458]">{node.region}</span>
                         <span className="text-[9px] text-slate-400 uppercase tracking-wider font-black">ACTIVE RELAY</span>
                       </div>
                     </div>
@@ -1752,7 +1752,7 @@ export default function CommunicationManager({
               <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest block font-sans">Active Server Heartbeats</span>
               <div className="flex justify-between text-xs">
                 <span className="font-sans font-medium text-slate-500">WebSocket listeners count:</span>
-                <span className="font-extrabold text-indigo-600 font-bold">{activeSocketHeartbeats} terminals</span>
+                <span className="font-extrabold text-[#0b74f0] font-bold">{activeSocketHeartbeats} terminals</span>
               </div>
               <div className="flex justify-between text-xs">
                 <span className="font-sans font-medium text-slate-500">Cluster Hydration SLA:</span>
@@ -1762,9 +1762,9 @@ export default function CommunicationManager({
           </div>
 
           {/* Webhook live simulation engine & Terminal logs right */}
-          <div className="lg:col-span-7 bg-[#0a0f1d] text-slate-100 p-5 rounded-2xl border border-slate-800 shadow-xl flex flex-col justify-between">
+          <div className="lg:col-span-7 bg-[#0a0f1d] text-slate-100 p-5 rounded-2xl border border-[#1e3a8a]/50 shadow-xl flex flex-col justify-between">
             <div className="space-y-4">
-              <div className="pb-3 border-b border-slate-800 flex justify-between items-center bg-[#0a0f1d]">
+              <div className="pb-3 border-b border-[#1e3a8a]/50 flex justify-between items-center bg-[#0a0f1d]">
                 <div>
                   <span className="text-[9.5px] font-mono font-bold text-slate-450 block uppercase tracking-wider">REAL-TIME TRANSACTION MONITOR</span>
                   <p className="text-xs text-slate-400 font-sans mt-0.5">Console telemetry logs mapping multi-channel dispatches.</p>
@@ -1772,14 +1772,14 @@ export default function CommunicationManager({
                 <button
                   disabled={isDemoTriggering}
                   onClick={triggerSimulatedMessageFlow}
-                  className="px-3.5 py-1.5 bg-slate-900 border border-slate-750 text-xxs font-extrabold font-sans text-amber-400 hover:bg-slate-800 rounded-lg shadow flex items-center gap-1 transition"
+                  className="px-3.5 py-1.5 bg-[#041845] border border-[#1e3a8a]/60 text-xxs font-extrabold font-sans text-amber-400 hover:bg-[#082458] rounded-lg shadow flex items-center gap-1 transition"
                 >
                   {isDemoTriggering ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <CloudLightning className="w-3.5 h-3.5 text-amber-500 animate-pulse" />} Simulated incoming message
                 </button>
               </div>
 
               {/* Logs block terminal styled container */}
-              <div className="bg-black/40 border border-slate-850 p-4.5 rounded-xl font-mono text-[10px] text-teal-400 leading-relaxed space-y-3 max-h-[290px] overflow-y-auto pr-1">
+              <div className="bg-black/40 border border-[#1e3a8a]/50 p-4.5 rounded-xl font-mono text-[10px] text-teal-400 leading-relaxed space-y-3 max-h-[290px] overflow-y-auto pr-1">
                 {serverConsoleLogs.map((log, index) => (
                   <div key={index} className="flex gap-2 items-start leading-relaxed bg-[#0a0f1d]">
                     <span className="text-slate-500 font-black shrink-0">CRM_NODE_01$</span>
@@ -1789,9 +1789,9 @@ export default function CommunicationManager({
               </div>
             </div>
 
-            <div className="border-t border-slate-800 pt-3.5 mt-5 flex justify-between items-center text-[10px] text-slate-500 block">
+            <div className="border-t border-[#1e3a8a]/50 pt-3.5 mt-5 flex justify-between items-center text-[10px] text-slate-500 block">
               <span className="font-sans uppercase text-[9px] font-black tracking-wide">SECURE CLOUD RUN INSTANCE: ACTIVE</span>
-              <span className="font-sans text-xs bg-slate-900 text-amber-400 px-2 py-0.5 rounded border border-slate-800 font-black">PORT 3000</span>
+              <span className="font-sans text-xs bg-[#041845] text-amber-400 px-2 py-0.5 rounded border border-[#1e3a8a]/50 font-black">PORT 3000</span>
             </div>
           </div>
 

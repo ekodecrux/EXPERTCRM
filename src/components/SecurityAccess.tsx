@@ -702,7 +702,7 @@ export default function SecurityAccess({
       
       {/* Toast Alert overlay */}
       {toastMessage && (
-        <div className="fixed bottom-4 right-4 bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py-3 shadow-2xl flex items-center gap-2.5 z-50 animate-bounce">
+        <div className="fixed bottom-4 right-4 bg-[#041845] border border-[#1e3a8a]/60 text-white rounded-xl px-4 py-3 shadow-2xl flex items-center gap-2.5 z-50 animate-bounce">
           <ShieldCheck className="w-5 h-5 text-emerald-400" />
           <span className="text-xs font-bold">{toastMessage}</span>
         </div>
@@ -711,17 +711,17 @@ export default function SecurityAccess({
       {/* Main Administrative Header Bar */}
       <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-xxs flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-slate-900 text-amber-400 rounded-xl">
+          <div className="p-2.5 bg-[#041845] text-amber-400 rounded-xl">
             <Lock className="w-6 h-6 shrink-0" />
           </div>
           <div>
-            <h1 className="text-md font-black text-slate-900 tracking-tight">Security & Governance Console</h1>
+            <h1 className="text-md font-black text-[#082458] tracking-tight">Security & Governance Console</h1>
             <p className="text-xs text-slate-400">Manage user creation permissions, edit system identity profiles, inspect cryptographic audits, and deploy system disaster recovery protocols.</p>
           </div>
         </div>
 
         {/* Global Security Status Indicator */}
-        <div className="bg-slate-55 flex flex-wrap items-center gap-1.5 p-1 rounded-xl self-start lg:self-auto border border-slate-150">
+        <div className="bg-slate-55 flex flex-wrap items-center gap-1.5 p-1 rounded-xl self-start lg:self-auto border border-slate-200">
           <div className="px-3 py-1.5 flex items-center gap-1.5 text-xs font-black text-slate-700 bg-white rounded-lg shadow-xxs">
             <ShieldCheck className="w-4 h-4 text-emerald-500" />
             <span className="uppercase text-[9.5px]">MFA:</span>
@@ -740,7 +740,7 @@ export default function SecurityAccess({
         <button
           onClick={() => setActiveTab('users')}
           className={`px-4 py-2.5 rounded-xl text-xs font-black transition-all flex items-center gap-2 ${
-            activeTab === 'users' ? 'bg-white text-slate-950 shadow-sm font-extrabold' : 'text-slate-500 hover:text-slate-900'
+            activeTab === 'users' ? 'bg-white text-[#041845] shadow-sm font-extrabold' : 'text-slate-500 hover:text-[#082458]'
           }`}
         >
           <Users className="w-4 h-4" /> User Registry ({users.length})
@@ -748,7 +748,7 @@ export default function SecurityAccess({
         <button
           onClick={() => setActiveTab('roles')}
           className={`px-4 py-2.5 rounded-xl text-xs font-black transition-all flex items-center gap-2 ${
-            activeTab === 'roles' ? 'bg-white text-slate-950 shadow-sm font-extrabold' : 'text-slate-500 hover:text-slate-900'
+            activeTab === 'roles' ? 'bg-white text-[#041845] shadow-sm font-extrabold' : 'text-slate-500 hover:text-[#082458]'
           }`}
         >
           <Key className="w-4 h-4" /> Roles & Permissions
@@ -756,7 +756,7 @@ export default function SecurityAccess({
         <button
           onClick={() => setActiveTab('matrix')}
           className={`px-4 py-2.5 rounded-xl text-xs font-black transition-all flex items-center gap-2 ${
-            activeTab === 'matrix' ? 'bg-white text-slate-950 shadow-sm font-extrabold' : 'text-slate-500 hover:text-slate-900'
+            activeTab === 'matrix' ? 'bg-white text-[#041845] shadow-sm font-extrabold' : 'text-slate-500 hover:text-[#082458]'
           }`}
         >
           <Settings className="w-4 h-4" /> privilege Matrix
@@ -764,7 +764,7 @@ export default function SecurityAccess({
         <button
           onClick={() => setActiveTab('controls')}
           className={`px-4 py-2.5 rounded-xl text-xs font-black transition-all flex items-center gap-2 ${
-            activeTab === 'controls' ? 'bg-white text-slate-950 shadow-sm font-extrabold' : 'text-slate-500 hover:text-slate-900'
+            activeTab === 'controls' ? 'bg-white text-[#041845] shadow-sm font-extrabold' : 'text-slate-500 hover:text-[#082458]'
           }`}
         >
           <Fingerprint className="w-4 h-4" /> Data Security Controls
@@ -772,7 +772,7 @@ export default function SecurityAccess({
         <button
           onClick={() => setActiveTab('audit')}
           className={`px-4 py-2.5 rounded-xl text-xs font-black transition-all flex items-center gap-2 ${
-            activeTab === 'audit' ? 'bg-white text-slate-950 shadow-sm font-extrabold' : 'text-slate-500 hover:text-slate-900'
+            activeTab === 'audit' ? 'bg-white text-[#041845] shadow-sm font-extrabold' : 'text-slate-500 hover:text-[#082458]'
           }`}
         >
           <Terminal className="w-4 h-4" /> Operations Audit Logs ({auditLogs.length})
@@ -780,7 +780,7 @@ export default function SecurityAccess({
         <button
           onClick={() => setActiveTab('backup')}
           className={`px-4 py-2.5 rounded-xl text-xs font-black transition-all flex items-center gap-2 ${
-            activeTab === 'backup' ? 'bg-rose-950 text-amber-400 font-extrabold shadow-sm' : 'text-slate-500 hover:text-slate-900'
+            activeTab === 'backup' ? 'bg-rose-950 text-amber-400 font-extrabold shadow-sm' : 'text-slate-500 hover:text-[#082458]'
           }`}
         >
           <HardDrive className="w-4 h-4 text-amber-500" /> Disaster Recovery
@@ -793,15 +793,15 @@ export default function SecurityAccess({
           <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Operational Space Impersonator Scope</span>
           <p className="text-xs text-slate-600 font-medium">Toggle active credentials to check client UI restrictions across tabs.</p>
         </div>
-        <div className="flex flex-wrap gap-1 bg-white p-1 rounded-xl shadow-xxs border border-slate-150 max-w-full overflow-x-auto">
+        <div className="flex flex-wrap gap-1 bg-white p-1 rounded-xl shadow-xxs border border-slate-200 max-w-full overflow-x-auto">
           {rolesList.map(role => (
             <button
               key={role}
               onClick={() => handleSystemImpersonation(role)}
               className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap ${
                 accessControl.role === role 
-                  ? 'bg-slate-900 text-amber-400 font-black shadow-xs' 
-                  : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
+                  ? 'bg-[#041845] text-amber-400 font-black shadow-xs' 
+                  : 'text-slate-500 hover:bg-slate-50 hover:text-[#082458]'
               }`}
             >
               {role}
@@ -819,21 +819,21 @@ export default function SecurityAccess({
             <div>
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 border-b border-slate-100">
                 <div className="space-y-0.5">
-                  <h3 className="text-sm font-black text-slate-900 uppercase">Enterprise Login Credentials registry</h3>
+                  <h3 className="text-sm font-black text-[#082458] uppercase">Enterprise Login Credentials registry</h3>
                   <p className="text-[11px] text-slate-400 font-medium">Authorized staff permitted terminal system access and localized telemetry metrics.</p>
                 </div>
                 <button
                   onClick={() => setIsNewUserOpen(true)}
-                  className="px-3.5 py-1.5 bg-slate-900 text-white rounded-xl text-xs font-extrabold flex items-center gap-1.5 shadow-sm hover:bg-slate-800 transition"
+                  className="px-3.5 py-1.5 bg-[#041845] text-white rounded-xl text-xs font-extrabold flex items-center gap-1.5 shadow-sm hover:bg-[#082458] transition"
                 >
                   <UserPlus className="w-4 h-4 text-amber-400" /> Create System User
                 </button>
               </div>
 
               {/* Users list table */}
-              <div className="overflow-x-auto rounded-xl border border-slate-150 bg-white mt-4">
+              <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white mt-4">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-slate-50 text-slate-500 font-extrabold uppercase text-[8.5px] border-b border-slate-150">
+                  <thead className="bg-slate-50 text-slate-500 font-extrabold uppercase text-[8.5px] border-b border-slate-200">
                     <tr>
                       <th className="p-3">Reference ID</th>
                       <th className="p-3">Staff Identity</th>
@@ -854,7 +854,7 @@ export default function SecurityAccess({
                       >
                         <td className="p-3 font-mono font-bold text-slate-400 text-[10px]">{u.id}</td>
                         <td className="p-3">
-                          <span className="text-slate-900 font-extrabold block">{maskSensitiveText(u.name)}</span>
+                          <span className="text-[#082458] font-extrabold block">{maskSensitiveText(u.name)}</span>
                           <span className="text-[10px] text-slate-400">Terminal: {u.device}</span>
                         </td>
                         <td className="p-3">
@@ -865,7 +865,7 @@ export default function SecurityAccess({
                         <td className="p-3 font-mono text-slate-500">{maskSensitiveText(u.email)}</td>
                         <td className="p-3">
                           <span className={`inline-block w-2.5 h-2.5 rounded-full ${
-                            u.active ? 'bg-emerald-500 shadow-xxs animate-pulse' : 'bg-slate-350'
+                            u.active ? 'bg-emerald-500 shadow-xxs animate-pulse' : 'bg-slate-300'
                           }`} title={u.active ? 'Session Permitted' : 'Access Restricted'} />
                           <span className="text-[10px] text-slate-500 ml-1.5 font-bold">{u.active ? 'Permitted' : 'Inactive'}</span>
                         </td>
@@ -900,14 +900,14 @@ export default function SecurityAccess({
           </div>
 
           {/* User Profile deep details viewer */}
-          <div className="xl:col-span-4 bg-white p-5 rounded-2xl border border-slate-150 shadow-xxs flex flex-col justify-between">
+          <div className="xl:col-span-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-xxs flex flex-col justify-between">
             {selectedUser ? (
               <div className="space-y-5">
-                <div className="text-center pb-4 border-b border-slate-150 flex flex-col items-center">
-                  <div className="w-16 h-16 bg-slate-900 border-2 border-amber-400 text-white rounded-2xl flex items-center justify-center font-black text-xl mb-3 shadow-md">
+                <div className="text-center pb-4 border-b border-slate-200 flex flex-col items-center">
+                  <div className="w-16 h-16 bg-[#041845] border-2 border-amber-400 text-white rounded-2xl flex items-center justify-center font-black text-xl mb-3 shadow-md">
                     {selectedUser.name.split(' ').map(n=>n[0]).join('')}
                   </div>
-                  <h3 className="font-extrabold text-slate-900 text-sm">{maskedName => maskSensitiveText(selectedUser.name)}</h3>
+                  <h3 className="font-extrabold text-[#082458] text-sm">{maskedName => maskSensitiveText(selectedUser.name)}</h3>
                   <span className="text-[10.5px] font-bold text-slate-400 uppercase tracking-widest">{selectedUser.role}</span>
                   
                   <div className="mt-2 flex gap-1">
@@ -926,17 +926,17 @@ export default function SecurityAccess({
                   
                   <div className="flex justify-between">
                     <span className="text-slate-400 font-bold">Email Coordinate:</span>
-                    <span className="font-mono text-slate-800 font-black">{maskSensitiveText(selectedUser.email)}</span>
+                    <span className="font-mono text-[#082458] font-black">{maskSensitiveText(selectedUser.email)}</span>
                   </div>
 
                   <div className="flex justify-between">
                     <span className="text-slate-400 font-bold">Registered Target Device:</span>
-                    <span className="text-slate-800 font-black">{selectedUser.device}</span>
+                    <span className="text-[#082458] font-black">{selectedUser.device}</span>
                   </div>
 
                   <div className="flex justify-between">
                     <span className="text-slate-400 font-bold">Last Account Access:</span>
-                    <span className="text-slate-800 font-black flex items-center gap-1">
+                    <span className="text-[#082458] font-black flex items-center gap-1">
                       <Clock className="w-3 h-3 text-slate-400" /> {selectedUser.lastLogin}
                     </span>
                   </div>
@@ -944,14 +944,14 @@ export default function SecurityAccess({
                   <div className="flex justify-between">
                     <span className="text-slate-400 font-bold">MFA Lock Enrolled:</span>
                     <span className="font-black flex items-center gap-1.5">
-                      <Fingerprint className={`w-3.5 h-3.5 ${selectedUser.mfaEnrolled ? 'text-emerald-500' : 'text-slate-350'}`} />
+                      <Fingerprint className={`w-3.5 h-3.5 ${selectedUser.mfaEnrolled ? 'text-emerald-500' : 'text-slate-300'}`} />
                       <span className={selectedUser.mfaEnrolled ? 'text-emerald-600' : 'text-slate-400'}>
                         {selectedUser.mfaEnrolled ? 'MFA Configured' : 'No Key Found'}
                       </span>
                     </span>
                   </div>
 
-                  <div className="pt-2 border-t border-slate-150 space-y-1">
+                  <div className="pt-2 border-t border-slate-200 space-y-1">
                     <span className="text-slate-400 font-bold block">Current Security Clearance Token:</span>
                     <div className="bg-slate-100 p-2 rounded text-[10px] font-mono text-slate-500 break-all border border-slate-200">
                       auth_token.sha256.{selectedUser.id.toLowerCase()}.{selectedUser.role.replace(' ', '').toLowerCase()}_clearance
@@ -965,7 +965,7 @@ export default function SecurityAccess({
                   <div className="grid grid-cols-2 gap-2">
                     <button
                       onClick={() => setIsEditProfileOpen(true)}
-                      className="px-3.5 py-2 bg-slate-900 text-white font-extrabold text-xs rounded-xl flex items-center justify-center gap-1 hover:bg-slate-800 shadow-sm transition"
+                      className="px-3.5 py-2 bg-[#041845] text-white font-extrabold text-xs rounded-xl flex items-center justify-center gap-1 hover:bg-[#082458] shadow-sm transition"
                     >
                       <Edit className="w-3.5 h-3.5 text-amber-400" /> Edit User Profile
                     </button>
@@ -993,7 +993,7 @@ export default function SecurityAccess({
       {activeTab === 'roles' && (
         <div className="space-y-6">
           {/* Intelligent Role & Permission Generator Panel */}
-          <div className="bg-gradient-to-br from-slate-900 to-slate-950 text-white p-6 rounded-2xl border border-slate-800 shadow-md relative overflow-hidden">
+          <div className="bg-gradient-to-br from-[#041845] to-[#031338] text-white p-6 rounded-2xl border border-[#1e3a8a]/50 shadow-md relative overflow-hidden">
             <div className="absolute top-0 right-0 p-8 opacity-5 pointer-events-none">
               <Sparkles className="w-32 h-32 text-amber-400" />
             </div>
@@ -1005,7 +1005,7 @@ export default function SecurityAccess({
               <div>
                 <h3 className="text-sm font-black uppercase tracking-wider text-slate-100 flex items-center gap-1.5">
                   Intelligent Role & Permission Generator
-                  <span className="text-[9px] bg-amber-400 text-slate-950 font-extrabold px-1.5 py-0.5 rounded-full uppercase tracking-normal">AI Enabled</span>
+                  <span className="text-[9px] bg-amber-400 text-[#041845] font-extrabold px-1.5 py-0.5 rounded-full uppercase tracking-normal">AI Enabled</span>
                 </h3>
                 <p className="text-[11px] text-slate-400">Generate tailor-fit access roles and map clearance tokens instantly via text instructions or template blueprints.</p>
               </div>
@@ -1022,7 +1022,7 @@ export default function SecurityAccess({
                       placeholder="e.g. Sales Intern"
                       value={generatorRoleName}
                       onChange={(e) => setGeneratorRoleName(e.target.value)}
-                      className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 transition"
+                      className="w-full px-3 py-2 bg-[#082458] border border-[#1e3a8a]/60 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 transition"
                     />
                   </div>
                   <div className="sm:col-span-2 space-y-1">
@@ -1039,7 +1039,7 @@ export default function SecurityAccess({
                           key={p.id}
                           type="button"
                           onClick={() => applyPresetTemplate(p.id)}
-                          className="px-2.5 py-1.5 bg-slate-800 border border-slate-700/60 hover:border-amber-400/60 rounded-lg text-[10.5px] font-bold text-slate-300 transition"
+                          className="px-2.5 py-1.5 bg-[#082458] border border-[#1e3a8a]/60/60 hover:border-amber-400/60 rounded-lg text-[10.5px] font-bold text-slate-300 transition"
                         >
                           {p.label}
                         </button>
@@ -1055,7 +1055,7 @@ export default function SecurityAccess({
                     placeholder="Describe what the employee needs to do. E.g. 'This role is for a call specialist who should be able to log voice calls and complete tasks but is blocked from HR and lead management.'"
                     value={generatorPrompt}
                     onChange={(e) => setGeneratorPrompt(e.target.value)}
-                    className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 transition resize-none leading-relaxed"
+                    className="w-full px-3 py-2 bg-[#082458] border border-[#1e3a8a]/60 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 transition resize-none leading-relaxed"
                   />
                 </div>
 
@@ -1068,7 +1068,7 @@ export default function SecurityAccess({
                       setGeneratorJustification('');
                       setGeneratorError(null);
                     }}
-                    className="px-3 py-1.5 border border-slate-700 text-slate-400 hover:text-white hover:bg-slate-800 text-xs font-bold rounded-lg transition"
+                    className="px-3 py-1.5 border border-[#1e3a8a]/60 text-slate-400 hover:text-white hover:bg-[#082458] text-xs font-bold rounded-lg transition"
                   >
                     Clear Slate
                   </button>
@@ -1076,7 +1076,7 @@ export default function SecurityAccess({
                     type="button"
                     disabled={generatorLoading}
                     onClick={handleGenerateRole}
-                    className="px-4 py-2 bg-amber-400 hover:bg-amber-500 disabled:bg-amber-400/50 text-slate-950 font-extrabold text-xs rounded-xl flex items-center gap-1.5 shadow-md transition"
+                    className="px-4 py-2 bg-amber-400 hover:bg-amber-500 disabled:bg-amber-400/50 text-[#041845] font-extrabold text-xs rounded-xl flex items-center gap-1.5 shadow-md transition"
                   >
                     {generatorLoading ? (
                       <>
@@ -1084,7 +1084,7 @@ export default function SecurityAccess({
                       </>
                     ) : (
                       <>
-                        <Sparkles className="w-3.5 h-3.5 text-slate-950" /> Generate Access Role
+                        <Sparkles className="w-3.5 h-3.5 text-[#041845]" /> Generate Access Role
                       </>
                     )}
                   </button>
@@ -1092,9 +1092,9 @@ export default function SecurityAccess({
               </div>
 
               {/* Right Column: AI Insights & Outputs */}
-              <div className="lg:col-span-5 bg-slate-900/60 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between space-y-4">
+              <div className="lg:col-span-5 bg-[#041845]/60 border border-[#1e3a8a]/50 rounded-2xl p-4 flex flex-col justify-between space-y-4">
                 <div className="space-y-3">
-                  <div className="flex items-center gap-1.5 border-b border-slate-800 pb-2">
+                  <div className="flex items-center gap-1.5 border-b border-[#1e3a8a]/50 pb-2">
                     <Info className="w-3.5 h-3.5 text-amber-400" />
                     <span className="text-[10px] font-black text-slate-300 uppercase tracking-wider">Security Alignment Analysis</span>
                   </div>
@@ -1120,7 +1120,7 @@ export default function SecurityAccess({
                     </div>
                   ) : (
                     <div className="py-6 text-center space-y-2">
-                      <div className="inline-flex p-2.5 bg-slate-800 rounded-full text-slate-500">
+                      <div className="inline-flex p-2.5 bg-[#082458] rounded-full text-slate-500">
                         <Key className="w-4.5 h-4.5" />
                       </div>
                       <p className="text-[11px] text-slate-400 max-w-[240px] mx-auto leading-relaxed">
@@ -1130,7 +1130,7 @@ export default function SecurityAccess({
                   )}
                 </div>
 
-                <div className="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800/80 text-[10px] text-slate-400 leading-normal flex gap-1.5 items-start">
+                <div className="bg-[#031338]/80 p-2.5 rounded-xl border border-[#1e3a8a]/50/80 text-[10px] text-slate-400 leading-normal flex gap-1.5 items-start">
                   <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
                   <span>
                     Clearance mappings adhere to the <b>Principle of Least Privilege (PoLP)</b>. Security matrix adjustments are written to the live audit log.
@@ -1141,17 +1141,17 @@ export default function SecurityAccess({
           </div>
 
           <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-xxs">
-            <h3 className="text-sm font-black text-slate-900 uppercase">Enterprise Permission Mapping Matrix</h3>
+            <h3 className="text-sm font-black text-[#082458] uppercase">Enterprise Permission Mapping Matrix</h3>
             <p className="text-xs text-slate-400 mt-0.5">Customize default permission access tokens on a per-role basis. Toggling options here immediately updates that role's template configurations globally.</p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-5">
               {rolesList.map(role => (
                 <div key={role} className="bg-slate-50 border border-slate-200/75 rounded-2xl p-4 space-y-3 shadow-xxs flex flex-col justify-between">
                   <div>
-                    <div className="flex items-center justify-between border-b border-slate-150 pb-2 mb-3">
+                    <div className="flex items-center justify-between border-b border-slate-200 pb-2 mb-3">
                       <div className="flex items-center gap-1.5">
                         <Key className="w-4 h-4 text-amber-500" />
-                        <span className="text-xs font-black text-slate-900 uppercase tracking-wider truncate max-w-[120px]">{role}</span>
+                        <span className="text-xs font-black text-[#082458] uppercase tracking-wider truncate max-w-[120px]">{role}</span>
                         {!['Super Admin', 'Admin', 'Sales Manager', 'Support Agent', 'HR Specialist', 'Guest'].includes(role) && (
                           <button
                             onClick={() => handleDeleteCustomRole(role)}
@@ -1190,7 +1190,7 @@ export default function SecurityAccess({
                             checked={roleMappings[role] ? roleMappings[role][p.key] : false}
                             onChange={() => handleRolePermissionToggle(role, p.key)}
                             disabled={role === 'Super Admin' && p.key === 'manageSecurity'} // absolute override protection
-                            className="w-4.5 h-4.5 rounded border-slate-300 text-slate-900 focus:ring-slate-900"
+                            className="w-4.5 h-4.5 rounded border-slate-300 text-[#082458] focus:ring-[#0b74f0]"
                           />
                         </label>
                       ))}
@@ -1213,7 +1213,7 @@ export default function SecurityAccess({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
           
           {/* Matrix Description left */}
-          <div className="lg:col-span-4 bg-[#0a0f1d] text-slate-100 p-6 rounded-2xl border border-slate-800 shadow-xl flex flex-col justify-between">
+          <div className="lg:col-span-4 bg-[#0a0f1d] text-slate-100 p-6 rounded-2xl border border-[#1e3a8a]/50 shadow-xl flex flex-col justify-between">
             <div>
               <span className="text-[9px] font-mono font-bold text-slate-500 block uppercase mb-1">State Cryptography Desk</span>
               <h3 className="text-sm font-extrabold text-slate-200">Role-Based System Security</h3>
@@ -1221,20 +1221,20 @@ export default function SecurityAccess({
                 Expert CRM implements zero-trust cryptographic role bindings. Selecting an impersonator role filters client-side buttons, metrics views, and sidebar panels instantly. Adjust the matrix on the right to dynamically toggle local privilege configurations.
               </p>
 
-              <div className="mt-6 space-y-3.5 bg-slate-900/50 p-4 rounded-xl border border-slate-850/60 text-xs">
-                <span className="font-extrabold uppercase text-[9px] text-indigo-400 tracking-wider block">Access Stats</span>
-                <div className="flex justify-between text-[11px] text-slate-350">
+              <div className="mt-6 space-y-3.5 bg-[#041845]/50 p-4 rounded-xl border border-[#1e3a8a]/50/60 text-xs">
+                <span className="font-extrabold uppercase text-[9px] text-[#16c2ff] tracking-wider block">Access Stats</span>
+                <div className="flex justify-between text-[11px] text-slate-300">
                   <span>Currently Active Role:</span>
                   <span className="text-amber-400 font-mono font-bold uppercase">{accessControl.role}</span>
                 </div>
-                <div className="flex justify-between text-[11px] text-slate-350">
+                <div className="flex justify-between text-[11px] text-slate-300">
                   <span>Active Tokens Enabled:</span>
-                  <span className="font-mono font-bold text-indigo-300">{Object.values(accessControl.permissions).filter(Boolean).length} / 9</span>
+                  <span className="font-mono font-bold text-[#16c2ff]">{Object.values(accessControl.permissions).filter(Boolean).length} / 9</span>
                 </div>
               </div>
             </div>
 
-            <div className="bg-slate-900/60 p-3 rounded-lg border border-slate-800 text-[10px] text-slate-500 mt-6 space-y-1">
+            <div className="bg-[#041845]/60 p-3 rounded-lg border border-[#1e3a8a]/50 text-[10px] text-slate-500 mt-6 space-y-1">
               <span className="font-bold text-slate-400 block">Active Workspace Hash:</span>
               <p className="font-mono break-all text-xxs">0x5F19DCEE2B38A8F9</p>
             </div>
@@ -1261,11 +1261,11 @@ export default function SecurityAccess({
                   className={`p-3.5 rounded-xl border flex items-center justify-between transition ${
                     accessControl.permissions[p.key as keyof AccessControl['permissions']]
                       ? 'bg-emerald-50/20 border-emerald-150'
-                      : 'bg-slate-50 border-slate-150 opacity-60'
+                      : 'bg-slate-50 border-slate-200 opacity-60'
                   }`}
                 >
                   <div className="space-y-0.5">
-                    <span className="text-xs font-bold text-slate-800 block">{p.label}</span>
+                    <span className="text-xs font-bold text-[#082458] block">{p.label}</span>
                     <span className="text-[10px] text-slate-400 font-medium">Token ID: privilege.{p.key}</span>
                   </div>
 
@@ -1302,7 +1302,7 @@ export default function SecurityAccess({
               {/* Sensitive Data Masking Policy */}
               <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-4">
                 <div className="space-y-0.5">
-                  <span className="text-xs font-black text-slate-800 block">Field Masking Policy</span>
+                  <span className="text-xs font-black text-[#082458] block">Field Masking Policy</span>
                   <p className="text-[10.5px] text-slate-400 font-semibold">Mask employee emails/roles in UI for non-authorized personnel.</p>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer shrink-0">
@@ -1312,14 +1312,14 @@ export default function SecurityAccess({
                     checked={dataMaskingEnforced}
                     onChange={handleToggleDataMasking}
                   />
-                  <div className="w-10 h-6 bg-slate-205 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-slate-900"></div>
+                  <div className="w-10 h-6 bg-slate-205 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#041845]"></div>
                 </label>
               </div>
 
               {/* Multi Factor Authentication switch */}
               <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-4">
                 <div className="space-y-0.5">
-                  <span className="text-xs font-black text-slate-800 block">Global MFA Enforcement</span>
+                  <span className="text-xs font-black text-[#082458] block">Global MFA Enforcement</span>
                   <p className="text-[10.5px] text-slate-400 font-semibold">Require certified cryptographic token challenges across active sessions.</p>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer shrink-0">
@@ -1329,7 +1329,7 @@ export default function SecurityAccess({
                     checked={globalMfaEnforced}
                     onChange={handleToggleGlobalMfa}
                   />
-                  <div className="w-10 h-6 bg-slate-205 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-slate-900"></div>
+                  <div className="w-10 h-6 bg-slate-205 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#041845]"></div>
                 </label>
               </div>
             </div>
@@ -1342,7 +1342,7 @@ export default function SecurityAccess({
 
           {/* IP Whitelisting Rules Section */}
           <div className="lg:col-span-8 bg-white p-5 rounded-2xl border border-slate-100 shadow-xxs space-y-4">
-            <h3 className="text-sm font-black text-slate-900 uppercase">IP Whitelist Subnet Access Constraints</h3>
+            <h3 className="text-sm font-black text-[#082458] uppercase">IP Whitelist Subnet Access Constraints</h3>
             <p className="text-xs text-slate-400 mt-0.5">Define authorized corporate IP address thresholds from which the CRM portal may be safely accessed. Unlisted network endpoints are auto-routed to security portals.</p>
 
             <form onSubmit={handleRegisterIp} className="flex gap-2 text-xs mt-3">
@@ -1355,14 +1355,14 @@ export default function SecurityAccess({
               />
               <button 
                 type="submit"
-                className="px-4 py-2.5 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 flex items-center gap-1.5 shrink-0"
+                className="px-4 py-2.5 bg-[#041845] text-white rounded-xl font-bold hover:bg-[#082458] flex items-center gap-1.5 shrink-0"
               >
                 <Plus className="w-3.5 h-3.5" /> Append IP Gateway
               </button>
             </form>
 
-            <div className="border border-slate-150 rounded-xl overflow-hidden mt-4 bg-white text-xs">
-              <div className="bg-slate-50 p-3 font-extrabold text-[9px] uppercase tracking-wider text-slate-400 border-b border-slate-150">
+            <div className="border border-slate-200 rounded-xl overflow-hidden mt-4 bg-white text-xs">
+              <div className="bg-slate-50 p-3 font-extrabold text-[9px] uppercase tracking-wider text-slate-400 border-b border-slate-200">
                 ACTIVE GATEWAY SUB-NET RULES ({ipWhitelist.length})
               </div>
               
@@ -1371,9 +1371,9 @@ export default function SecurityAccess({
                   <div key={ip} className="p-3 flex items-center justify-between hover:bg-slate-50 transition">
                     <div className="flex items-center gap-2">
                       <Globe className="w-4 h-4 text-emerald-500" />
-                      <span className="font-mono text-slate-800 font-bold">{ip}</span>
+                      <span className="font-mono text-[#082458] font-bold">{ip}</span>
                       {ip === '127.0.0.1' && (
-                        <span className="px-1.5 py-0.2 bg-indigo-50 border border-indigo-150 text-[8px] text-indigo-600 rounded uppercase font-black tracking-widest">
+                        <span className="px-1.5 py-0.2 bg-[#eef4fb] border border-[#0b74f0]/25 text-[8px] text-[#0b74f0] rounded uppercase font-black tracking-widest">
                           Localhost
                         </span>
                       )}
@@ -1398,7 +1398,7 @@ export default function SecurityAccess({
         <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-xxs space-y-4">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-100 pb-4">
             <div className="space-y-0.5">
-              <h3 className="text-sm font-black text-slate-900 uppercase">Operational Cryptographic Audit trail</h3>
+              <h3 className="text-sm font-black text-[#082458] uppercase">Operational Cryptographic Audit trail</h3>
               <p className="text-xs text-slate-400 font-medium">Verified historical log records tracking user actions, security switches, base state restoration events, and login attempts.</p>
             </div>
             
@@ -1439,7 +1439,7 @@ export default function SecurityAccess({
                   key={tab}
                   onClick={() => setAuditFilter(tab)}
                   className={`px-2.5 py-1 rounded text-[10px] text-slate-600 transition capitalize ${
-                    auditFilter === tab ? 'bg-white text-slate-900 shadow-xxs font-black' : 'hover:text-slate-900'
+                    auditFilter === tab ? 'bg-white text-[#082458] shadow-xxs font-black' : 'hover:text-[#082458]'
                   }`}
                 >
                   {tab === 'all' ? 'All Logs' : tab}
@@ -1449,9 +1449,9 @@ export default function SecurityAccess({
           </div>
 
           {/* Table log displays */}
-          <div className="overflow-x-auto rounded-xl border border-slate-150 bg-white">
+          <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 text-slate-500 font-extrabold uppercase text-[8.5px] border-b border-slate-150">
+              <thead className="bg-slate-50 text-slate-500 font-extrabold uppercase text-[8.5px] border-b border-slate-200">
                 <tr>
                   <th className="p-3">Audit Reference ID</th>
                   <th className="p-3">Threat Severity</th>
@@ -1473,13 +1473,13 @@ export default function SecurityAccess({
                       <td className="p-3">
                         <span className={`inline-block px-2 py-0.5 rounded text-[8.5px] font-black uppercase border tracking-wider ${
                           log.severity === 'critical' ? 'bg-rose-50 text-rose-600 border-rose-200 animate-pulse' :
-                          log.severity === 'security' ? 'bg-indigo-50 text-indigo-600 border-indigo-200 font-extrabold' :
+                          log.severity === 'security' ? 'bg-[#eef4fb] text-[#0b74f0] border-[#0b74f0]/25 font-extrabold' :
                           log.severity === 'warning' ? 'bg-amber-50 text-amber-600 border-amber-200' : 'bg-slate-100 text-slate-500 border-slate-200'
                         }`}>
                           {log.severity}
                         </span>
                       </td>
-                      <td className="p-3 text-slate-800 font-bold">{log.action}</td>
+                      <td className="p-3 text-[#082458] font-bold">{log.action}</td>
                       <td className="p-3 font-mono text-slate-500">{maskSensitiveText(log.user)}</td>
                       <td className="p-3 font-mono text-slate-400">{log.ipAddress}</td>
                       <td className="p-3 text-right text-slate-400 font-mono text-xxs">{log.timestamp}</td>
@@ -1500,12 +1500,12 @@ export default function SecurityAccess({
           <div className="lg:col-span-5 bg-white p-5 rounded-2xl border border-slate-100 shadow-xxs flex flex-col justify-between">
             <div className="space-y-4">
               <div className="flex items-center gap-2">
-                <div className="p-2 bg-indigo-50 text-indigo-600 rounded-xl border border-indigo-150">
+                <div className="p-2 bg-[#eef4fb] text-[#0b74f0] rounded-xl border border-[#0b74f0]/25">
                   <Download className="w-5 h-5 shrink-0" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-black text-slate-900 uppercase">Export CRM Database Vault</h3>
-                  <span className="text-[10px] text-slate-450 block font-bold uppercase tracking-widest text-indigo-500">Security Clearance Required</span>
+                  <h3 className="text-sm font-black text-[#082458] uppercase">Export CRM Database Vault</h3>
+                  <span className="text-[10px] text-slate-450 block font-bold uppercase tracking-widest text-[#0b74f0]">Security Clearance Required</span>
                 </div>
               </div>
 
@@ -1529,7 +1529,7 @@ export default function SecurityAccess({
             <div className="space-y-3.5 pt-6 border-t border-slate-100">
               <button
                 onClick={handleExportSystemBackup}
-                className="w-full py-3 bg-slate-900 text-white rounded-xl font-extrabold text-xs flex items-center justify-center gap-2"
+                className="w-full py-3 bg-[#041845] text-white rounded-xl font-extrabold text-xs flex items-center justify-center gap-2"
               >
                 <FileJson className="w-4 h-4 text-amber-400 animate-pulse" /> Download State Backup (.json)
               </button>
@@ -1551,7 +1551,7 @@ export default function SecurityAccess({
                 <Upload className="w-5 h-5 shrink-0 hover:rotate-180 transition duration-300" />
               </div>
               <div>
-                <h3 className="text-sm font-black text-slate-900 uppercase">State Recovery Block Uploader</h3>
+                <h3 className="text-sm font-black text-[#082458] uppercase">State Recovery Block Uploader</h3>
                 <p className="text-[10px] text-slate-400 font-semibold">Overwrites contemporary leads, employees, and ticket variables instantly.</p>
               </div>
             </div>
@@ -1565,7 +1565,7 @@ export default function SecurityAccess({
                 className="absolute inset-0 opacity-0 cursor-pointer"
               />
               <FileJson className="w-8 h-8 text-slate-400 mx-auto mb-2" />
-              <span className="text-xs font-bold text-slate-800 block">Drag your JSON backup block here or <span className="text-indigo-600 underline">Browse files</span></span>
+              <span className="text-xs font-bold text-[#082458] block">Drag your JSON backup block here or <span className="text-[#0b74f0] underline">Browse files</span></span>
               <span className="text-[10px] text-slate-400 font-bold block mt-1">Accepts only verified ExpertCRM JSON schemas</span>
             </div>
 
@@ -1601,11 +1601,11 @@ export default function SecurityAccess({
                   Backup Generated: <strong>{restoreSummary.metadata?.timestamp || "unspecified"}</strong>
                 </p>
 
-                <div className="grid grid-cols-2 gap-x-6 gap-y-1 mt-2 text-[11px] font-bold text-slate-650">
+                <div className="grid grid-cols-2 gap-x-6 gap-y-1 mt-2 text-[11px] font-bold text-slate-600">
                   {Object.keys(restoreSummary.counts).map(key => (
                     <div key={key} className="flex justify-between border-b border-white p-1">
                       <span className="font-mono text-slate-505">{key}</span>
-                      <span className="font-mono text-slate-900 font-extrabold">{restoreSummary.counts[key]} rows</span>
+                      <span className="font-mono text-[#082458] font-extrabold">{restoreSummary.counts[key]} rows</span>
                     </div>
                   ))}
                 </div>
@@ -1627,9 +1627,9 @@ export default function SecurityAccess({
 
       {/* ===================== MODAL: REGISTER NEW USER ===================== */}
       {isNewUserOpen && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50">
+        <div className="fixed inset-0 bg-[#041845]/60 backdrop-blur-xs flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-md w-full overflow-hidden text-xs">
-            <div className="bg-slate-900 text-white p-4 flex justify-between items-center">
+            <div className="bg-[#041845] text-white p-4 flex justify-between items-center">
               <h3 className="font-extrabold text-sm flex items-center gap-1">
                 <UserPlus className="w-4 h-4 text-amber-400" /> Create System Credentials
               </h3>
@@ -1698,9 +1698,9 @@ export default function SecurityAccess({
                   id="mfaCheckbox"
                   checked={newUserForm.mfaEnrolled}
                   onChange={(e) => setNewUserForm(prev=>({ ...prev, mfaEnrolled: e.target.checked }))}
-                  className="w-4 h-4 rounded text-slate-900 border-slate-300 focus:ring-slate-900"
+                  className="w-4 h-4 rounded text-[#082458] border-slate-300 focus:ring-[#0b74f0]"
                 />
-                <label htmlFor="mfaCheckbox" className="text-[11px] text-slate-650 cursor-pointer text-slate-500 font-semibold select-none">
+                <label htmlFor="mfaCheckbox" className="text-[11px] text-slate-600 cursor-pointer text-slate-500 font-semibold select-none">
                   Pre-register MFA Cryptographic Security Key
                 </label>
               </div>
@@ -1715,7 +1715,7 @@ export default function SecurityAccess({
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-slate-900 text-white rounded-xl hover:bg-slate-800 font-extrabold shadow-sm flex items-center gap-1"
+                  className="px-4 py-2 bg-[#041845] text-white rounded-xl hover:bg-[#082458] font-extrabold shadow-sm flex items-center gap-1"
                 >
                   <Check className="w-3.5 h-3.5" /> Save Credentials
                 </button>
@@ -1727,9 +1727,9 @@ export default function SecurityAccess({
 
       {/* ===================== MODAL: EDIT USER PROFILE ===================== */}
       {isEditProfileOpen && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50">
+        <div className="fixed inset-0 bg-[#041845]/60 backdrop-blur-xs flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-md w-full overflow-hidden text-xs">
-            <div className="bg-slate-900 text-white p-4 flex justify-between items-center">
+            <div className="bg-[#041845] text-white p-4 flex justify-between items-center">
               <h3 className="font-extrabold text-sm flex items-center gap-1">
                 <Edit className="w-4 h-4 text-amber-400" /> Edit User Profile Credentials
               </h3>
@@ -1797,7 +1797,7 @@ export default function SecurityAccess({
                     id="editActiveCh"
                     checked={editProfileForm.active}
                     onChange={(e) => setEditProfileForm(prev=>({ ...prev, active: e.target.checked }))}
-                    className="w-4 h-4 rounded text-slate-900 border-slate-300 focus:ring-slate-900"
+                    className="w-4 h-4 rounded text-[#082458] border-slate-300 focus:ring-[#0b74f0]"
                   />
                   <label htmlFor="editActiveCh" className="text-[11px] text-slate-500 font-semibold select-none">
                     Status: Permitted
@@ -1810,7 +1810,7 @@ export default function SecurityAccess({
                     id="editMfaCh"
                     checked={editProfileForm.mfaEnrolled}
                     onChange={(e) => setEditProfileForm(prev=>({ ...prev, mfaEnrolled: e.target.checked }))}
-                    className="w-4 h-4 rounded text-slate-900 border-slate-300 focus:ring-slate-900"
+                    className="w-4 h-4 rounded text-[#082458] border-slate-300 focus:ring-[#0b74f0]"
                   />
                   <label htmlFor="editMfaCh" className="text-[11px] text-slate-500 font-semibold select-none">
                     Enforced MFA key
@@ -1828,7 +1828,7 @@ export default function SecurityAccess({
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-slate-900 text-white rounded-xl hover:bg-slate-800 font-extrabold shadow-sm flex items-center gap-1"
+                  className="px-4 py-2 bg-[#041845] text-white rounded-xl hover:bg-[#082458] font-extrabold shadow-sm flex items-center gap-1"
                 >
                   <CheckCircle2 className="w-3.5 h-3.5" /> Save Changes
                 </button>
@@ -1840,8 +1840,8 @@ export default function SecurityAccess({
 
       {/* ===================== CONFIRM RESTORE WATERFALL ===================== */}
       {isRestoreConfirmOpen && (
-        <div className="fixed inset-0 bg-slate-900/70 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-sm w-full overflow-hidden text-xs text-slate-750">
+        <div className="fixed inset-0 bg-[#041845]/70 backdrop-blur-xs flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-sm w-full overflow-hidden text-xs text-slate-700">
             <div className="bg-rose-900 text-white p-4 flex justify-between items-center">
               <h3 className="font-extrabold text-xs flex items-center gap-1">
                 <AlertTriangle className="w-5 h-5 text-amber-400 animate-bounce" /> Hard system-State Recovery Alert
@@ -1868,7 +1868,7 @@ export default function SecurityAccess({
                 <button
                   type="button"
                   onClick={() => setIsRestoreConfirmOpen(false)}
-                  className="px-3.5 py-1.5 border border-slate-205 bg-white rounded-xl text-slate-750 font-bold"
+                  className="px-3.5 py-1.5 border border-slate-205 bg-white rounded-xl text-slate-700 font-bold"
                 >
                   Abort Action
                 </button>

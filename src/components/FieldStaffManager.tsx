@@ -399,11 +399,11 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
   });
 
   return (
-    <div id="field-staff-operations-hub" className="space-y-4 font-sans text-slate-800">
+    <div id="field-staff-operations-hub" className="space-y-4 font-sans text-[#082458]">
       
       {/* Toast Alert Popups */}
       {toastMessage && (
-        <div className="fixed bottom-4 right-4 bg-slate-900 text-white px-4 py-3 rounded-xl border border-slate-700 shadow-2xl flex items-center gap-2 z-50 animate-bounce duration-300">
+        <div className="fixed bottom-4 right-4 bg-[#041845] text-white px-4 py-3 rounded-xl border border-[#1e3a8a]/60 shadow-2xl flex items-center gap-2 z-50 animate-bounce duration-300">
           <Sparkles className="w-5 h-5 text-emerald-400" />
           <span className="text-xs font-semibold">{toastMessage}</span>
         </div>
@@ -417,7 +417,7 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="text-base font-black text-slate-900 tracking-tight">Field & Handset Staff Operations Center</h2>
+              <h2 className="text-base font-black text-[#082458] tracking-tight">Field & Handset Staff Operations Center</h2>
               <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[9px] font-black uppercase px-2 py-0.5 rounded-full">
                 SLA GPS Terminal
               </span>
@@ -431,7 +431,7 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
           <button
             onClick={() => setActivePanel('performance')}
             className={`px-3 py-1.5 rounded-md text-xs font-bold transition flex items-center gap-1.5 uppercase ${
-              activePanel === 'performance' ? 'bg-white text-slate-900 shadow-xxs border border-slate-200/50' : 'text-slate-500 hover:text-slate-800'
+              activePanel === 'performance' ? 'bg-white text-[#082458] shadow-xxs border border-slate-200/50' : 'text-slate-500 hover:text-[#082458]'
             }`}
           >
             <BarChart2 className="w-4 h-4 text-emerald-500" /> Performance & Reports
@@ -440,16 +440,16 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
           <button
             onClick={() => setActivePanel('gps')}
             className={`px-3 py-1.5 rounded-md text-xs font-bold transition flex items-center gap-1.5 uppercase ${
-              activePanel === 'gps' ? 'bg-white text-slate-900 shadow-xxs border border-slate-200/50' : 'text-slate-500 hover:text-slate-800'
+              activePanel === 'gps' ? 'bg-white text-[#082458] shadow-xxs border border-slate-200/50' : 'text-slate-500 hover:text-[#082458]'
             }`}
           >
-            <Crosshair className="w-4 h-4 text-indigo-500" /> Live GPS Tracking ({fieldStaff.filter(s => s.status !== 'Offline').length})
+            <Crosshair className="w-4 h-4 text-[#0b74f0]" /> Live GPS Tracking ({fieldStaff.filter(s => s.status !== 'Offline').length})
           </button>
 
           <button
             onClick={() => setActivePanel('attendance')}
             className={`px-3 py-1.5 rounded-md text-xs font-bold transition flex items-center gap-1.5 uppercase ${
-              activePanel === 'attendance' ? 'bg-white text-slate-900 shadow-xxs border border-slate-200/50' : 'text-slate-500 hover:text-slate-800'
+              activePanel === 'attendance' ? 'bg-white text-[#082458] shadow-xxs border border-slate-200/50' : 'text-slate-500 hover:text-[#082458]'
             }`}
           >
             <MapPinCheck className="w-4 h-4 text-amber-500" /> Check-In & Attendance
@@ -458,7 +458,7 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
           <button
             onClick={() => setActivePanel('visits')}
             className={`px-3 py-1.5 rounded-md text-xs font-bold transition flex items-center gap-1.5 uppercase ${
-              activePanel === 'visits' ? 'bg-white text-slate-900 shadow-xxs border border-slate-200/50' : 'text-slate-500 hover:text-slate-800'
+              activePanel === 'visits' ? 'bg-white text-[#082458] shadow-xxs border border-slate-200/50' : 'text-slate-500 hover:text-[#082458]'
             }`}
           >
             <ClipboardList className="w-4 h-4 text-sky-500" /> Visit Schedules & Insights
@@ -467,7 +467,7 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
           <button
             onClick={() => setActivePanel('operations')}
             className={`px-3 py-1.5 rounded-md text-xs font-bold transition flex items-center gap-1.5 uppercase ${
-              activePanel === 'operations' ? 'bg-white text-slate-900 shadow-xxs border border-slate-200/50' : 'text-slate-500 hover:text-slate-800'
+              activePanel === 'operations' ? 'bg-white text-[#082458] shadow-xxs border border-slate-200/50' : 'text-slate-500 hover:text-[#082458]'
             }`}
           >
             <Activity className="w-4 h-4 text-rose-500" /> Operations Command
@@ -480,11 +480,11 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
         <div className="space-y-4">
           
           {/* Inner performance panel navigation subtab */}
-          <div className="flex border-b border-slate-150">
+          <div className="flex border-b border-slate-200">
             <button 
               onClick={() => setReportSubTab('kpi_dashboard')}
               className={`pb-2 px-4 text-xs font-extrabold tracking-tight border-b-2 uppercase transition ${
-                reportSubTab === 'kpi_dashboard' ? 'border-emerald-500 text-slate-900' : 'border-transparent text-slate-400 hover:text-slate-600'
+                reportSubTab === 'kpi_dashboard' ? 'border-emerald-500 text-[#082458]' : 'border-transparent text-slate-400 hover:text-slate-600'
               }`}
             >
               📊 Performance Dashboard
@@ -492,7 +492,7 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
             <button 
               onClick={() => setReportSubTab('sales_reports')}
               className={`pb-2 px-4 text-xs font-extrabold tracking-tight border-b-2 uppercase transition ${
-                reportSubTab === 'sales_reports' ? 'border-amber-500 text-slate-900' : 'border-transparent text-slate-400 hover:text-slate-600'
+                reportSubTab === 'sales_reports' ? 'border-amber-500 text-[#082458]' : 'border-transparent text-slate-400 hover:text-slate-600'
               }`}
             >
               💰 Ground Sales Reports
@@ -500,7 +500,7 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
             <button 
               onClick={() => setReportSubTab('lead_conversion')}
               className={`pb-2 px-4 text-xs font-extrabold tracking-tight border-b-2 uppercase transition ${
-                reportSubTab === 'lead_conversion' ? 'border-indigo-500 text-slate-900' : 'border-transparent text-slate-400 hover:text-slate-600'
+                reportSubTab === 'lead_conversion' ? 'border-[#0b74f0] text-[#082458]' : 'border-transparent text-slate-400 hover:text-slate-600'
               }`}
             >
               📈 Lead Conversion Reports
@@ -508,7 +508,7 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
             <button 
               onClick={() => setReportSubTab('activity_reports')}
               className={`pb-2 px-4 text-xs font-extrabold tracking-tight border-b-2 uppercase transition ${
-                reportSubTab === 'activity_reports' ? 'border-rose-500 text-slate-900' : 'border-transparent text-slate-400 hover:text-slate-600'
+                reportSubTab === 'activity_reports' ? 'border-rose-500 text-[#082458]' : 'border-transparent text-slate-400 hover:text-slate-600'
               }`}
             >
               📝 Field Activity Reports
@@ -524,7 +524,7 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
                 <div className="bg-white p-3.5 rounded-xl border border-slate-200">
                   <span className="text-[10px] uppercase font-black tracking-wider text-slate-400 block mb-1">Efficacy Index Score</span>
                   <div className="flex items-baseline gap-2">
-                    <span className="text-xl font-black text-slate-900">94.2%</span>
+                    <span className="text-xl font-black text-[#082458]">94.2%</span>
                     <span className="text-[9px] text-emerald-600 font-bold flex items-center">▲ 1.4% MoM</span>
                   </div>
                   <div className="w-full bg-slate-100 h-1 rounded-full mt-2 overflow-hidden">
@@ -535,8 +535,8 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
                 <div className="bg-white p-3.5 rounded-xl border border-slate-200">
                   <span className="text-[10px] uppercase font-black tracking-wider text-slate-400 block mb-1">Active Headcount Status</span>
                   <div className="flex items-baseline gap-2">
-                    <span className="text-xl font-black text-slate-900">{fieldStaff.length} Reps</span>
-                    <span className="text-[9px] text-indigo-600 font-bold">{fieldStaff.filter(s=>s.status !== 'Offline').length} Live</span>
+                    <span className="text-xl font-black text-[#082458]">{fieldStaff.length} Reps</span>
+                    <span className="text-[9px] text-[#0b74f0] font-bold">{fieldStaff.filter(s=>s.status !== 'Offline').length} Live</span>
                   </div>
                   <span className="text-[9px] text-slate-400 block mt-2">100% Mobile telemetry signal sync</span>
                 </div>
@@ -544,7 +544,7 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
                 <div className="bg-white p-3.5 rounded-xl border border-slate-200">
                   <span className="text-[10px] uppercase font-black tracking-wider text-slate-400 block mb-1">SLA Visit Compliance</span>
                   <div className="flex items-baseline gap-2">
-                    <span className="text-xl font-black text-slate-900">{completionRate}%</span>
+                    <span className="text-xl font-black text-[#082458]">{completionRate}%</span>
                     <span className="text-[9px] text-emerald-600 font-bold">{completedCount} / {totalVisits} Completed</span>
                   </div>
                   <div className="w-full bg-slate-100 h-1 rounded-full mt-2 overflow-hidden">
@@ -568,7 +568,7 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
                 {/* Custom Responsive SVG Chart: Scheduled vs Completed Visits */}
                 <div className="lg:col-span-7 bg-white p-4 rounded-xl border border-slate-205 space-y-4">
                   <div>
-                    <h4 className="text-xs font-bold text-slate-900 uppercase">Ground Visit Completion Analysis</h4>
+                    <h4 className="text-xs font-bold text-[#082458] uppercase">Ground Visit Completion Analysis</h4>
                     <p className="text-[10px] text-slate-400">Total planned visits vs verified completed service orders per individual staff representative</p>
                   </div>
 
@@ -611,7 +611,7 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
                     <div className="flex gap-4 justify-center items-center text-[10px] text-slate-500 pt-3">
                       <span className="flex items-center gap-1.5"><span className="w-3 h-3 bg-slate-200 rounded"></span> Total Assigned Target</span>
                       <span className="flex items-center gap-1.5"><span className="w-3 h-3 bg-emerald-500 rounded"></span> Verified Completed Visits</span>
-                      <span className="flex items-center gap-1.5"><span className="w-3 h-3 bg-indigo-500 rounded"></span> Enterprise Closed SLA</span>
+                      <span className="flex items-center gap-1.5"><span className="w-3 h-3 bg-[#0b74f0] rounded"></span> Enterprise Closed SLA</span>
                     </div>
                   </div>
                 </div>
@@ -619,7 +619,7 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
                 {/* Team Representative Efficacy Leaderboard */}
                 <div className="lg:col-span-5 bg-white p-4 rounded-xl border border-slate-205 space-y-3">
                   <div>
-                    <h4 className="text-xs font-bold text-slate-900 uppercase">Field Agent Efficacy Leaderboard</h4>
+                    <h4 className="text-xs font-bold text-[#082458] uppercase">Field Agent Efficacy Leaderboard</h4>
                     <p className="text-[10px] text-slate-400">Scorecard indexed by SLA on-route accuracy, on-time visits, customer rating</p>
                   </div>
 
@@ -633,13 +633,13 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
                             <span className="text-[10px] font-black text-slate-400 w-4">#{idx+1}</span>
                             <img src={r.avatar} className="w-8 h-8 rounded-full border border-slate-200" referrerPolicy="no-referrer" />
                             <div className="truncate">
-                              <span className="font-extrabold text-slate-800 text-xs block">{r.name}</span>
+                              <span className="font-extrabold text-[#082458] text-xs block">{r.name}</span>
                               <span className="text-[9px] text-slate-400 block font-mono">{r.id} • SLA Tier 1</span>
                             </div>
                           </div>
 
                           <div className="text-right shrink-0">
-                            <span className="text-xs font-black text-slate-900 block">{(96 - idx * 5.2).toFixed(1)}% Score</span>
+                            <span className="text-xs font-black text-[#082458] block">{(96 - idx * 5.2).toFixed(1)}% Score</span>
                             <div className="flex items-center justify-end gap-1 text-[9px] text-amber-500 font-bold mt-0.5">
                               <Star className="w-3 h-3 fill-amber-500" />
                               {ratingAvg} ({taskComps} Verified)
@@ -660,7 +660,7 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
               
               <div className="bg-white p-4 rounded-xl border border-slate-205 flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
                 <div>
-                  <h4 className="text-xs font-bold text-slate-900 uppercase">Ground Sales Contract Logging</h4>
+                  <h4 className="text-xs font-bold text-[#082458] uppercase">Ground Sales Contract Logging</h4>
                   <p className="text-[10.5px] text-slate-400">Track and trace sales revenue generation closed physically by agents in the field</p>
                 </div>
                 <button
@@ -688,20 +688,20 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
                   <tbody className="divide-y divide-slate-100 font-medium">
                     {visits.map((vis) => (
                       <tr key={vis.id} className="hover:bg-slate-50/50">
-                        <td className="px-4 py-3 font-mono text-slate-900 font-bold">{vis.id}</td>
+                        <td className="px-4 py-3 font-mono text-[#082458] font-bold">{vis.id}</td>
                         <td className="px-4 py-3 flex items-center gap-2">
                           <div className="w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center font-bold text-[9px]">
                             {vis.assignedStaffName.slice(0, 2).toUpperCase()}
                           </div>
                           <span>{vis.assignedStaffName}</span>
                         </td>
-                        <td className="px-4 py-3 font-bold text-slate-800">{vis.companyName}</td>
+                        <td className="px-4 py-3 font-bold text-[#082458]">{vis.companyName}</td>
                         <td className="px-4 py-3 text-emerald-600 font-bold">
                           {vis.salesAmtClosed ? `₹${vis.salesAmtClosed.toLocaleString()}` : <span className="text-slate-400">₹0 (Tech Only)</span>}
                         </td>
                         <td className="px-4 py-3">
                           <span className={`px-2 py-0.5 rounded text-[9px] font-bold ${
-                            vis.salesPotential === 'High' ? 'bg-indigo-50 text-indigo-700 border border-indigo-100' :
+                            vis.salesPotential === 'High' ? 'bg-[#eef4fb] text-[#0b74f0] border border-[#0b74f0]/25' :
                             vis.salesPotential === 'Medium' ? 'bg-amber-50 text-amber-700 border border-amber-100' : 'bg-slate-50 text-slate-500'
                           }`}>
                             {vis.salesPotential}
@@ -731,12 +731,12 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 <div className="bg-white p-4 rounded-xl border border-slate-200 space-y-1">
                   <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Core Conversion Velocity</span>
-                  <div className="text-xl font-black text-slate-800">3.4 Days Avg</div>
+                  <div className="text-xl font-black text-[#082458]">3.4 Days Avg</div>
                   <p className="text-[9.5px] text-slate-400">Average days from ground walk assignment to invoicing receipt</p>
                 </div>
                 <div className="bg-white p-4 rounded-xl border border-slate-200 space-y-1">
                   <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Close Success Ratio</span>
-                  <div className="text-xl font-black text-slate-800">83.5% Success</div>
+                  <div className="text-xl font-black text-[#082458]">83.5% Success</div>
                   <p className="text-[9.5px] text-slate-400">Total conversion velocity based on 12 physical leads assigned</p>
                 </div>
                 <div className="bg-white p-4 rounded-xl border border-slate-200 space-y-1">
@@ -749,7 +749,7 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
               {/* Graphic Leads pipeline illustration */}
               <div className="bg-white p-5 rounded-xl border border-slate-205 space-y-4">
                 <div>
-                  <h4 className="text-xs font-bold text-slate-900 uppercase">SLA Ground Lead Pipeline Stages</h4>
+                  <h4 className="text-xs font-bold text-[#082458] uppercase">SLA Ground Lead Pipeline Stages</h4>
                   <p className="text-[10px] text-slate-400">Conversion funnel based on on-field representative visits & tech demos</p>
                 </div>
 
@@ -761,7 +761,7 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
                       <span>12 General Accounts</span>
                     </div>
                     <div className="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
-                      <div className="bg-indigo-500 h-full w-full"></div>
+                      <div className="bg-[#0b74f0] h-full w-full"></div>
                     </div>
                   </div>
 
@@ -772,7 +772,7 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
                       <span>9 Diagnostic Audits Completed</span>
                     </div>
                     <div className="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
-                      <div className="bg-indigo-400 h-full w-[75%]"></div>
+                      <div className="bg-[#38bdf8] h-full w-[75%]"></div>
                     </div>
                   </div>
 
@@ -823,7 +823,7 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
                 <div className="flex items-center gap-2">
                   <button 
                     onClick={handleCSVExport}
-                    className="px-2.5 py-1.5 text-xs font-bold bg-slate-900 hover:bg-slate-800 text-white rounded flex items-center gap-1.5 transition"
+                    className="px-2.5 py-1.5 text-xs font-bold bg-[#041845] hover:bg-[#082458] text-white rounded flex items-center gap-1.5 transition"
                   >
                     <Download className="w-3.5 h-3.5" /> Export CSV Log
                   </button>
@@ -858,7 +858,7 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
                     ) : (
                       filteredCheckIns.map(log => (
                         <tr key={log.id} className="hover:bg-slate-50/50 text-[11px]">
-                          <td className="px-4 py-3 font-mono text-slate-900 font-bold">{log.id}</td>
+                          <td className="px-4 py-3 font-mono text-[#082458] font-bold">{log.id}</td>
                           <td className="px-4 py-3 font-bold">{log.staffName}</td>
                           <td className="px-4 py-3">
                             <span className={`px-2 py-0.5 text-[10px] rounded font-bold ${
@@ -913,12 +913,12 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
                       key={s.id}
                       onClick={() => setSelectedStaffId(s.id)}
                       className={`p-3 rounded-lg border text-left cursor-pointer transition ${
-                        selectedStaffId === s.id ? 'bg-slate-900 text-white border-slate-900 shadow-sm' : 'bg-white hover:bg-slate-50 text-slate-800 border-slate-200'
+                        selectedStaffId === s.id ? 'bg-[#041845] text-white border-[#082458] shadow-sm' : 'bg-white hover:bg-slate-50 text-[#082458] border-slate-200'
                       }`}
                     >
                       <div className="flex justify-between items-start">
                         <div className="flex items-center gap-2">
-                          <img src={s.avatar} className="w-8 h-8 rounded-full border border-slate-350" referrerPolicy="no-referrer" />
+                          <img src={s.avatar} className="w-8 h-8 rounded-full border border-slate-300" referrerPolicy="no-referrer" />
                           <div>
                             <span className="font-extrabold text-xs block">{s.name}</span>
                             <span className={`text-[9px] font-bold ${selectedStaffId === s.id ? 'text-slate-300' : 'text-slate-400'}`}>
@@ -928,9 +928,9 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
                         </div>
 
                         <span className={`text-[8.5px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full ${
-                          s.status === 'On Site' ? 'bg-emerald-500 text-slate-900' :
-                          s.status === 'On Route' ? 'bg-amber-400 text-slate-900' :
-                          s.status === 'Active' ? 'bg-blue-500 text-white' : 'bg-slate-150 text-slate-700'
+                          s.status === 'On Site' ? 'bg-emerald-500 text-[#082458]' :
+                          s.status === 'On Route' ? 'bg-amber-400 text-[#082458]' :
+                          s.status === 'Active' ? 'bg-blue-500 text-white' : 'bg-slate-200 text-slate-700'
                         }`}>
                           {s.status}
                         </span>
@@ -955,7 +955,7 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
           </div>
 
           {/* Right panel: Modern Glowing Map Coordinate Grid & Path Overlay */}
-          <div className="lg:col-span-8 bg-[#0b1329] p-4 rounded-xl border border-slate-800 relative h-[520px] shadow-xl overflow-hidden flex flex-col justify-between">
+          <div className="lg:col-span-8 bg-[#0b1329] p-4 rounded-xl border border-[#1e3a8a]/50 relative h-[520px] shadow-xl overflow-hidden flex flex-col justify-between">
             
             {/* Grid background & vectors */}
             <div className="absolute inset-0 opacity-15 bg-[linear-gradient(to_right,#10b981_1px,transparent_1px),linear-gradient(to_bottom,#3b82f6_1px,transparent_1px)] bg-[size:28px_28px]"></div>
@@ -975,10 +975,10 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
 
             {/* Top operational bar info */}
             <div className="relative flex justify-between items-start z-10">
-              <span className="text-[10px] uppercase font-black text-[#10b981] bg-slate-900/90 px-2.5 py-1 rounded border border-slate-800 flex items-center gap-1.5 shadow-xl">
+              <span className="text-[10px] uppercase font-black text-[#10b981] bg-[#041845]/90 px-2.5 py-1 rounded border border-[#1e3a8a]/50 flex items-center gap-1.5 shadow-xl">
                 <Crosshair className="w-3.5 h-3.5 animate-spin" /> Live Handset GPS Terminal ACTIVE
               </span>
-              <span className="text-[9px] font-mono font-bold text-slate-400 bg-slate-900/90 px-2 py-0.5 rounded border border-slate-800">
+              <span className="text-[9px] font-mono font-bold text-slate-400 bg-[#041845]/90 px-2 py-0.5 rounded border border-[#1e3a8a]/50">
                 Lat: 28.6° N | Lng: 77.3° E (NCR Georadar Axis)
               </span>
             </div>
@@ -1018,14 +1018,14 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
                   
                   <div className={`p-2 rounded-full border shadow-xl ${
                     isActive 
-                      ? 'scale-125 bg-emerald-500 border-white text-slate-900 z-30 ring-4 ring-emerald-500/30' 
-                      : 'bg-slate-950 border-blue-500/80 text-blue-400 hover:scale-110'
+                      ? 'scale-125 bg-emerald-500 border-white text-[#082458] z-30 ring-4 ring-emerald-500/30' 
+                      : 'bg-[#031338] border-blue-500/80 text-blue-400 hover:scale-110'
                   } transition-all duration-300`}>
                     <MapPin className="w-4 h-4" />
                   </div>
 
                   {/* Representative Label above node */}
-                  <span className="absolute left-7 top-0 bg-slate-950/95 text-[9px] font-black text-slate-200 px-2 py-1 rounded border border-slate-800 shadow-xl truncate max-w-[120px] select-none block">
+                  <span className="absolute left-7 top-0 bg-[#031338]/95 text-[9px] font-black text-slate-200 px-2 py-1 rounded border border-[#1e3a8a]/50 shadow-xl truncate max-w-[120px] select-none block">
                     {s.name} ({s.status})
                   </span>
                 </div>
@@ -1033,7 +1033,7 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
             })}
 
             {/* Bottom Floating Telemetry Panel */}
-            <div className="relative z-10 bg-slate-950/85 p-4 rounded-xl border border-slate-800 space-y-3 shadow-xl">
+            <div className="relative z-10 bg-[#031338]/85 p-4 rounded-xl border border-[#1e3a8a]/50 space-y-3 shadow-xl">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                 <div>
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block font-mono">Isolated Telemetry Node: {activeStaff?.name}</span>
@@ -1047,21 +1047,21 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
                   </div>
                 </div>
 
-                <div className="text-right flex sm:flex-col items-center sm:items-end justify-between font-mono w-full sm:w-auto text-[11px] text-slate-300 border-t sm:border-t-0 border-slate-800/60 pt-2 sm:pt-0">
+                <div className="text-right flex sm:flex-col items-center sm:items-end justify-between font-mono w-full sm:w-auto text-[11px] text-slate-300 border-t sm:border-t-0 border-[#1e3a8a]/50/60 pt-2 sm:pt-0">
                   <span>Remaining: <strong>{config.distanceLeft}</strong></span>
                   <span>Duration: <strong className="text-emerald-400">{config.durationLeft}</strong></span>
                 </div>
               </div>
 
               {/* Breadcrumbs historical location route monitoring details */}
-              <div className="border-t border-slate-850 pt-2.5 space-y-2">
+              <div className="border-t border-[#1e3a8a]/50 pt-2.5 space-y-2">
                 <span className="text-[9px] font-black text-slate-400 uppercase tracking-wider block">Today Chronological Trail & Breadcrumb History (Location Trajectory History)</span>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                   {config.breadcrumbs.map((crumb, idx) => (
-                    <div key={idx} className="bg-slate-900/60 p-2 rounded border border-slate-800/80 hover:bg-slate-900/90 transition text-left">
+                    <div key={idx} className="bg-[#041845]/60 p-2 rounded border border-[#1e3a8a]/50/80 hover:bg-[#041845]/90 transition text-left">
                       <div className="flex justify-between items-center text-[10px] text-slate-400 font-mono">
                         <span className="font-bold text-slate-300">{crumb.time}</span>
-                        <span className="text-[9px] px-1 py-0.2 bg-slate-800 text-indigo-300 rounded font-bold uppercase">{crumb.status}</span>
+                        <span className="text-[9px] px-1 py-0.2 bg-[#082458] text-[#16c2ff] rounded font-bold uppercase">{crumb.status}</span>
                       </div>
                       <p className="text-[11.5px] font-semibold text-slate-200 mt-1 truncate" title={crumb.label}>{crumb.label}</p>
                       <p className="text-[9.5px] text-slate-500 font-mono mt-0.5">Coords: {crumb.lat}, {crumb.lng}</p>
@@ -1148,7 +1148,7 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
               </div>
 
               {/* Handset verification checks checkboxes simulation */}
-              <div className="bg-slate-50 p-3 rounded-lg border border-slate-150 space-y-1.5 text-[11px] text-slate-500">
+              <div className="bg-slate-50 p-3 rounded-lg border border-slate-200 space-y-1.5 text-[11px] text-slate-500">
                 <div className="flex items-center gap-2">
                   <input 
                     type="checkbox" 
@@ -1185,13 +1185,13 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
             
             {/* GPS Attendance verification KPI blocks */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              <div className="bg-indigo-50 p-3 rounded-lg border border-indigo-100 flex items-center gap-3">
-                <div className="p-2 bg-indigo-500 text-white rounded-lg">
+              <div className="bg-[#eef4fb] p-3 rounded-lg border border-[#0b74f0]/25 flex items-center gap-3">
+                <div className="p-2 bg-[#0b74f0] text-white rounded-lg">
                   <CheckCircle className="w-4 h-4" />
                 </div>
                 <div>
-                  <span className="text-[10px] text-indigo-700 font-bold block leading-none uppercase">Cumulative Efficacy</span>
-                  <span className="text-base font-black text-slate-900 mt-1 inline-block">95.4%</span>
+                  <span className="text-[10px] text-[#0b74f0] font-bold block leading-none uppercase">Cumulative Efficacy</span>
+                  <span className="text-base font-black text-[#082458] mt-1 inline-block">95.4%</span>
                 </div>
               </div>
 
@@ -1201,7 +1201,7 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
                 </div>
                 <div>
                   <span className="text-[10px] text-emerald-700 font-bold block leading-none uppercase">Geofence Compliance</span>
-                  <span className="text-base font-black text-slate-900 mt-1 inline-block">100% Status</span>
+                  <span className="text-base font-black text-[#082458] mt-1 inline-block">100% Status</span>
                 </div>
               </div>
 
@@ -1211,7 +1211,7 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
                 </div>
                 <div>
                   <span className="text-[10px] text-amber-700 font-bold block leading-none uppercase">On-time checks</span>
-                  <span className="text-base font-black text-slate-900 mt-1 inline-block">100% Registry</span>
+                  <span className="text-base font-black text-[#082458] mt-1 inline-block">100% Registry</span>
                 </div>
               </div>
             </div>
@@ -1219,7 +1219,7 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
             {/* Attendance Logs History timeline */}
             <div className="space-y-3">
               <div>
-                <h4 className="text-xs font-bold text-slate-900 uppercase">GPS Geofenced Daily Attendance Feed Logs</h4>
+                <h4 className="text-xs font-bold text-[#082458] uppercase">GPS Geofenced Daily Attendance Feed Logs</h4>
                 <p className="text-[10px] text-slate-400">Chronological list of agent shift checking timestamps cross-verified by GPS and Noida/Mumbai Geofences</p>
               </div>
 
@@ -1230,7 +1230,7 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
                     <div key={log.id} className="p-3 rounded-xl border border-slate-100 bg-slate-50/50 hover:bg-slate-50 transition flex items-start justify-between gap-3 text-xs leading-relaxed">
                       <div className="space-y-1">
                         <div className="flex items-center gap-2">
-                          <span className="font-extrabold text-slate-800">{log.staffName}</span>
+                          <span className="font-extrabold text-[#082458]">{log.staffName}</span>
                           <span className={`px-1.5 py-0.2 rounded font-mono text-[9px] font-bold uppercase leading-none ${
                             log.checkType === 'Check-In' ? 'bg-emerald-50 text-emerald-700 border border-emerald-150' : 'bg-rose-50 text-rose-700 border border-rose-150'
                           }`}>
@@ -1276,17 +1276,17 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
 
             <div className="space-y-3 max-h-[420px] overflow-y-auto pr-1">
               {visits.map((v) => (
-                <div key={v.id} className="p-3 rounded-xl border border-slate-150 hover:bg-slate-50/40 transition text-xs leading-relaxed space-y-2 text-left">
+                <div key={v.id} className="p-3 rounded-xl border border-slate-200 hover:bg-slate-50/40 transition text-xs leading-relaxed space-y-2 text-left">
                   <div className="flex justify-between items-start">
                     <div>
                       <span className="text-[8.5px] text-slate-400 font-mono font-bold uppercase tracking-widest block">{v.id} &bull; Target Time: {v.scheduledTime}</span>
-                      <h4 className="font-extrabold text-slate-800 text-sm mt-0.5">{v.companyName}</h4>
+                      <h4 className="font-extrabold text-[#082458] text-sm mt-0.5">{v.companyName}</h4>
                       <p className="text-[10px] text-slate-400 font-medium">Recipient Client: <strong>{v.customerName}</strong></p>
                     </div>
 
                     <span className={`text-[9px] font-black uppercase px-2 py-0.5 rounded border ${
                       v.status === 'Completed' ? 'bg-emerald-50 text-emerald-800 border-emerald-150' :
-                      v.status === 'Checked-In' ? 'bg-indigo-50 text-indigo-800 border-indigo-150' : 'bg-slate-50 text-slate-600 border-slate-200'
+                      v.status === 'Checked-In' ? 'bg-[#eef4fb] text-[#082458] border-[#0b74f0]/25' : 'bg-slate-50 text-slate-600 border-slate-200'
                     }`}>
                       {v.status}
                     </span>
@@ -1330,7 +1330,7 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
                 <div key={vi.id} className="p-3.5 rounded-xl border border-dotted border-slate-250 space-y-2.5 text-xs text-left">
                   <div className="flex items-center justify-between">
                     <div>
-                      <span className="text-xs font-extrabold text-slate-900 block">{vi.companyName}</span>
+                      <span className="text-xs font-extrabold text-[#082458] block">{vi.companyName}</span>
                       <span className="text-[9.5px] text-slate-400">Field Reporter: {vi.assignedStaffName}</span>
                     </div>
 
@@ -1340,13 +1340,13 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
                     </div>
                   </div>
 
-                  <div className="bg-emerald-50/55 p-3 rounded-lg border border-emerald-150/60 font-sans leading-relaxed text-slate-800">
+                  <div className="bg-emerald-50/55 p-3 rounded-lg border border-emerald-150/60 font-sans leading-relaxed text-[#082458]">
                     {vi.feedbackNotes ? `"${vi.feedbackNotes}"` : '"Diagnostics run finalized. Trunk SIP servers online without alerts."'}
                   </div>
 
                   <div className="flex items-center justify-between text-[11px] text-slate-400 pt-1 border-t border-slate-100">
                     <span className="flex items-center gap-1">Sales Closed: <strong className="text-emerald-600">₹{vi.salesAmtClosed?.toLocaleString() || '₹0'}</strong></span>
-                    <span className="flex items-center gap-1">SLA Conversion Potential: <strong className="text-indigo-600 tracking-tight uppercase">{vi.salesPotential}</strong></span>
+                    <span className="flex items-center gap-1">SLA Conversion Potential: <strong className="text-[#0b74f0] tracking-tight uppercase">{vi.salesPotential}</strong></span>
                   </div>
                 </div>
               ))}
@@ -1363,45 +1363,45 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
             
             {/* Real-time Ticker Audit Activities Feed Feed logs */}
-            <div className="lg:col-span-7 bg-[#0b1329] p-5 rounded-xl border border-slate-800 flex flex-col justify-between h-[450px]">
+            <div className="lg:col-span-7 bg-[#0b1329] p-5 rounded-xl border border-[#1e3a8a]/50 flex flex-col justify-between h-[450px]">
               <div className="space-y-3">
-                <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+                <div className="flex items-center justify-between pb-3 border-b border-[#1e3a8a]/50">
                   <div>
                     <h3 className="text-xs font-black text-emerald-400 uppercase tracking-widest flex items-center gap-2">
                       <Activity className="w-4 h-4 text-emerald-400 animate-pulse" /> Live Telemetry Event Flow Ticker
                     </h3>
                     <p className="text-[10px] text-slate-400">Subseconds tracking of checks, alerts, low batteries, travel deviation reports</p>
                   </div>
-                  <span className="text-[9px] bg-slate-900 border border-green-500/20 text-emerald-400 font-mono font-bold px-2 py-0.5 rounded">
+                  <span className="text-[9px] bg-[#041845] border border-green-500/20 text-emerald-400 font-mono font-bold px-2 py-0.5 rounded">
                     SYS_FEED Status: ONLINE
                   </span>
                 </div>
 
-                <div className="space-y-2.5 overflow-y-auto max-h-[300px] text-xs font-mono text-slate-350 pr-1">
-                  <div className="p-2 border-b border-slate-850/60 leading-normal flex items-start gap-2">
+                <div className="space-y-2.5 overflow-y-auto max-h-[300px] text-xs font-mono text-slate-300 pr-1">
+                  <div className="p-2 border-b border-[#1e3a8a]/50/60 leading-normal flex items-start gap-2">
                     <span className="text-emerald-400 shrink-0">[09:17:09 AM]</span>
                     <p className="text-slate-300">SYSTEM: Connected to Noida Base gateway server successfully with zero alarms.</p>
                   </div>
-                  <div className="p-2 border-b border-slate-850/60 leading-normal flex items-start gap-2">
+                  <div className="p-2 border-b border-[#1e3a8a]/50/60 leading-normal flex items-start gap-2">
                     <span className="text-emerald-400 shrink-0">[09:15:00 AM]</span>
                     <p className="text-slate-300"><strong className="text-slate-100">Meera Nair</strong> logged Check-In at Mumbai Kalamboli Yard Axis (Verified within Noida/Mumbai Geofence limits).</p>
                   </div>
-                  <div className="p-2 border-b border-slate-850/60 leading-normal flex items-start gap-2">
+                  <div className="p-2 border-b border-[#1e3a8a]/50/60 leading-normal flex items-start gap-2">
                     <span className="text-red-400 shrink-0">[08:44:12 AM]</span>
                     <p className="text-slate-300">TELEMETRY WARNING: Sandeep Roy battery levels drop beneath <strong className="text-rose-400">18% threshold</strong>. Auto Low energy telemetry triggered on ground handset.</p>
                   </div>
-                  <div className="p-2 border-b border-slate-850/60 leading-normal flex items-start gap-2">
+                  <div className="p-2 border-b border-[#1e3a8a]/50/60 leading-normal flex items-start gap-2">
                     <span className="text-emerald-400 shrink-0">[08:30:21 AM]</span>
                     <p className="text-slate-300"><strong className="text-slate-100">Ketan Patel</strong> logged Check-In at Noida Sector 62 Main Warehouse Core (Verified within Central Sector Geofences).</p>
                   </div>
-                  <div className="p-2 border-b border-slate-850/60 leading-normal flex items-start gap-2">
+                  <div className="p-2 border-b border-[#1e3a8a]/50/60 leading-normal flex items-start gap-2">
                     <span className="text-[#3b82f6] shrink-0 font-bold">[Yesterday]</span>
                     <p className="text-slate-400">DATA SYNC: Aggregated and processed total ledger contract values ₹7,30,000 across CRM Noida & Mumbai yards.</p>
                   </div>
                 </div>
               </div>
 
-              <div className="text-[10px] text-slate-500 font-mono flex items-center justify-between border-t border-slate-850 pt-3">
+              <div className="text-[10px] text-slate-500 font-mono flex items-center justify-between border-t border-[#1e3a8a]/50 pt-3">
                 <span>Auto-purge logs queue set after 24 hours.</span>
                 <span>Telemetry stream sequence index #TC-4009</span>
               </div>
@@ -1416,11 +1416,11 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
                 </div>
 
                 {activeStaff && (
-                  <div className="bg-slate-50 p-3 rounded-lg border border-slate-150 leading-relaxed text-xs">
+                  <div className="bg-slate-50 p-3 rounded-lg border border-slate-200 leading-relaxed text-xs">
                     <div className="flex items-center gap-2">
                       <img src={activeStaff.avatar} className="w-8 h-8 rounded-full border border-slate-250" referrerPolicy="no-referrer" />
                       <div>
-                        <span className="font-extrabold text-slate-800 block leading-tight">{activeStaff.name}</span>
+                        <span className="font-extrabold text-[#082458] block leading-tight">{activeStaff.name}</span>
                         <span className="text-[10px] font-mono text-slate-400">Targeting Device Signal: {activeStaff.phone}</span>
                       </div>
                     </div>
@@ -1434,7 +1434,7 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
                       <span>Parent dispatcher linked. All commands pipe live to handset.</span>
                     </div>
                     <p className="text-[11px] text-slate-450 leading-normal">
-                      We have upgraded your Field & Staff Management Module to use the state-of-the-art Operational Cockpit! If you wish to send instant notifications, please leverage our specialized Sub-Panels above to adjust representative check status or sales contracts.
+                      We have upgraded your Field & Staff Module to use the state-of-the-art Operational Cockpit! If you wish to send instant notifications, please leverage our specialized Sub-Panels above to adjust representative check status or sales contracts.
                     </p>
                   </div>
                 </div>
@@ -1451,11 +1451,11 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
 
       {/* ===================== DIALOG MODAL: Ground Sales Contract Simulation ===================== */}
       {isSalesModalOpen && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-[#041845]/60 backdrop-blur-xs flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl border border-slate-200 max-w-sm w-full p-5 space-y-4 shadow-2xl animate-in fade-in duration-300">
             <div className="flex justify-between items-start">
               <div>
-                <h4 className="text-xs font-extrabold text-slate-900 uppercase">Book Field Contract Sale</h4>
+                <h4 className="text-xs font-extrabold text-[#082458] uppercase">Book Field Contract Sale</h4>
                 <p className="text-[10.5px] text-slate-400">Log a verified won deal concluded by ground representatives</p>
               </div>
               <button 
@@ -1466,7 +1466,7 @@ export default function FieldStaffManager({ fieldStaff, onDispatchTask }: FieldS
               </button>
             </div>
 
-            <form onSubmit={handleBookSale} className="space-y-3.5 text-xs text-slate-650 font-bold">
+            <form onSubmit={handleBookSale} className="space-y-3.5 text-xs text-slate-600 font-bold">
               <div>
                 <label className="block text-[9px] uppercase tracking-wider text-slate-400 mb-1">Assigned Ground Representative</label>
                 <select

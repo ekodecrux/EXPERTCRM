@@ -286,7 +286,7 @@ export const INITIAL_TICKETS: SupportTicket[] = [
     category: 'Account Access',
     createdTime: '2026-06-15 11:00 AM',
     description: 'Need to provision 5 additional seats under the design division workspace logs.',
-    aiResponseDraft: 'Hi Ramesh, We have provisioned the additional seats for your design division workspace logs. You can change their roles under Security & Access Control. Warm regards, Support Desk.'
+    aiResponseDraft: 'Hi Ramesh, We have provisioned the additional seats for your design division workspace logs. You can change their roles under Security & Access. Warm regards, Support Desk.'
   }
 ];
 

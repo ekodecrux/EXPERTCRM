@@ -342,11 +342,11 @@ export default function TaskManager({
       {/* Toast Alert Widget */}
       {toast && (
         <div className={`fixed bottom-5 right-5 border p-4 rounded-xl text-white flex items-start gap-3 shadow-2xl z-55 animate-fadeIn max-w-sm ${
-          toast.type === 'success' ? 'bg-slate-900 border-indigo-500' :
-          toast.type === 'error' ? 'bg-rose-950 border-rose-500' : 'bg-slate-900 border-amber-500'
+          toast.type === 'success' ? 'bg-[#041845] border-[#0b74f0]' :
+          toast.type === 'error' ? 'bg-rose-950 border-rose-500' : 'bg-[#041845] border-amber-500'
         }`}>
           <div>
-            {toast.type === 'success' ? <CheckCircle className="w-5 h-5 text-indigo-400 shrink-0" /> :
+            {toast.type === 'success' ? <CheckCircle className="w-5 h-5 text-[#16c2ff] shrink-0" /> :
              toast.type === 'error' ? <Lock className="w-5 h-5 text-rose-400 shrink-0" /> :
              <AlertCircle className="w-5 h-5 text-amber-400 shrink-0" />}
           </div>
@@ -368,7 +368,7 @@ export default function TaskManager({
             <CheckSquare className="w-6 h-6 shrink-0" />
           </div>
           <div>
-            <h2 className="text-md font-black text-slate-900 tracking-tight">Activities & Scheduler Workspace</h2>
+            <h2 className="text-md font-black text-[#082458] tracking-tight">Activities & Scheduler Workspace</h2>
             <p className="text-xs text-slate-400">Manage task assignments, schedule Zoom/physical client meetings, trigger auto follow-ups, and audit activity feeds.</p>
           </div>
         </div>
@@ -376,7 +376,7 @@ export default function TaskManager({
         <div className="flex items-center gap-2">
           {/* Security Scope dynamic status */}
           <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 font-mono text-[10px] bg-slate-50 text-slate-550 border border-slate-200/60 rounded-lg">
-            <Shield className="w-3.5 h-3.5 text-indigo-505" />
+            <Shield className="w-3.5 h-3.5 text-[#0b74f0]" />
             <span className="font-bold">{activeRole} Level</span>
           </div>
 
@@ -414,7 +414,7 @@ export default function TaskManager({
         <button
           onClick={() => setActiveTab('tasks')}
           className={`px-4 py-2.5 rounded-xl text-xs font-black transition-all flex items-center gap-2 ${
-            activeTab === 'tasks' ? 'bg-white text-slate-950 shadow-sm font-extrabold' : 'text-slate-500 hover:text-slate-900'
+            activeTab === 'tasks' ? 'bg-white text-[#041845] shadow-sm font-extrabold' : 'text-slate-500 hover:text-[#082458]'
           }`}
         >
           <Sliders className="w-4 h-4 text-purple-500" /> Active Tasks & Assignment
@@ -423,7 +423,7 @@ export default function TaskManager({
         <button
           onClick={() => setActiveTab('schedule')}
           className={`px-4 py-2.5 rounded-xl text-xs font-black transition-all flex items-center gap-2 ${
-            activeTab === 'schedule' ? 'bg-white text-slate-950 shadow-sm font-extrabold' : 'text-slate-500 hover:text-slate-900'
+            activeTab === 'schedule' ? 'bg-white text-[#041845] shadow-sm font-extrabold' : 'text-slate-500 hover:text-[#082458]'
           }`}
         >
           <Calendar className="w-4 h-4 text-sky-500" /> Meeting Scheduler Center
@@ -432,7 +432,7 @@ export default function TaskManager({
         <button
           onClick={() => setActiveTab('followup')}
           className={`px-4 py-2.5 rounded-xl text-xs font-black transition-all flex items-center gap-2 ${
-            activeTab === 'followup' ? 'bg-white text-slate-950 shadow-sm font-extrabold' : 'text-slate-500 hover:text-slate-900'
+            activeTab === 'followup' ? 'bg-white text-[#041845] shadow-sm font-extrabold' : 'text-slate-500 hover:text-[#082458]'
           }`}
         >
           <UserPlus className="w-4 h-4 text-emerald-500" /> Lead Follow-up Tracking
@@ -441,7 +441,7 @@ export default function TaskManager({
         <button
           onClick={() => setActiveTab('history')}
           className={`px-4 py-2.5 rounded-xl text-xs font-black transition-all flex items-center gap-2 ${
-            activeTab === 'history' ? 'bg-white text-slate-950 shadow-sm font-extrabold' : 'text-slate-500 hover:text-slate-900'
+            activeTab === 'history' ? 'bg-white text-[#041845] shadow-sm font-extrabold' : 'text-slate-500 hover:text-[#082458]'
           }`}
         >
           <Activity className="w-4 h-4 text-rose-500 animate-pulse" /> Activity History Feed
@@ -457,12 +457,12 @@ export default function TaskManager({
           <div className="lg:col-span-4 space-y-6">
             
             {/* Quick Summary Numbers */}
-            <div className="bg-gradient-to-br from-indigo-900 to-slate-900 p-5 rounded-2xl text-white space-y-4">
-              <span className="text-[10px] font-black uppercase text-indigo-250 tracking-wider font-mono">Operations Tracker</span>
+            <div className="bg-gradient-to-br from-[#082458] to-[#041845] p-5 rounded-2xl text-white space-y-4">
+              <span className="text-[10px] font-black uppercase text-sky-200 tracking-wider font-mono">Operations Tracker</span>
               <div className="grid grid-cols-3 gap-2 text-center">
                 <div className="p-1 px-1.5 bg-white/10 rounded-xl">
                   <span className="text-sm font-black block">{tasks.length}</span>
-                  <span className="text-[9px] text-indigo-200">Total</span>
+                  <span className="text-[9px] text-sky-100">Total</span>
                 </div>
                 <div className="p-1 px-1.5 bg-amber-500/15 border border-amber-500/20 rounded-xl">
                   <span className="text-sm font-black text-amber-305 block">{tasks.filter(t=>t.status==='Pending').length}</span>
@@ -473,14 +473,14 @@ export default function TaskManager({
                   <span className="text-[9px] text-emerald-250">Done</span>
                 </div>
               </div>
-              <div className="pt-2 border-t border-indigo-850 flex justify-between items-center text-[10px] text-indigo-200">
+              <div className="pt-2 border-t border-[#0844a4] flex justify-between items-center text-[10px] text-sky-100">
                 <span className="font-semibold">Assignment fillrate:</span>
                 <span className="font-bold underline">{Math.round((tasks.filter(t=>t.assignedTo).length / (tasks.length || 1)) * 100)}%</span>
               </div>
             </div>
 
             {/* Dynamic filter panel cards */}
-            <div className="bg-white p-5 rounded-2xl border border-slate-150/70 shadow-xxs space-y-5">
+            <div className="bg-white p-5 rounded-2xl border border-slate-200/70 shadow-xxs space-y-5">
               <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest">SLA Dispatch Filters</h3>
               
               {/* Text Search input */}
@@ -504,7 +504,7 @@ export default function TaskManager({
                       key={st}
                       onClick={() => setSelectedStatusFilter(st)}
                       className={`flex justify-between items-center px-3 py-1.5 rounded-lg font-medium transition ${
-                        selectedStatusFilter === st ? 'bg-purple-50 text-purple-700 font-extrabold' : 'text-slate-650 hover:bg-slate-50'
+                        selectedStatusFilter === st ? 'bg-purple-50 text-purple-700 font-extrabold' : 'text-slate-600 hover:bg-slate-50'
                       }`}
                     >
                       <span className="flex items-center gap-1.5">
@@ -528,7 +528,7 @@ export default function TaskManager({
                       key={tp}
                       onClick={() => setSelectedTypeFilter(tp)}
                       className={`px-3 py-1.5 rounded-lg text-xxs font-extrabold border transition ${
-                        selectedTypeFilter === tp ? 'bg-slate-900 border-slate-900 text-white shadow-xs' : 'bg-white border-slate-200 text-slate-655 hover:bg-slate-50'
+                        selectedTypeFilter === tp ? 'bg-[#041845] border-[#082458] text-white shadow-xs' : 'bg-white border-slate-200 text-slate-655 hover:bg-slate-50'
                       }`}
                     >
                       {tp === 'Task' ? '🛠️ Tasks' : tp === 'Meeting' ? '🤝 Meetings' : tp === 'Follow-up' ? '📈 Follow-ups' : '🗂️ All Categories'}
@@ -537,7 +537,7 @@ export default function TaskManager({
                 </div>
               </div>
 
-              <div className="pt-2 border-t border-slate-100 text-[11px] text-slate-405 space-y-2">
+              <div className="pt-2 border-t border-slate-100 text-[11px] text-slate-400 space-y-2">
                 <span className="font-bold text-slate-600 block">Priority Indicators:</span>
                 <div className="flex gap-3">
                   <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-rose-500"></span> High Priority</span>
@@ -561,7 +561,7 @@ export default function TaskManager({
           {/* Active tasks core dispatcher panel on the Right */}
           <div className="lg:col-span-8 space-y-4">
             
-            <div className="bg-white p-5 rounded-2xl border border-slate-150/70 shadow-xxs">
+            <div className="bg-white p-5 rounded-2xl border border-slate-200/70 shadow-xxs">
               <div className="flex justify-between items-center mb-4 pb-2 border-b border-slate-50">
                 <div>
                   <h3 className="text-xs font-black text-slate-450 uppercase tracking-widest block">Active Tasks Matrix</h3>
@@ -585,7 +585,7 @@ export default function TaskManager({
                     return (
                       <div 
                         key={task.id}
-                        className="p-4.5 rounded-2xl border border-slate-150 hover:border-slate-300 bg-white hover:shadow-xs transition flex flex-col gap-3.5 relative"
+                        className="p-4.5 rounded-2xl border border-slate-200 hover:border-slate-300 bg-white hover:shadow-xs transition flex flex-col gap-3.5 relative"
                       >
                         {/* Upper metadata row */}
                         <div className="flex items-start justify-between gap-2">
@@ -599,7 +599,7 @@ export default function TaskManager({
 
                             <div>
                               <div className="flex flex-wrap items-center gap-1.5">
-                                <h4 className={`text-xs font-extrabold text-slate-900 ${task.status === 'Completed' ? 'line-through text-slate-400' : ''}`}>
+                                <h4 className={`text-xs font-extrabold text-[#082458] ${task.status === 'Completed' ? 'line-through text-slate-400' : ''}`}>
                                   {task.title}
                                 </h4>
                                 
@@ -618,7 +618,7 @@ export default function TaskManager({
                                 </p>
                               )}
                               
-                              <p className="text-xxs text-slate-500 font-medium leading-relaxed mt-1.5 bg-slate-50/80 p-2 rounded-lg border border-slate-150/40">{task.description}</p>
+                              <p className="text-xxs text-slate-500 font-medium leading-relaxed mt-1.5 bg-slate-50/80 p-2 rounded-lg border border-slate-200/40">{task.description}</p>
                             </div>
                           </div>
 
@@ -684,9 +684,9 @@ export default function TaskManager({
                             {task.assignedTo ? (
                               <button 
                                 onClick={() => setActiveAssigneeDropdownTaskId(activeAssigneeDropdownTaskId === task.id ? null : task.id)}
-                                className="flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-slate-50 hover:bg-slate-100 border border-slate-200/70 text-slate-800 transition"
+                                className="flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-slate-50 hover:bg-slate-100 border border-slate-200/70 text-[#082458] transition"
                               >
-                                <div className="w-4.5 h-4.5 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center text-[10px] font-mono uppercase font-black">
+                                <div className="w-4.5 h-4.5 rounded-full bg-[#dceafb] text-[#0b74f0] flex items-center justify-center text-[10px] font-mono uppercase font-black">
                                   {task.assignedTo.slice(0, 2)}
                                 </div>
                                 <span className="font-extrabold">{task.assignedTo}</span>
@@ -704,8 +704,8 @@ export default function TaskManager({
 
                             {/* Inline popover selector floating */}
                             {activeAssigneeDropdownTaskId === task.id && (
-                              <div className="absolute left-0 bottom-full mb-1.5 w-64 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl z-40 p-2.5 space-y-1.5 animate-fadeIn">
-                                <div className="flex justify-between items-center text-[10px] text-slate-400 pb-1.5 border-b border-slate-800 px-1">
+                              <div className="absolute left-0 bottom-full mb-1.5 w-64 bg-[#041845] border border-[#1e3a8a]/50 rounded-xl shadow-2xl z-40 p-2.5 space-y-1.5 animate-fadeIn">
+                                <div className="flex justify-between items-center text-[10px] text-slate-400 pb-1.5 border-b border-[#1e3a8a]/50 px-1">
                                   <span className="font-extrabold uppercase font-mono tracking-wider">Select Corporate Assignee</span>
                                   <button onClick={() => setActiveAssigneeDropdownTaskId(null)} className="text-white">×</button>
                                 </div>
@@ -714,10 +714,10 @@ export default function TaskManager({
                                     <button
                                       key={item.id}
                                       onClick={() => handleAssignTask(task.id, item.name)}
-                                      className="w-full text-left p-1.5 hover:bg-slate-800 rounded-lg text-xs font-extrabold text-white flex justify-between items-center transition"
+                                      className="w-full text-left p-1.5 hover:bg-[#082458] rounded-lg text-xs font-extrabold text-white flex justify-between items-center transition"
                                     >
                                       <span>{item.name}</span>
-                                      <span className="text-[9px] text-indigo-350 font-medium font-mono block max-w-28 truncate">{item.role}</span>
+                                      <span className="text-[9px] text-[#16c2ff] font-medium font-mono block max-w-28 truncate">{item.role}</span>
                                     </button>
                                   ))}
                                 </div>
@@ -737,9 +737,9 @@ export default function TaskManager({
                                   {task.status === 'Pending' ? (
                                     <button 
                                       onClick={() => handleTaskStatusChange(task.id, 'Pending', 'In Progress')}
-                                      className="px-3 py-1.5 text-xxs bg-indigo-50 border border-indigo-150 text-indigo-700 hover:bg-indigo-100 rounded-xl flex items-center gap-1 shadow-xxs transition font-extrabold"
+                                      className="px-3 py-1.5 text-xxs bg-[#eef4fb] border border-[#0b74f0]/25 text-[#0b74f0] hover:bg-[#dceafb] rounded-xl flex items-center gap-1 shadow-xxs transition font-extrabold"
                                     >
-                                      <Play className="w-3.5 h-3.5 text-indigo-650" /> Start Task
+                                      <Play className="w-3.5 h-3.5 text-[#0b74f0]" /> Start Task
                                     </button>
                                   ) : (
                                     <button 
@@ -786,9 +786,9 @@ export default function TaskManager({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           
           {/* Scheduling form inside */}
-          <div className="lg:col-span-7 bg-white p-6 rounded-2xl border border-slate-150/70 shadow-xxs">
+          <div className="lg:col-span-7 bg-white p-6 rounded-2xl border border-slate-200/70 shadow-xxs">
             <div className="pb-3 border-b border-slate-100 mb-5">
-              <h3 className="text-xs font-black text-slate-900 uppercase">Interactive Meeting Planner</h3>
+              <h3 className="text-xs font-black text-[#082458] uppercase">Interactive Meeting Planner</h3>
               <p className="text-xs text-slate-400">Schedule physical walk-ins or virtual customer support / billing negotiation calls seamlessly.</p>
             </div>
 
@@ -808,7 +808,7 @@ export default function TaskManager({
                         setMeetingAgenda(`Corporate onboarding discussion aligning technical requirements & support SLA timelines for ${selected.name}'s fleet.`);
                       }
                     }}
-                    className="w-full border border-slate-205 rounded-xl p-2.5 bg-white text-slate-800"
+                    className="w-full border border-slate-205 rounded-xl p-2.5 bg-white text-[#082458]"
                   >
                     <option value="">-- Choose Active Client Lead --</option>
                     {leads.map(lead => (
@@ -838,7 +838,7 @@ export default function TaskManager({
                     type="date"
                     value={meetingDate}
                     onChange={(e) => setMeetingDate(e.target.value)}
-                    className="w-full border border-slate-205 rounded-xl p-2.5 bg-white text-slate-800"
+                    className="w-full border border-slate-205 rounded-xl p-2.5 bg-white text-[#082458]"
                   />
                 </div>
                 
@@ -858,7 +858,7 @@ export default function TaskManager({
                   <select 
                     value={meetingDuration}
                     onChange={(e) => setMeetingDuration(e.target.value)}
-                    className="w-full border border-slate-205 rounded-xl p-2.5 bg-white text-slate-800"
+                    className="w-full border border-slate-205 rounded-xl p-2.5 bg-white text-[#082458]"
                   >
                     <option value="15 mins">15 mins checkin</option>
                     <option value="30 mins">30 mins briefing</option>
@@ -874,7 +874,7 @@ export default function TaskManager({
                   <select 
                     value={meetingAssignee}
                     onChange={(e) => setMeetingAssignee(e.target.value)}
-                    className="w-full border border-slate-205 rounded-xl p-2.5 bg-white text-slate-800"
+                    className="w-full border border-slate-205 rounded-xl p-2.5 bg-white text-[#082458]"
                   >
                     <option value="">-- Let System Select (Self) --</option>
                     {assigneesList.map(staff => (
@@ -905,7 +905,7 @@ export default function TaskManager({
                         setMeetingLocation('Aman Varma Corp Hub, Delhi');
                       }}
                       className={`flex-1 py-2.5 rounded-xl border text-center transition flex justify-center items-center gap-1 ${
-                        meetingType === 'Physical' ? 'bg-indigo-50 border-indigo-400 text-indigo-700 font-extrabold' : 'bg-white border-slate-200 text-slate-600'
+                        meetingType === 'Physical' ? 'bg-[#eef4fb] border-[#38bdf8] text-[#0b74f0] font-extrabold' : 'bg-white border-slate-200 text-slate-600'
                       }`}
                     >
                       <MapPin className="w-4 h-4 shrink-0" /> physical Office Visit
@@ -964,7 +964,7 @@ export default function TaskManager({
           <div className="lg:col-span-5 space-y-6">
             
             {/* Real-time calendar mockup list */}
-            <div className="bg-white p-5 rounded-2xl border border-slate-150/70 shadow-xxs">
+            <div className="bg-white p-5 rounded-2xl border border-slate-200/70 shadow-xxs">
               <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block mb-3 font-mono">Today's Meeting Calendar</span>
               
               <div className="space-y-3">
@@ -976,24 +976,24 @@ export default function TaskManager({
                   </div>
                 ) : (
                   tasks.filter(t => t.type === 'Meeting').map(m => (
-                    <div key={m.id} className="p-3 border border-slate-150 rounded-xl bg-slate-50/50 hover:bg-white hover:border-slate-350 transition space-y-2">
+                    <div key={m.id} className="p-3 border border-slate-200 rounded-xl bg-slate-50/50 hover:bg-white hover:border-slate-300 transition space-y-2">
                       <div className="flex justify-between items-start">
                         <div>
-                          <h4 className="text-xs font-bold text-slate-900">{m.title}</h4>
+                          <h4 className="text-xs font-bold text-[#082458]">{m.title}</h4>
                           <span className="text-[9.5px] text-slate-400 font-extrabold block">With {m.clientName || 'General Client'}</span>
                         </div>
                         <span className="text-[10px] font-mono text-slate-400 font-bold shrink-0">{m.time}</span>
                       </div>
                       
-                      <div className="flex items-center justify-between gap-2.5 pt-2 border-t border-slate-150/50 text-[11px] text-slate-500">
-                        <span className="font-semibold text-slate-600">Assignee: <span className="font-extrabold text-indigo-650">{m.assignedTo || 'Unassigned'}</span></span>
+                      <div className="flex items-center justify-between gap-2.5 pt-2 border-t border-slate-200/50 text-[11px] text-slate-500">
+                        <span className="font-semibold text-slate-600">Assignee: <span className="font-extrabold text-[#0b74f0]">{m.assignedTo || 'Unassigned'}</span></span>
                         
                         {m.meetingDetails?.type === 'Virtual' ? (
                           <span className="text-sky-600 font-bold flex items-center gap-1">
                             <Video className="w-3.5 h-3.5" /> Virtual Meet
                           </span>
                         ) : (
-                          <span className="text-indigo-600 font-bold flex items-center gap-1">
+                          <span className="text-[#0b74f0] font-bold flex items-center gap-1">
                             <MapPin className="w-3.5 h-3.5" /> Office Venue
                           </span>
                         )}
@@ -1005,7 +1005,7 @@ export default function TaskManager({
             </div>
 
             {/* Simulated Zoom Video Bridge Promo Card */}
-            <div className="bg-slate-950 p-6 rounded-2xl text-white relative overflow-hidden">
+            <div className="bg-[#031338] p-6 rounded-2xl text-white relative overflow-hidden">
               <div className="absolute right-0 bottom-0 opacity-10">
                 <Calendar className="w-48 h-48" />
               </div>
@@ -1033,11 +1033,11 @@ export default function TaskManager({
 
       {/* ===================== TAB: LEAD FOLLOW-UP TRACKING ===================== */}
       {activeTab === 'followup' && (
-        <div className="bg-white p-5 rounded-2xl border border-slate-150/70 shadow-xxs space-y-4">
+        <div className="bg-white p-5 rounded-2xl border border-slate-200/70 shadow-xxs space-y-4">
           
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
             <div>
-              <h3 className="text-xs font-black text-slate-900 uppercase">Leads Pipeline Follow-up Core</h3>
+              <h3 className="text-xs font-black text-[#082458] uppercase">Leads Pipeline Follow-up Core</h3>
               <p className="text-xs text-slate-400">Track contact reminders, outstanding proposals, and nudge qualification stages to prevent deals from getting cold.</p>
             </div>
 
@@ -1054,7 +1054,7 @@ export default function TaskManager({
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs text-slate-650">
+            <table className="w-full text-left text-xs text-slate-600">
               <thead>
                 <tr className="bg-slate-50 text-[10px] font-black uppercase text-slate-400 tracking-wider">
                   <th className="p-3">Client Contact / Company</th>
@@ -1078,7 +1078,7 @@ export default function TaskManager({
                     return (
                       <tr key={lead.id} className="hover:bg-slate-50/50 transition">
                         <td className="p-3">
-                          <div className="font-extrabold text-slate-900 text-xs">{lead.name}</div>
+                          <div className="font-extrabold text-[#082458] text-xs">{lead.name}</div>
                           <div className="text-[10px] text-slate-400">{lead.company} • {lead.email}</div>
                         </td>
 
@@ -1093,14 +1093,14 @@ export default function TaskManager({
                           </span>
                         </td>
 
-                        <td className="p-3 text-right font-bold text-slate-800">
+                        <td className="p-3 text-right font-bold text-[#082458]">
                           ${lead.value.toLocaleString()}
                         </td>
 
                         <td className="p-3 text-center">
                           {existingFollowTask ? (
-                            <span className="inline-flex items-center gap-1 text-[10px] bg-indigo-50 text-indigo-700 border border-indigo-150 px-2.5 py-0.5 rounded-lg font-bold">
-                              <Check className="w-3 h-3 text-indigo-600" /> Touchpoint Scheduled
+                            <span className="inline-flex items-center gap-1 text-[10px] bg-[#eef4fb] text-[#0b74f0] border border-[#0b74f0]/25 px-2.5 py-0.5 rounded-lg font-bold">
+                              <Check className="w-3 h-3 text-[#0b74f0]" /> Touchpoint Scheduled
                             </span>
                           ) : (
                             <span className="inline-flex items-center gap-1 text-[10px] bg-rose-50 text-rose-700 border border-rose-150 px-2.5 py-0.5 rounded-lg font-bold">
@@ -1120,7 +1120,7 @@ export default function TaskManager({
                           ) : (
                             <button
                               onClick={() => handleQuickFollowup(lead)}
-                              className="px-3 py-1 bg-indigo-600 hover:bg-slate-900 text-white rounded-lg text-xxs font-black transition shadow-xxs flex items-center gap-1 mx-auto"
+                              className="px-3 py-1 bg-[#0b74f0] hover:bg-[#041845] text-white rounded-lg text-xxs font-black transition shadow-xxs flex items-center gap-1 mx-auto"
                             >
                               <Plus className="w-3 h-3" /> Schedule Follow-up
                             </button>
@@ -1144,11 +1144,11 @@ export default function TaskManager({
 
       {/* ===================== TAB: SYSTEM AUDIT FEED ACTIVITY HISTORY ===================== */}
       {activeTab === 'history' && (
-        <div className="bg-white p-5 rounded-2xl border border-slate-150/70 shadow-xxs space-y-4">
+        <div className="bg-white p-5 rounded-2xl border border-slate-200/70 shadow-xxs space-y-4">
           
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
             <div>
-              <h3 className="text-xs font-black text-slate-900 uppercase">Operational Audit Activity Log</h3>
+              <h3 className="text-xs font-black text-[#082458] uppercase">Operational Audit Activity Log</h3>
               <p className="text-xs text-slate-400">Chronological history record of all employee tasks assigned, meetings booked, and stage actions completed.</p>
             </div>
             
@@ -1177,7 +1177,7 @@ export default function TaskManager({
                     log.type === 'Task' ? 'bg-purple-600 shadow-[0_0_0_4px_rgba(147,51,234,0.1)]' :
                     log.type === 'Meeting' ? 'bg-sky-500 shadow-[0_0_0_4px_rgba(14,165,233,0.1)]' :
                     log.type === 'Follow-up' ? 'bg-emerald-500 shadow-[0_0_0_4px_rgba(16,185,129,0.1)]' :
-                    log.type === 'Assignment' ? 'bg-indigo-600 shadow-[0_0_0_4px_rgba(79,70,229,0.1)]' :
+                    log.type === 'Assignment' ? 'bg-[#0b74f0] shadow-[0_0_0_4px_rgba(79,70,229,0.1)]' :
                     log.type === 'Deletion' ? 'bg-rose-600 shadow-[0_0_0_4px_rgba(220,38,38,0.1)]' :
                     'bg-slate-450'
                   }`}>
@@ -1187,12 +1187,12 @@ export default function TaskManager({
                   {/* Information block */}
                   <div className="space-y-1">
                     <div className="flex flex-wrap items-baseline gap-2">
-                      <span className="text-xs font-black text-slate-900">{log.action}</span>
+                      <span className="text-xs font-black text-[#082458]">{log.action}</span>
                       <span className={`px-1.5 py-0.2 rounded text-[8.5px] uppercase font-mono font-black border ${
                         log.type === 'Task' ? 'bg-purple-50 text-purple-700 border-purple-150' :
                         log.type === 'Meeting' ? 'bg-sky-50 text-sky-700 border-sky-150' :
                         log.type === 'Follow-up' ? 'bg-emerald-50 text-emerald-700 border-emerald-150' :
-                        log.type === 'Assignment' ? 'bg-indigo-50 text-indigo-700 border-indigo-150' :
+                        log.type === 'Assignment' ? 'bg-[#eef4fb] text-[#0b74f0] border-[#0b74f0]/25' :
                         'bg-slate-50 text-slate-655 border-slate-200'
                       }`}>
                         {log.type}
@@ -1219,10 +1219,10 @@ export default function TaskManager({
 
       {/* Generic Task Creation Form Modal on overlay */}
       {isFormOpen && (
-        <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center z-55 p-4 animate-fadeIn">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6 border border-slate-150 shadow-2xl relative">
+        <div className="fixed inset-0 bg-[#031338]/60 backdrop-blur-xs flex items-center justify-center z-55 p-4 animate-fadeIn">
+          <div className="bg-white rounded-2xl max-w-lg w-full p-6 border border-slate-200 shadow-2xl relative">
             <div className="pb-3 border-b border-slate-100 mb-4">
-              <h3 className="text-sm font-black text-slate-900 uppercase">Create Operational Task</h3>
+              <h3 className="text-sm font-black text-[#082458] uppercase">Create Operational Task</h3>
               <p className="text-xs text-slate-400">Complete the coordinates to seed details into scheduling workspaces.</p>
             </div>
 
@@ -1245,7 +1245,7 @@ export default function TaskManager({
                   <select
                     value={clientName}
                     onChange={(e) => setClientName(e.target.value)}
-                    className="w-full border border-slate-205 rounded-xl p-2.5 bg-white text-slate-850"
+                    className="w-full border border-slate-205 rounded-xl p-2.5 bg-white text-[#082458]"
                   >
                     <option value="">-- Let Blank / Choose from CRM --</option>
                     {leads.map(lead => (
@@ -1270,7 +1270,7 @@ export default function TaskManager({
                 <div>
                   <label className="block text-[10px] font-black uppercase text-slate-450 tracking-wider mb-1">Activity Category</label>
                   <select 
-                    className="w-full border border-slate-205 rounded-xl p-2.5 bg-white text-slate-800"
+                    className="w-full border border-slate-205 rounded-xl p-2.5 bg-white text-[#082458]"
                     value={taskType}
                     onChange={(e) => setTaskType(e.target.value as any)}
                   >
@@ -1283,7 +1283,7 @@ export default function TaskManager({
                 <div>
                   <label className="block text-[10px] font-black uppercase text-slate-450 tracking-wider mb-1">Priority Level</label>
                   <select 
-                    className="w-full border border-slate-205 rounded-xl p-2.5 bg-white text-slate-800"
+                    className="w-full border border-slate-205 rounded-xl p-2.5 bg-white text-[#082458]"
                     value={priority}
                     onChange={(e) => setPriority(e.target.value as any)}
                   >
@@ -1297,7 +1297,7 @@ export default function TaskManager({
               <div>
                 <label className="block text-[10px] font-black uppercase text-slate-450 tracking-wider mb-1">Corporate Representative Assignee</label>
                 <select 
-                  className="w-full border border-slate-205 rounded-xl p-2.5 bg-white text-slate-800 font-extrabold"
+                  className="w-full border border-slate-205 rounded-xl p-2.5 bg-white text-[#082458] font-extrabold"
                   value={assignedTo}
                   onChange={(e) => setAssignedTo(e.target.value)}
                 >

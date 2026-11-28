@@ -1,10 +1,31 @@
-import React, { useState } from 'react';
-import { 
-  Users, Target, Phone, Headphones, MapPin, CheckSquare, 
-  CreditCard, MessageSquare, Lock, Plus, ArrowUpRight, ChevronRight,
-  TrendingUp, CircleDollarSign, Shield, Calendar, Users2, HelpCircle
+import React, { useMemo, useState } from 'react';
+import {
+  Users,
+  FileText,
+  TrendingUp,
+  BarChart3,
+  PieChart,
+  Zap,
+  UserPlus,
+  Headphones,
+  CheckSquare,
+  Settings,
+  ArrowRight,
+  CheckCircle2,
+  Award,
+  Activity,
+  Receipt,
+  UserCheck,
 } from 'lucide-react';
-import { Lead, CallLog, SupportTicket, FieldStaff, Task, Employee, CommsLog } from '../types';
+import {
+  Lead,
+  CallLog,
+  SupportTicket,
+  FieldStaff,
+  Task,
+  Employee,
+  CommsLog,
+} from '../types';
 
 interface DashboardProps {
   leads: Lead[];
@@ -14,6 +35,7 @@ interface DashboardProps {
   tasks: Task[];
   employees: Employee[];
   commsLogs: CommsLog[];
+  userRole?: string;
   onNavigate: (tab: string) => void;
   onAddLeadOpen: () => void;
   onAddCustomerOpen: () => void;
@@ -21,332 +43,852 @@ interface DashboardProps {
   onCreateTaskOpen: () => void;
   onAddEmployeeOpen: () => void;
   onProcessPayroll: () => void;
+  onClientOnboardingOpen?: () => void;
+}
+
+interface StoredTenant {
+  id: string;
+  name: string;
+  status: 'Active' | 'Trialing' | 'Suspended';
+  createdAt?: string;
+}
+
+interface StoredInvoice {
+  id: string;
+  clientName: string;
+  companyName: string;
+  totalAmount: number;
+  status: 'Paid' | 'Unpaid' | 'Overdue';
+  dateIssued: string;
+}
+
+type TimeframeOption = 'Last 6 Months' | 'Last 12 Months' | 'This Quarter';
+
+const SALES_SERIES_BY_TIMEFRAME: Record<
+  TimeframeOption,
+  { label: string; sales: number; invoices: number; revenue: number }[]
+> = {
+  'Last 6 Months': [
+    { label: 'Jun', sales: 6.1, invoices: 4.3, revenue: 2.7 },
+    { label: 'Jul', sales: 10.6, invoices: 8.6, revenue: 7.2 },
+    { label: 'Aug', sales: 13.4, invoices: 11.2, revenue: 9.7 },
+    { label: 'Sep', sales: 12.3, invoices: 10.2, revenue: 8.1 },
+    { label: 'Oct', sales: 15.6, invoices: 13.0, revenue: 10.1 },
+    { label: 'Nov', sales: 20.0, invoices: 17.6, revenue: 14.9 },
+  ],
+  'Last 12 Months': [
+    { label: 'Dec', sales: 4.2, invoices: 3.1, revenue: 2.2 },
+    { label: 'Feb', sales: 7.4, invoices: 5.9, revenue: 4.3 },
+    { label: 'Apr', sales: 9.8, invoices: 7.7, revenue: 6.1 },
+    { label: 'Jun', sales: 12.1, invoices: 9.6, revenue: 7.8 },
+    { label: 'Aug', sales: 15.8, invoices: 13.2, revenue: 10.6 },
+    { label: 'Nov', sales: 20.0, invoices: 17.6, revenue: 14.9 },
+  ],
+  'This Quarter': [
+    { label: 'W1', sales: 8.2, invoices: 6.5, revenue: 4.9 },
+    { label: 'W3', sales: 11.4, invoices: 9.1, revenue: 7.2 },
+    { label: 'W5', sales: 13.8, invoices: 11.6, revenue: 9.1 },
+    { label: 'W7', sales: 15.1, invoices: 12.4, revenue: 10.3 },
+    { label: 'W9', sales: 17.5, invoices: 15.0, revenue: 12.6 },
+    { label: 'W12', sales: 19.6, invoices: 17.1, revenue: 14.5 },
+  ],
+};
+
+const DEFAULT_RECENT_INVOICES = [
+  { id: 'INV-10256', customer: 'ABC Traders', amount: 12500, status: 'Paid', date: '28 Nov 2025' },
+  { id: 'INV-10255', customer: 'Global Tech', amount: 18750, status: 'Paid', date: '27 Nov 2025' },
+  { id: 'INV-10254', customer: 'Sunrise Pvt Ltd', amount: 25000, status: 'Pending', date: '26 Nov 2025' },
+  { id: 'INV-10253', customer: 'Bright India', amount: 15200, status: 'Paid', date: '25 Nov 2025' },
+  { id: 'INV-10252', customer: 'Mega Stores', amount: 20000, status: 'Paid', date: '24 Nov 2025' },
+];
+
+const DEFAULT_TOP_CUSTOMERS = [
+  { customer: 'ABC Traders', invoices: 320, revenue: 850000 },
+  { customer: 'Global Tech', invoices: 280, revenue: 720000 },
+  { customer: 'Sunrise Pvt Ltd', invoices: 210, revenue: 580000 },
+  { customer: 'Bright India', invoices: 190, revenue: 450000 },
+  { customer: 'Mega Stores', invoices: 150, revenue: 320000 },
+];
+
+function safeParseLocalArray<T>(key: string): T[] {
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+function formatDateLabel(rawDate: string): string {
+  const parsed = new Date(rawDate);
+  if (Number.isNaN(parsed.getTime())) return rawDate;
+  return parsed.toLocaleDateString('en-GB', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  });
 }
 
 export default function Dashboard({
   leads,
-  callLogs,
   supportTickets,
-  fieldStaff,
   tasks,
-  employees,
   commsLogs,
+  userRole = 'Super Admin',
   onNavigate,
-  onAddLeadOpen,
   onAddCustomerOpen,
-  onLogCallOpen,
   onCreateTaskOpen,
   onAddEmployeeOpen,
-  onProcessPayroll
+  onClientOnboardingOpen,
 }: DashboardProps) {
-  // Analytical graph interactive coordinates
-  const [hoveredPoint, setHoveredPoint] = useState<{ x: number; y: number; day: number; leads: number; revenue: number } | null>(null);
-  const [hoveredSource, setHoveredSource] = useState<string | null>(null);
+  const [timeframe, setTimeframe] = useState<TimeframeOption>('Last 6 Months');
+  const [hoveredChartIdx, setHoveredChartIdx] = useState<number | null>(null);
+  const [hoveredSegment, setHoveredSegment] = useState<string | null>(null);
 
-  // Derive counts dynamically
-  const activeLeadsCount = leads.length + 1249; // Offset to match image mockup base
-  const openOppsCount = leads.filter(l => l.status !== 'Won').length + 673;
-  const customersCount = leads.filter(l => l.status === 'Won').length + 979;
-  
-  // Calculate dynamic revenue
-  const totalRevenueBase = 2568450;
-  const newWonValue = leads.filter(l => l.status === 'Won').reduce((acc, lead) => acc + lead.value, 0);
-  const totalRevenue = totalRevenueBase + (newWonValue > 0 ? newWonValue : 0);
+  const storedTenants = useMemo(
+    () => safeParseLocalArray<StoredTenant>('saas_tenants'),
+    []
+  );
+  const storedInvoices = useMemo(
+    () => safeParseLocalArray<StoredInvoice>('crm_leads_invoices'),
+    []
+  );
 
-  // Group Pipeline counts
-  const pipelineCounts = {
-    'New Leads': leads.filter(l => l.status === 'New Leads').length + 1251,
-    'Qualification': leads.filter(l => l.status === 'Qualification').length + 848,
-    'Proposal': leads.filter(l => l.status === 'Proposal').length + 618,
-    'Negotiation': leads.filter(l => l.status === 'Negotiation').length + 318,
-    'Won': leads.filter(l => l.status === 'Won').length + 209,
-  };
+  // KPI Metrics (reflecting live tenant & invoice changes on top of baseline)
+  const totalTenantsCount = 1245 + (storedTenants.length || 3);
+  const totalInvoicesCount = 8764 + (storedInvoices.length || 1);
+  const wonRevenueDelta = leads
+    .filter((l) => l.status === 'Won')
+    .reduce((sum, l) => sum + (Number(l.value) || 0), 0);
+  const paidInvoiceDelta = storedInvoices
+    .filter((inv) => inv.status === 'Paid')
+    .reduce((sum, inv) => sum + (Number(inv.totalAmount) || 0), 0);
+  const totalRevenue =
+    2450000 +
+    (wonRevenueDelta > 1500000 ? wonRevenueDelta - 1500000 : 0) +
+    (paidInvoiceDelta > 350000 ? paidInvoiceDelta - 350000 : 0);
+  const activeTenantsDelta = storedTenants.filter((t) => t.status === 'Active').length;
+  const activeSubscriptionsCount = 1118 + (activeTenantsDelta || 2);
 
-  // Leads Source Distribution
-  const leadSources = [
-    { name: 'Website', pct: 30, count: Math.round(activeLeadsCount * 0.30), color: '#4f46e5' },
-    { name: 'Referral', pct: 20, count: Math.round(activeLeadsCount * 0.20), color: '#10b981' },
-    { name: 'Social Media', pct: 15, count: Math.round(activeLeadsCount * 0.15), color: '#f59e0b' },
-    { name: 'Calling', pct: 15, count: Math.round(activeLeadsCount * 0.15), color: '#ec4899' },
-    { name: 'Walk-in', pct: 10, count: Math.round(activeLeadsCount * 0.10), color: '#f97316' },
-    { name: 'Others', pct: 10, count: Math.round(activeLeadsCount * 0.10), color: '#84cc16' }
-  ];
+  // Sales Overview series
+  const chartData = SALES_SERIES_BY_TIMEFRAME[timeframe];
+  const chartWidth = 460;
+  const chartHeight = 148;
+  const padLeft = 36;
+  const padRight = 14;
+  const padTop = 12;
+  const padBottom = 10;
+  const innerW = chartWidth - padLeft - padRight;
+  const innerH = chartHeight - padTop - padBottom;
 
-  // Mock graph points for 30 days revenue & leads comparison
-  const graphPoints = [
-    { day: 1, leads: 280, revenue: 15 },
-    { day: 5, leads: 420, revenue: 22 },
-    { day: 10, leads: 310, revenue: 18 },
-    { day: 15, leads: 510, revenue: 28 },
-    { day: 20, leads: 430, revenue: 20 },
-    { day: 25, leads: 560, revenue: 31 },
-    { day: 30, leads: 780, revenue: 40 }
-  ];
-
-  // Helper for generating dynamic chart curves
-  const getLinePath = (data: typeof graphPoints, key: 'leads' | 'revenue', maxVal: number, height: number): string => {
-    const width = 500;
-    const points = data.map((d, index) => {
-      const x = (index / (data.length - 1)) * width;
-      const y = height - (d[key] / maxVal) * height;
-      return `${x},${y}`;
+  const getChartCoords = (key: 'sales' | 'invoices' | 'revenue') =>
+    chartData.map((pt, idx) => {
+      const x = padLeft + (idx / Math.max(1, chartData.length - 1)) * innerW;
+      const y = padTop + innerH - (pt[key] / 20) * innerH;
+      return { x, y, val: pt[key], label: pt.label };
     });
-    return `M ${points.join(' L ')}`;
+
+  const buildSmoothLinePath = (points: { x: number; y: number }[]) => {
+    if (points.length === 0) return '';
+    return points.reduce((acc, pt, idx, arr) => {
+      if (idx === 0) return `M ${pt.x} ${pt.y}`;
+      const prev = arr[idx - 1];
+      const cx = (prev.x + pt.x) / 2;
+      return `${acc} C ${cx} ${prev.y}, ${cx} ${pt.y}, ${pt.x} ${pt.y}`;
+    }, '');
   };
 
-  // KPI Mini charts data paths
-  const l1Path = "M 0 25 Q 15 15 30 22 T 60 12 T 90 28 T 120 10 T 150 18 T 180 5 T 210 20 T 240 12";
-  const l2Path = "M 0 28 Q 15 25 30 18 T 60 22 T 90 10 T 120 25 T 150 14 T 180 20 T 210 12 T 240 8";
-  const l3Path = "M 0 20 Q 15 28 30 15 T 60 25 T 90 12 T 120 18 T 150 8 T 180 15 T 210 5 T 240 10";
-  const l4Path = "M 0 15 Q 15 18 30 10 T 60 26 T 90 15 T 120 22 T 150 12 T 180 25 T 210 18 T 240 5";
+  const salesCoords = getChartCoords('sales');
+  const invoicesCoords = getChartCoords('invoices');
+  const revenueCoords = getChartCoords('revenue');
+
+  // Subscription Status Donut segments
+  const subscriptionBreakdown = useMemo(() => {
+    const activeExtra = storedTenants.filter((t) => t.status === 'Active').length;
+    const pendingExtra = storedTenants.filter((t) => t.status === 'Trialing').length;
+    const suspendedExtra = storedTenants.filter((t) => t.status === 'Suspended').length;
+
+    if (storedTenants.length >= 6) {
+      const total = storedTenants.length;
+      const activePct = Math.round((activeExtra / total) * 100);
+      const expiredPct = Math.round((suspendedExtra / total) * 100);
+      const pendingPct = Math.max(0, 100 - activePct - expiredPct);
+      return [
+        { name: 'Active', pct: activePct, color: '#10b981' },
+        { name: 'Expired', pct: expiredPct, color: '#157cf3' },
+        { name: 'Pending', pct: pendingPct, color: '#f59e0b' },
+      ];
+    }
+
+    return [
+      { name: 'Active', pct: 72, color: '#10b981' },
+      { name: 'Expired', pct: 16, color: '#157cf3' },
+      { name: 'Pending', pct: 12 + (pendingExtra > 1 ? 0 : 0), color: '#f59e0b' },
+    ];
+  }, [storedTenants]);
+
+  // Recent Invoices (merged with live crm_leads_invoices)
+  const recentInvoicesRows = useMemo(() => {
+    const liveRows = storedInvoices.slice(0, 3).map((inv) => ({
+      id: inv.id,
+      customer: inv.companyName || inv.clientName,
+      amount: inv.totalAmount,
+      status: inv.status === 'Paid' ? 'Paid' : inv.status === 'Overdue' ? 'Overdue' : 'Pending',
+      date: formatDateLabel(inv.dateIssued),
+    }));
+    const seen = new Set(liveRows.map((r) => r.id));
+    const merged = [
+      ...liveRows,
+      ...DEFAULT_RECENT_INVOICES.filter((d) => !seen.has(d.id)),
+    ];
+    return merged.slice(0, 5);
+  }, [storedInvoices]);
+
+  // Top Customers (merged with live Won/high-value leads)
+  const topCustomerRows = useMemo(() => {
+    const liveTop = [...leads]
+      .sort((a, b) => b.value - a.value)
+      .slice(0, 2)
+      .map((lead, idx) => ({
+        customer: lead.company || lead.name,
+        invoices: 340 - idx * 25,
+        revenue: lead.value,
+      }));
+    const seen = new Set(liveTop.map((r) => r.customer.toLowerCase()));
+    const merged = [
+      ...liveTop,
+      ...DEFAULT_TOP_CUSTOMERS.filter((c) => !seen.has(c.customer.toLowerCase())),
+    ];
+    return merged.slice(0, 5);
+  }, [leads]);
+
+  // Recent Activities timeline (synthesizing live tasks, tickets, comms, invoices)
+  const recentActivityRows = useMemo(() => {
+    const items: {
+      id: string;
+      text: string;
+      time: string;
+      tone: 'green' | 'blue' | 'purple' | 'amber' | 'indigo';
+      icon: 'check' | 'tenant' | 'ticket' | 'task' | 'user';
+    }[] = [];
+
+    if (recentInvoicesRows[0]) {
+      items.push({
+        id: 'act-inv',
+        text: `Invoice ${recentInvoicesRows[0].id} ${
+          recentInvoicesRows[0].status === 'Paid' ? 'paid successfully' : 'generated for client'
+        }`,
+        time: '2 mins ago',
+        tone: 'green',
+        icon: 'check',
+      });
+    }
+
+    if (storedTenants[0]) {
+      items.push({
+        id: 'act-ten',
+        text: `Tenant ${storedTenants[storedTenants.length - 1].name} active in cluster`,
+        time: '15 mins ago',
+        tone: 'blue',
+        icon: 'tenant',
+      });
+    } else {
+      items.push({
+        id: 'act-ten-default',
+        text: 'New tenant ABC Traders onboarded',
+        time: '15 mins ago',
+        tone: 'blue',
+        icon: 'tenant',
+      });
+    }
+
+    const latestTicket = supportTickets[0];
+    items.push({
+      id: 'act-tkt',
+      text: latestTicket
+        ? `Support ticket #${latestTicket.id} ${latestTicket.status.toLowerCase()}`
+        : 'Support ticket #ST-1045 resolved',
+      time: '1 hour ago',
+      tone: 'purple',
+      icon: 'ticket',
+    });
+
+    const latestTask = tasks[0];
+    items.push({
+      id: 'act-tsk',
+      text: latestTask
+        ? `${latestTask.title} (${latestTask.assignedTo || 'Assigned'})`
+        : 'New task assigned to Rahul Sharma',
+      time: '2 hours ago',
+      tone: 'amber',
+      icon: 'task',
+    });
+
+    const latestComm = commsLogs[0];
+    items.push({
+      id: 'act-usr',
+      text: latestComm
+        ? `${latestComm.type} dispatched to ${latestComm.recipient}`
+        : 'New user registered: rohit.kumar',
+      time: '3 hours ago',
+      tone: 'indigo',
+      icon: 'user',
+    });
+
+    return items.slice(0, 5);
+  }, [recentInvoicesRows, storedTenants, supportTickets, tasks, commsLogs]);
+
+  const quickActionItems = [
+    {
+      id: 'qa-create-invoice',
+      label: 'Create Invoice',
+      icon: FileText,
+      onClick: () => onNavigate('leads'),
+    },
+    {
+      id: 'qa-add-tenant',
+      label: userRole === 'Super Admin' ? 'Client Onboarding' : 'Add Lead',
+      icon: UserPlus,
+      onClick: () => {
+        if (userRole === 'Super Admin') {
+          if (onClientOnboardingOpen) {
+            onClientOnboardingOpen();
+          } else {
+            onNavigate('saas');
+          }
+        } else {
+          onNavigate('leads');
+        }
+      },
+    },
+    {
+      id: 'qa-support-ticket',
+      label: 'Support Ticket',
+      icon: Headphones,
+      onClick: onAddCustomerOpen,
+    },
+    {
+      id: 'qa-create-task',
+      label: 'Create Task',
+      icon: CheckSquare,
+      onClick: onCreateTaskOpen,
+    },
+    {
+      id: 'qa-add-staff',
+      label: 'Add Staff',
+      icon: Users,
+      onClick: onAddEmployeeOpen,
+    },
+    {
+      id: 'qa-settings',
+      label: 'Settings',
+      icon: Settings,
+      onClick: () => onNavigate('security'),
+    },
+  ];
 
   return (
-    <div id="dashboard-container" className="space-y-3">
-      
-      {/* Metrics Row (KPIs Matching image) - High Density Styled */}
-      <div id="widget-kpi-row" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-        
-        {/* Card 1: Total Leads */}
-        <div id="kpi-leads" className="bg-white p-3.5 rounded border border-slate-200 shadow-none flex flex-col justify-between h-28 relative overflow-hidden group hover:bg-slate-50/30 transition duration-200">
-          <div className="flex justify-between items-start">
-            <div>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Leads</p>
-              <h3 className="text-xl font-black text-slate-900 mt-1">{activeLeadsCount.toLocaleString('en-IN')}</h3>
+    <div id="dashboard-container" className="space-y-4">
+      {/* Row 1: 4 Elevated KPI Cards with Wave Sparklines */}
+      <div
+        id="widget-kpi-row"
+        className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4"
+      >
+        {/* KPI 1: Total Tenants */}
+        <div
+          id="kpi-tenants"
+          onClick={() => onNavigate(userRole === 'Super Admin' ? 'saas' : 'leads')}
+          className="bg-white rounded-2xl border border-slate-200/70 shadow-[0_4px_18px_rgba(8,36,88,0.05)] p-4 relative overflow-hidden flex flex-col justify-between min-h-[116px] cursor-pointer hover:shadow-[0_8px_24px_rgba(11,116,240,0.12)] transition"
+        >
+          <div className="flex items-start gap-3.5 relative z-10">
+            <div className="w-12 h-12 rounded-xl bg-[#eef4fb] text-[#0b74f0] flex items-center justify-center shrink-0">
+              <Users className="w-6 h-6" id="icon-total-tenants" />
             </div>
-            <div className="p-1.5 rounded bg-indigo-50 text-indigo-600 border border-indigo-100">
-              <Users className="w-4 h-4" id="icon-total-leads" />
+            <div className="min-w-0">
+              <p className="text-[12px] font-medium text-slate-500 truncate">
+                Total Tenants
+              </p>
+              <h3 className="text-2xl font-extrabold text-[#082458] tracking-tight tabular-nums mt-0.5">
+                {totalTenantsCount.toLocaleString('en-IN')}
+              </h3>
             </div>
           </div>
-          <div className="flex items-center justify-between mt-2 z-10">
-            <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-150 flex items-center gap-0.5">
-              <TrendingUp className="w-2.5 h-2.5" /> 18.5%
-              <span className="text-slate-400 font-normal ml-0.5">vs last month</span>
+
+          <div className="mt-3 relative z-10">
+            <span className="inline-flex items-center gap-1 text-xs font-bold text-[#10b981] tabular-nums">
+              <span>↑</span> 12%
             </span>
           </div>
-          {/* Wave chart overlay */}
-          <div className="absolute bottom-0 left-0 w-full opacity-30">
-            <svg viewBox="0 0 240 35" className="w-full h-6 text-indigo-500 fill-none stroke-current stroke-1">
-              <path d={l1Path} />
-            </svg>
-          </div>
+
+          <svg
+            viewBox="0 0 180 56"
+            preserveAspectRatio="none"
+            className="absolute right-0 bottom-0 w-40 h-14 pointer-events-none"
+          >
+            <defs>
+              <linearGradient id="kpiWaveBlue" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#0b74f0" stopOpacity="0.32" />
+                <stop offset="100%" stopColor="#0b74f0" stopOpacity="0.02" />
+              </linearGradient>
+            </defs>
+            <path
+              d="M 10 48 Q 32 42 52 24 T 95 28 T 135 16 T 180 26 L 180 56 L 10 56 Z"
+              fill="url(#kpiWaveBlue)"
+            />
+            <path
+              d="M 10 48 Q 32 42 52 24 T 95 28 T 135 16 T 180 26"
+              fill="none"
+              stroke="#0b74f0"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+          </svg>
         </div>
 
-        {/* Card 2: Open Opportunities */}
-        <div id="kpi-opportunities" className="bg-white p-3.5 rounded border border-slate-200 shadow-none flex flex-col justify-between h-28 relative overflow-hidden group hover:bg-slate-50/30 transition duration-200">
-          <div className="flex justify-between items-start">
-            <div>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Open Opportunities</p>
-              <h3 className="text-xl font-black text-slate-900 mt-1">{openOppsCount}</h3>
+        {/* KPI 2: Total Invoices */}
+        <div
+          id="kpi-invoices"
+          onClick={() => onNavigate('leads')}
+          className="bg-white rounded-2xl border border-slate-200/70 shadow-[0_4px_18px_rgba(8,36,88,0.05)] p-4 relative overflow-hidden flex flex-col justify-between min-h-[116px] cursor-pointer hover:shadow-[0_8px_24px_rgba(20,184,134,0.12)] transition"
+        >
+          <div className="flex items-start gap-3.5 relative z-10">
+            <div className="w-12 h-12 rounded-xl bg-[#e6f9f0] text-[#069468] flex items-center justify-center shrink-0">
+              <FileText className="w-6 h-6" id="icon-total-invoices" />
             </div>
-            <div className="p-1.5 rounded bg-amber-50 text-amber-700 border border-amber-100">
-              <Target className="w-4 h-4" id="icon-open-opps" />
+            <div className="min-w-0">
+              <p className="text-[12px] font-medium text-slate-500 truncate">
+                Total Invoices
+              </p>
+              <h3 className="text-2xl font-extrabold text-[#082458] tracking-tight tabular-nums mt-0.5">
+                {totalInvoicesCount.toLocaleString('en-IN')}
+              </h3>
             </div>
           </div>
-          <div className="flex items-center justify-between mt-2 z-10">
-            <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-150 flex items-center gap-0.5">
-              <TrendingUp className="w-2.5 h-2.5" /> 12.4%
-              <span className="text-slate-400 font-normal ml-0.5">vs last month</span>
+
+          <div className="mt-3 relative z-10">
+            <span className="inline-flex items-center gap-1 text-xs font-bold text-[#10b981] tabular-nums">
+              <span>↑</span> 15%
             </span>
           </div>
-          <div className="absolute bottom-0 left-0 w-full opacity-30">
-            <svg viewBox="0 0 240 35" className="w-full h-6 text-amber-500 fill-none stroke-current stroke-1">
-              <path d={l2Path} />
-            </svg>
-          </div>
+
+          <svg
+            viewBox="0 0 180 56"
+            preserveAspectRatio="none"
+            className="absolute right-0 bottom-0 w-40 h-14 pointer-events-none"
+          >
+            <defs>
+              <linearGradient id="kpiWaveGreen" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#14b886" stopOpacity="0.32" />
+                <stop offset="100%" stopColor="#14b886" stopOpacity="0.02" />
+              </linearGradient>
+            </defs>
+            <path
+              d="M 10 49 Q 35 40 58 30 T 100 32 T 140 18 T 180 22 L 180 56 L 10 56 Z"
+              fill="url(#kpiWaveGreen)"
+            />
+            <path
+              d="M 10 49 Q 35 40 58 30 T 100 32 T 140 18 T 180 22"
+              fill="none"
+              stroke="#14b886"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+          </svg>
         </div>
 
-        {/* Card 3: Total Customers */}
-        <div id="kpi-customers" className="bg-white p-3.5 rounded border border-slate-200 shadow-none flex flex-col justify-between h-28 relative overflow-hidden group hover:bg-slate-50/30 transition duration-200">
-          <div className="flex justify-between items-start">
-            <div>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Customers</p>
-              <h3 className="text-xl font-black text-slate-900 mt-1">{customersCount}</h3>
+        {/* KPI 3: Total Revenue */}
+        <div
+          id="kpi-revenue"
+          onClick={() => onNavigate('leads')}
+          className="bg-white rounded-2xl border border-slate-200/70 shadow-[0_4px_18px_rgba(8,36,88,0.05)] p-4 relative overflow-hidden flex flex-col justify-between min-h-[116px] cursor-pointer hover:shadow-[0_8px_24px_rgba(245,158,11,0.12)] transition"
+        >
+          <div className="flex items-start gap-3.5 relative z-10">
+            <div className="w-12 h-12 rounded-xl bg-[#fef4e2] text-[#f59e0b] flex items-center justify-center shrink-0">
+              <span className="w-7 h-7 rounded-md bg-[#f59e0b] text-white font-extrabold text-sm flex items-center justify-center">
+                ₹
+              </span>
             </div>
-            <div className="p-1.5 rounded bg-indigo-50 text-indigo-600 border border-indigo-100">
-              <Users2 className="w-4 h-4" id="icon-total-customers" />
+            <div className="min-w-0">
+              <p className="text-[12px] font-medium text-slate-500 truncate">
+                Total Revenue
+              </p>
+              <h3 className="text-2xl font-extrabold text-[#082458] tracking-tight tabular-nums mt-0.5 truncate">
+                ₹ {totalRevenue.toLocaleString('en-IN')}
+              </h3>
             </div>
           </div>
-          <div className="flex items-center justify-between mt-2 z-10">
-            <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-150 flex items-center gap-0.5">
-              <TrendingUp className="w-2.5 h-2.5" /> 15.8%
-              <span className="text-slate-400 font-normal ml-0.5">vs last month</span>
+
+          <div className="mt-3 relative z-10">
+            <span className="inline-flex items-center gap-1 text-xs font-bold text-[#10b981] tabular-nums">
+              <span>↑</span> 18%
             </span>
           </div>
-          <div className="absolute bottom-0 left-0 w-full opacity-30">
-            <svg viewBox="0 0 240 35" className="w-full h-6 text-indigo-500 fill-none stroke-current stroke-1">
-              <path d={l3Path} />
-            </svg>
-          </div>
+
+          <svg
+            viewBox="0 0 180 56"
+            preserveAspectRatio="none"
+            className="absolute right-0 bottom-0 w-40 h-14 pointer-events-none"
+          >
+            <defs>
+              <linearGradient id="kpiWaveAmber" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.32" />
+                <stop offset="100%" stopColor="#f59e0b" stopOpacity="0.02" />
+              </linearGradient>
+            </defs>
+            <path
+              d="M 10 50 Q 34 38 62 34 T 104 26 T 144 19 T 180 12 L 180 56 L 10 56 Z"
+              fill="url(#kpiWaveAmber)"
+            />
+            <path
+              d="M 10 50 Q 34 38 62 34 T 104 26 T 144 19 T 180 12"
+              fill="none"
+              stroke="#f59e0b"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+          </svg>
         </div>
 
-        {/* Card 4: Revenue This Month */}
-        <div id="kpi-revenue" className="bg-white p-3.5 rounded border border-slate-200 shadow-none flex flex-col justify-between h-28 relative overflow-hidden group hover:bg-slate-50/30 transition duration-200">
-          <div className="flex justify-between items-start">
-            <div>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Revenue This Month</p>
-              <h3 className="text-xl font-black text-slate-900 mt-1">₹ {totalRevenue.toLocaleString('en-IN')}</h3>
+        {/* KPI 4: Active Subscriptions */}
+        <div
+          id="kpi-subscriptions"
+          onClick={() => onNavigate(userRole === 'Super Admin' ? 'saas' : 'leads')}
+          className="bg-white rounded-2xl border border-slate-200/70 shadow-[0_4px_18px_rgba(8,36,88,0.05)] p-4 relative overflow-hidden flex flex-col justify-between min-h-[116px] cursor-pointer hover:shadow-[0_8px_24px_rgba(105,43,224,0.12)] transition"
+        >
+          <div className="flex items-start gap-3.5 relative z-10">
+            <div className="w-12 h-12 rounded-xl bg-[#f1eaff] text-[#692be0] flex items-center justify-center shrink-0">
+              <TrendingUp className="w-6 h-6" id="icon-active-subs" />
             </div>
-            <div className="p-1.5 px-3 rounded bg-emerald-50 text-emerald-700 font-black border border-emerald-100 text-sm">
-              ₹
+            <div className="min-w-0">
+              <p className="text-[12px] font-medium text-slate-500 truncate">
+                Active Subscriptions
+              </p>
+              <h3 className="text-2xl font-extrabold text-[#082458] tracking-tight tabular-nums mt-0.5">
+                {activeSubscriptionsCount.toLocaleString('en-IN')}
+              </h3>
             </div>
           </div>
-          <div className="flex items-center justify-between mt-2 z-10">
-            <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-150 flex items-center gap-0.5">
-              <TrendingUp className="w-2.5 h-2.5" /> 20.6%
-              <span className="text-slate-400 font-normal ml-0.5">vs last month</span>
+
+          <div className="mt-3 relative z-10">
+            <span className="inline-flex items-center gap-1 text-xs font-bold text-[#10b981] tabular-nums">
+              <span>↑</span> 10%
             </span>
           </div>
-          <div className="absolute bottom-0 left-0 w-full opacity-30">
-            <svg viewBox="0 0 240 35" className="w-full h-6 text-emerald-500 fill-none stroke-current stroke-1">
-              <path d={l4Path} />
-            </svg>
-          </div>
+
+          <svg
+            viewBox="0 0 180 56"
+            preserveAspectRatio="none"
+            className="absolute right-0 bottom-0 w-40 h-14 pointer-events-none"
+          >
+            <defs>
+              <linearGradient id="kpiWavePurple" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#8a5cf5" stopOpacity="0.32" />
+                <stop offset="100%" stopColor="#692be0" stopOpacity="0.02" />
+              </linearGradient>
+            </defs>
+            <path
+              d="M 10 46 Q 36 42 58 29 T 102 31 T 142 15 T 180 20 L 180 56 L 10 56 Z"
+              fill="url(#kpiWavePurple)"
+            />
+            <path
+              d="M 10 46 Q 36 42 58 29 T 102 31 T 142 15 T 180 20"
+              fill="none"
+              stroke="#692be0"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+          </svg>
         </div>
       </div>
 
-      {/* Primary Analytics Row */}
-      <div id="middle-core-grid" className="grid grid-cols-1 lg:grid-cols-12 gap-3">
-        
-        {/* Sales Pipeline (Pixel-perfect Funnel Mockup) */}
-        <div id="pipeline-panel" className="bg-white p-3.5 rounded border border-slate-200 shadow-none lg:col-span-5 flex flex-col justify-between">
-          <div>
-            <h3 className="text-xs font-bold text-slate-900 uppercase tracking-tight">Sales Pipeline</h3>
-            <p className="text-[10px] text-slate-400">Distribution across primary CRM funnel stages</p>
+      {/* Row 2: Sales Overview + Subscription Status + Quick Actions */}
+      <div
+        id="middle-core-grid"
+        className="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr_1.05fr] gap-4"
+      >
+        {/* Panel 1: Sales Overview */}
+        <div
+          id="analytics-overview-panel"
+          className="bg-white rounded-2xl border border-slate-200/70 shadow-[0_4px_18px_rgba(8,36,88,0.05)] overflow-hidden flex flex-col"
+        >
+          <div className="bg-gradient-to-r from-[#041845] to-[#082458] text-white px-4 py-3 flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2 min-w-0">
+              <BarChart3 className="w-4 h-4 text-[#16c2ff] shrink-0" />
+              <h3 className="text-sm font-bold tracking-tight truncate">
+                Sales Overview
+              </h3>
+            </div>
+            <select
+              aria-label="Sales overview timeframe"
+              value={timeframe}
+              onChange={(e) => setTimeframe(e.target.value as TimeframeOption)}
+              className="bg-[#0b74f0] hover:bg-[#005be0] text-white text-xs font-semibold rounded-full px-3 py-1 border border-[#16c2ff]/40 focus:outline-none cursor-pointer shrink-0"
+            >
+              <option value="Last 6 Months">Last 6 Months</option>
+              <option value="Last 12 Months">Last 12 Months</option>
+              <option value="This Quarter">This Quarter</option>
+            </select>
           </div>
-          
-          {/* Graphic Horizontal Funnel layout */}
-          <div className="flex items-center gap-3 my-auto pt-1 pb-1">
-            <div className="relative w-36 h-40 flex flex-col justify-between items-center pr-1 shrink-0">
-              {/* Funnel Slices */}
-              {/* Stage 1 Blue */}
-              <div className="w-32 h-6.5 bg-indigo-500 rounded-sm shadow-none transform hover:scale-[1.02] transition flex items-center justify-center text-[9px] font-bold text-white tracking-wide">
-                100% Volume
-              </div>
-              
-              <div className="w-0.5 h-1.5 bg-slate-200"></div>
 
-              {/* Stage 2 Green */}
-              <div className="w-24 h-6.5 bg-emerald-500 rounded-sm shadow-none transform hover:scale-[1.02] transition flex items-center justify-center text-[9px] font-bold text-white tracking-wide">
-                Qualification
-              </div>
-
-              <div className="w-0.5 h-1.5 bg-slate-200"></div>
-
-              {/* Stage 3 Yellow */}
-              <div className="w-18 h-6.5 bg-amber-400 rounded-sm shadow-none transform hover:scale-[1.02] transition flex items-center justify-center text-[9px] font-bold text-white tracking-wide">
-                Proposal
-              </div>
-
-              <div className="w-0.5 h-1.5 bg-slate-200"></div>
-
-              {/* Stage 4 Purple */}
-              <div className="w-12 h-6.5 bg-purple-500 rounded-sm shadow-none transform hover:scale-[1.02] transition flex items-center justify-center text-[9px] font-bold text-white tracking-wide">
-                Negotiation
-              </div>
-
-              <div className="w-0.5 h-1.5 bg-slate-200"></div>
-
-              {/* Stage 5 Red */}
-              <div className="w-8 h-6.5 bg-rose-500 rounded-sm shadow-none transform hover:scale-[1.02] transition flex items-center justify-center text-[9px] font-bold text-white tracking-wide">
-                Won
-              </div>
+          <div className="p-4 flex-1 flex flex-col justify-between">
+            {/* Series Legend */}
+            <div className="flex items-center justify-center gap-5 text-xs font-semibold text-slate-600 mb-2">
+              <span className="flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#0b74f0]" />
+                Sales
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#14b886]" />
+                Invoices
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#8a5cf5]" />
+                Revenue
+              </span>
             </div>
 
-            {/* Pipeline Stage Labels & Values */}
-            <div className="flex-1 space-y-1.5 text-[11px]">
-              <div className="flex items-center justify-between pb-0.5 border-b border-slate-100">
-                <span className="flex items-center gap-1 font-medium text-slate-500">
-                  <span className="w-2 h-2 rounded-full bg-indigo-500 block"></span> New Leads
-                </span>
-                <span className="font-extrabold text-slate-800 text-right">{pipelineCounts['New Leads']}</span>
-              </div>
-              <div className="flex items-center justify-between pb-0.5 border-b border-slate-100">
-                <span className="flex items-center gap-1 font-medium text-slate-500">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 block"></span> Qualification
-                </span>
-                <span className="font-extrabold text-slate-800 text-right">{pipelineCounts['Qualification']}</span>
-              </div>
-              <div className="flex items-center justify-between pb-0.5 border-b border-slate-100">
-                <span className="flex items-center gap-1 font-medium text-slate-500">
-                  <span className="w-2 h-2 rounded-full bg-amber-400 block"></span> Proposal
-                </span>
-                <span className="font-extrabold text-slate-800 text-right">{pipelineCounts['Proposal']}</span>
-              </div>
-              <div className="flex items-center justify-between pb-0.5 border-b border-slate-100">
-                <span className="flex items-center gap-1 font-medium text-slate-500">
-                  <span className="w-2 h-2 rounded-full bg-purple-500 block"></span> Negotiation
-                </span>
-                <span className="font-extrabold text-slate-800 text-right">{pipelineCounts['Negotiation']}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="flex items-center gap-1 font-medium text-slate-500">
-                  <span className="w-2 h-2 rounded-full bg-rose-500 block"></span> Won
-                </span>
-                <span className="font-extrabold text-slate-800 text-right">{pipelineCounts['Won']}</span>
-              </div>
+            {/* SVG Multi-Series Smooth Line Chart */}
+            <div className="relative w-full">
+              <svg
+                viewBox={`0 0 ${chartWidth} ${chartHeight + 24}`}
+                className="w-full h-48 overflow-visible"
+              >
+                <defs>
+                  <linearGradient id="salesFillGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#0b74f0" stopOpacity="0.16" />
+                    <stop offset="100%" stopColor="#0b74f0" stopOpacity="0.0" />
+                  </linearGradient>
+                </defs>
+
+                {/* Horizontal Grid & Y-Axis Labels */}
+                {[
+                  { val: 20, label: '20K' },
+                  { val: 15, label: '15K' },
+                  { val: 10, label: '10K' },
+                  { val: 5, label: '5K' },
+                  { val: 0, label: '0' },
+                ].map((tick) => {
+                  const y = padTop + innerH - (tick.val / 20) * innerH;
+                  return (
+                    <g key={tick.label}>
+                      <line
+                        x1={padLeft}
+                        y1={y}
+                        x2={chartWidth - padRight}
+                        y2={y}
+                        stroke={tick.val === 0 ? '#cbd5e1' : '#e2e8f0'}
+                        strokeWidth="1"
+                      />
+                      <text
+                        x={padLeft - 8}
+                        y={y + 3.5}
+                        textAnchor="end"
+                        className="fill-slate-500 text-[10px] font-semibold tabular-nums"
+                      >
+                        {tick.label}
+                      </text>
+                    </g>
+                  );
+                })}
+
+                {/* Soft Fill under Top Line */}
+                <path
+                  d={`${buildSmoothLinePath(salesCoords)} L ${
+                    salesCoords[salesCoords.length - 1].x
+                  } ${padTop + innerH} L ${salesCoords[0].x} ${padTop + innerH} Z`}
+                  fill="url(#salesFillGrad)"
+                />
+
+                {/* Smooth Curves */}
+                <path
+                  d={buildSmoothLinePath(revenueCoords)}
+                  fill="none"
+                  stroke="#8a5cf5"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                />
+                <path
+                  d={buildSmoothLinePath(invoicesCoords)}
+                  fill="none"
+                  stroke="#14b886"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                />
+                <path
+                  d={buildSmoothLinePath(salesCoords)}
+                  fill="none"
+                  stroke="#0b74f0"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                />
+
+                {/* Hover Guide Line & Dots */}
+                {hoveredChartIdx !== null && (
+                  <line
+                    x1={salesCoords[hoveredChartIdx].x}
+                    y1={padTop}
+                    x2={salesCoords[hoveredChartIdx].x}
+                    y2={padTop + innerH}
+                    stroke="#94a3b8"
+                    strokeDasharray="3 3"
+                    strokeWidth="1"
+                  />
+                )}
+
+                {chartData.map((pt, idx) => {
+                  const sx = salesCoords[idx].x;
+                  return (
+                    <g
+                      key={pt.label}
+                      className="cursor-pointer"
+                      onMouseEnter={() => setHoveredChartIdx(idx)}
+                      onMouseLeave={() => setHoveredChartIdx(null)}
+                    >
+                      <rect
+                        x={sx - 24}
+                        y={padTop}
+                        width={48}
+                        height={innerH}
+                        fill="transparent"
+                      />
+                      <circle
+                        cx={sx}
+                        cy={salesCoords[idx].y}
+                        r={hoveredChartIdx === idx ? 5.5 : 4}
+                        fill="#0b74f0"
+                        stroke="#ffffff"
+                        strokeWidth="1.5"
+                      />
+                      <circle
+                        cx={sx}
+                        cy={invoicesCoords[idx].y}
+                        r={hoveredChartIdx === idx ? 5.5 : 4}
+                        fill="#14b886"
+                        stroke="#ffffff"
+                        strokeWidth="1.5"
+                      />
+                      <circle
+                        cx={sx}
+                        cy={revenueCoords[idx].y}
+                        r={hoveredChartIdx === idx ? 5.5 : 4}
+                        fill="#8a5cf5"
+                        stroke="#ffffff"
+                        strokeWidth="1.5"
+                      />
+                      <text
+                        x={sx}
+                        y={padTop + innerH + 18}
+                        textAnchor="middle"
+                        className="fill-slate-600 text-[11px] font-semibold"
+                      >
+                        {pt.label}
+                      </text>
+                    </g>
+                  );
+                })}
+              </svg>
+
+              {hoveredChartIdx !== null && (
+                <div
+                  className="absolute top-1 bg-[#082458] text-white rounded-lg px-2.5 py-1.5 shadow-lg text-[11px] pointer-events-none z-20 space-y-0.5 tabular-nums border border-[#16c2ff]/30"
+                  style={{
+                    left: `${Math.min(
+                      72,
+                      Math.max(8, (hoveredChartIdx / Math.max(1, chartData.length - 1)) * 72 + 6)
+                    )}%`,
+                  }}
+                >
+                  <p className="font-bold text-[#16c2ff]">{chartData[hoveredChartIdx].label}</p>
+                  <p>Sales: ₹{chartData[hoveredChartIdx].sales.toFixed(1)}K</p>
+                  <p>Invoices: {Math.round(chartData[hoveredChartIdx].invoices * 100)}</p>
+                  <p>Revenue: ₹{chartData[hoveredChartIdx].revenue.toFixed(1)}K</p>
+                </div>
+              )}
             </div>
           </div>
         </div>
 
-        {/* Lead Source Distribution */}
-        <div id="source-panel" className="bg-white p-3.5 rounded border border-slate-200 shadow-none lg:col-span-4 flex flex-col justify-between">
-          <div>
-            <h3 className="text-xs font-bold text-slate-900 uppercase tracking-tight">Leads Source</h3>
-            <p className="text-[10px] text-slate-400">Traffic classification and capture stats</p>
+        {/* Panel 2: Subscription Status Donut */}
+        <div
+          id="source-panel"
+          className="bg-white rounded-2xl border border-slate-200/70 shadow-[0_4px_18px_rgba(8,36,88,0.05)] overflow-hidden flex flex-col"
+        >
+          <div className="bg-gradient-to-r from-[#041845] to-[#082458] text-white px-4 py-3 flex items-center gap-2">
+            <PieChart className="w-4 h-4 text-[#16c2ff] shrink-0" />
+            <h3 className="text-sm font-bold tracking-tight">Subscription Status</h3>
           </div>
 
-          <div className="flex flex-col items-center justify-center my-auto pb-1">
-            {/* SVG Interactive Donut Chart */}
-            <div className="relative w-28 h-28 flex items-center justify-center mb-2.5">
-              <svg className="w-full h-full transform -rotate-90">
-                <circle cx="56" cy="56" r="40" fill="transparent" stroke="#e2e8f0" strokeWidth="12" />
+          <div className="p-4 flex-1 flex items-center justify-center gap-4">
+            {/* Donut SVG */}
+            <div className="relative w-36 h-36 shrink-0 flex items-center justify-center">
+              <svg viewBox="0 0 132 132" className="w-full h-full -rotate-90">
+                <circle
+                  cx="66"
+                  cy="66"
+                  r="48"
+                  fill="transparent"
+                  stroke="#eef2f6"
+                  strokeWidth="20"
+                />
                 {(() => {
-                  let cumulativePercent = 0;
-                  return leadSources.map((source) => {
-                    const r = 40;
-                    const circumference = 2 * Math.PI * r;
-                    const strokeDasharray = `${circumference * (source.pct / 100)} ${circumference * (1 - source.pct / 100)}`;
-                    const strokeDashoffset = -circumference * (cumulativePercent / 100);
-                    cumulativePercent += source.pct;
+                  let cumulative = 0;
+                  const radius = 48;
+                  const circumference = 2 * Math.PI * radius;
+                  return subscriptionBreakdown.map((seg) => {
+                    const segLength = circumference * (seg.pct / 100);
+                    const gapLength = circumference - segLength;
+                    const offset = -circumference * (cumulative / 100);
+                    cumulative += seg.pct;
                     return (
-                      <circle 
-                        key={source.name}
-                        cx="56" 
-                        cy="56" 
-                        r={r} 
-                        fill="transparent" 
-                        stroke={source.color} 
-                        strokeWidth="12" 
-                        strokeDasharray={strokeDasharray}
-                        strokeDashoffset={strokeDashoffset}
-                        className="cursor-pointer hover:stroke-[14px] transition-all"
-                        onMouseEnter={() => setHoveredSource(source.name)}
-                        onMouseLeave={() => setHoveredSource(null)}
+                      <circle
+                        key={seg.name}
+                        cx="66"
+                        cy="66"
+                        r={radius}
+                        fill="transparent"
+                        stroke={seg.color}
+                        strokeWidth={hoveredSegment === seg.name ? 22 : 20}
+                        strokeDasharray={`${Math.max(0, segLength - 2)} ${gapLength + 2}`}
+                        strokeDashoffset={offset}
+                        className="transition-all cursor-pointer"
+                        onMouseEnter={() => setHoveredSegment(seg.name)}
+                        onMouseLeave={() => setHoveredSegment(null)}
                       />
                     );
                   });
                 })()}
               </svg>
 
-              <div className="absolute flex flex-col items-center justify-center">
-                <span className="text-md font-black text-slate-800">{activeLeadsCount}</span>
-                <span className="text-[8px] text-slate-400 uppercase tracking-widest font-bold">Total</span>
+              <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                <span className="text-2xl font-extrabold text-[#082458] tabular-nums leading-none">
+                  {totalTenantsCount.toLocaleString('en-IN')}
+                </span>
+                <span className="text-xs font-medium text-slate-500 mt-1">Total</span>
               </div>
             </div>
 
-            {/* Source items lists */}
-            <div className="w-full grid grid-cols-2 gap-x-2 gap-y-1 text-[11px]">
-              {leadSources.map((source) => (
-                <div 
-                  key={source.name} 
-                  className={`flex items-center justify-between p-0.5 rounded transition ${hoveredSource === source.name ? 'bg-slate-50' : ''}`}
+            {/* Right Legend */}
+            <div className="space-y-3 min-w-[115px]">
+              {subscriptionBreakdown.map((seg) => (
+                <div
+                  key={seg.name}
+                  onMouseEnter={() => setHoveredSegment(seg.name)}
+                  onMouseLeave={() => setHoveredSegment(null)}
+                  className={`flex items-center justify-between gap-3 px-2 py-1 rounded-lg transition cursor-default ${
+                    hoveredSegment === seg.name ? 'bg-[#eef4fb]' : ''
+                  }`}
                 >
-                  <span className="flex items-center gap-1 text-slate-500 font-medium">
-                    <span className="w-1.5 h-1.5 rounded-full block" style={{ backgroundColor: source.color }}></span>
-                    {source.name}
+                  <span className="flex items-center gap-2 text-xs font-medium text-[#082458]">
+                    <span
+                      className="w-2.5 h-2.5 rounded-full shrink-0"
+                      style={{ backgroundColor: seg.color }}
+                    />
+                    {seg.name}
                   </span>
-                  <span className="font-extrabold text-slate-800">
-                    {source.pct}%
+                  <span className="text-xs font-extrabold text-[#082458] tabular-nums">
+                    {seg.pct}%
                   </span>
                 </div>
               ))}
@@ -354,444 +896,235 @@ export default function Dashboard({
           </div>
         </div>
 
-        {/* Quick Actions Panel */}
-        <div id="quick-actions-panel" className="bg-white p-3.5 rounded border border-slate-200 shadow-none lg:col-span-3 flex flex-col justify-between">
-          <div>
-            <h3 className="text-xs font-bold text-slate-900 uppercase tracking-tight">Quick Actions</h3>
-            <p className="text-[10px] text-slate-400">Fast-track direct CRM triggers</p>
+        {/* Panel 3: Quick Actions */}
+        <div
+          id="quick-actions-panel"
+          className="bg-white rounded-2xl border border-slate-200/70 shadow-[0_4px_18px_rgba(8,36,88,0.05)] overflow-hidden flex flex-col"
+        >
+          <div className="bg-gradient-to-r from-[#041845] to-[#082458] text-white px-4 py-3 flex items-center gap-2">
+            <Zap className="w-4 h-4 text-[#16c2ff] shrink-0" />
+            <h3 className="text-sm font-bold tracking-tight">Quick Actions</h3>
           </div>
 
-          <div className="grid grid-cols-2 gap-1.5 my-auto">
-            <button 
-              id="action-add-lead" 
-              onClick={onAddLeadOpen}
-              className="flex flex-col items-center justify-center p-2 bg-slate-50 hover:bg-indigo-50/50 text-indigo-600 rounded border border-slate-200 hover:border-indigo-200 transition"
-            >
-              <Users className="w-4 h-4 mb-1 text-indigo-500" />
-              <span className="text-[9px] font-bold uppercase tracking-wider text-slate-600">Add Lead</span>
-            </button>
-            <button 
-              id="action-add-customer" 
-              onClick={onAddCustomerOpen}
-              className="flex flex-col items-center justify-center p-2 bg-slate-50 hover:bg-indigo-50/50 text-indigo-600 rounded border border-slate-200 hover:border-indigo-200 transition"
-            >
-              <Users2 className="w-4 h-4 mb-1 text-emerald-500" />
-              <span className="text-[9px] font-bold uppercase tracking-wider text-slate-600">Add Client</span>
-            </button>
-            <button 
-              id="action-log-call" 
-              onClick={onLogCallOpen}
-              className="flex flex-col items-center justify-center p-2 bg-slate-50 hover:bg-indigo-50/50 text-indigo-600 rounded border border-slate-200 hover:border-indigo-200 transition"
-            >
-              <Phone className="w-4 h-4 mb-1 text-amber-500" />
-              <span className="text-[9px] font-bold uppercase tracking-wider text-slate-600">Log Call</span>
-            </button>
-            <button 
-              id="action-create-task" 
-              onClick={onCreateTaskOpen}
-              className="flex flex-col items-center justify-center p-2 bg-slate-50 hover:bg-indigo-50/50 text-indigo-600 rounded border border-slate-200 hover:border-indigo-200 transition"
-            >
-              <CheckSquare className="w-4 h-4 mb-1 text-purple-500" />
-              <span className="text-[9px] font-bold uppercase tracking-wider text-slate-600">Schedule</span>
-            </button>
-            <button 
-              id="action-add-employee" 
-              onClick={onAddEmployeeOpen}
-              className="flex flex-col items-center justify-center p-2 bg-slate-50 hover:bg-indigo-50/50 text-indigo-600 rounded border border-slate-200 hover:border-indigo-200 transition"
-            >
-              <Users className="w-4 h-4 mb-1 text-rose-500" />
-              <span className="text-[9px] font-bold uppercase tracking-wider text-slate-600">Staff hr</span>
-            </button>
-            <button 
-              id="action-process-payroll" 
-              onClick={onProcessPayroll}
-              className="flex flex-col items-center justify-center p-2 bg-slate-50 hover:bg-indigo-50/50 text-indigo-600 rounded border border-slate-200 hover:border-indigo-200 transition"
-            >
-              <CreditCard className="w-4 h-4 mb-1 text-[#10b981]" />
-              <span className="text-[9px] font-bold uppercase tracking-wider text-slate-600">Disburse</span>
-            </button>
+          <div className="p-4 flex-1 grid grid-cols-3 gap-2.5 content-center">
+            {quickActionItems.map((action) => {
+              const Icon = action.icon;
+              return (
+                <button
+                  key={action.id}
+                  id={action.id}
+                  type="button"
+                  onClick={action.onClick}
+                  className="bg-[#eef4fb] hover:bg-[#dceafb] border border-[#0b74f0]/15 rounded-xl p-3 flex flex-col items-center justify-center gap-2 transition cursor-pointer group"
+                >
+                  <span className="w-9 h-9 rounded-lg bg-gradient-to-br from-[#0b78f4] to-[#005be0] group-hover:from-[#0768d8] group-hover:to-[#004ec4] text-white flex items-center justify-center shadow-sm transition">
+                    <Icon className="w-4.5 h-4.5" />
+                  </span>
+                  <span className="text-[11px] font-semibold text-[#082458] whitespace-nowrap">
+                    {action.label}
+                  </span>
+                </button>
+              );
+            })}
           </div>
         </div>
       </div>
 
-      {/* Middle Row 2: Today's Activities + Analytics Overview Graph */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3" id="row-activities-analytics">
-        
-        {/* Today's Activities (Matches Mockup) */}
-        <div id="activities-panel" className="bg-white p-3.5 rounded border border-slate-200 shadow-none lg:col-span-4 flex flex-col justify-between">
-          <div className="flex justify-between items-center mb-2.5">
-            <div>
-              <h3 className="text-xs font-bold text-slate-900 uppercase tracking-tight">Today's Activities</h3>
-              <p className="text-[10px] text-slate-400">Chronological interaction timeline</p>
+      {/* Row 3: Recent Invoices + Top Customers + Recent Activities */}
+      <div
+        id="summary-modules-grid"
+        className="grid grid-cols-1 lg:grid-cols-3 gap-4"
+      >
+        {/* Card 1: Recent Invoices */}
+        <div
+          id="sum-recent-invoices"
+          className="bg-white rounded-2xl border border-slate-200/70 shadow-[0_4px_18px_rgba(8,36,88,0.05)] overflow-hidden flex flex-col"
+        >
+          <div className="bg-gradient-to-r from-[#2393f8] to-[#0a66e0] text-white px-4 py-3 flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <Receipt className="w-4 h-4 text-sky-100 shrink-0" />
+              <h3 className="text-sm font-bold tracking-tight">Recent Invoices</h3>
             </div>
-            <button 
-              id="btn-all-activities" 
+            <button
+              type="button"
+              onClick={() => onNavigate('leads')}
+              className="text-xs font-semibold text-white/90 hover:text-white flex items-center gap-1 whitespace-nowrap shrink-0 cursor-pointer"
+            >
+              View All <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+
+          <div className="p-3 overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="border-b border-slate-100 text-[11px] font-semibold text-slate-500">
+                  <th className="py-2 px-1.5 whitespace-nowrap">Invoice No.</th>
+                  <th className="py-2 px-1.5 whitespace-nowrap">Customer</th>
+                  <th className="py-2 px-1.5 whitespace-nowrap">Amount</th>
+                  <th className="py-2 px-1.5 whitespace-nowrap">Status</th>
+                  <th className="py-2 px-1.5 whitespace-nowrap text-right">Date</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 text-xs">
+                {recentInvoicesRows.map((inv) => (
+                  <tr
+                    key={inv.id}
+                    onClick={() => onNavigate('leads')}
+                    className="hover:bg-[#eef4fb]/60 transition cursor-pointer"
+                  >
+                    <td className="py-2.5 px-1.5 font-semibold text-[#082458] whitespace-nowrap tabular-nums">
+                      {inv.id}
+                    </td>
+                    <td className="py-2.5 px-1.5 text-slate-700 truncate max-w-[115px]">
+                      {inv.customer}
+                    </td>
+                    <td className="py-2.5 px-1.5 font-semibold text-[#082458] whitespace-nowrap tabular-nums">
+                      ₹ {inv.amount.toLocaleString('en-IN')}
+                    </td>
+                    <td className="py-2.5 px-1.5 whitespace-nowrap">
+                      <span
+                        className={`inline-block px-2 py-0.5 rounded-md text-[11px] font-semibold ${
+                          inv.status === 'Paid'
+                            ? 'bg-emerald-50 text-emerald-600'
+                            : inv.status === 'Overdue'
+                            ? 'bg-rose-50 text-rose-600'
+                            : 'bg-amber-50 text-amber-600'
+                        }`}
+                      >
+                        {inv.status}
+                      </span>
+                    </td>
+                    <td className="py-2.5 px-1.5 text-slate-500 whitespace-nowrap text-right tabular-nums">
+                      {inv.date}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Card 2: Top Customers */}
+        <div
+          id="sum-top-customers"
+          className="bg-white rounded-2xl border border-slate-200/70 shadow-[0_4px_18px_rgba(8,36,88,0.05)] overflow-hidden flex flex-col"
+        >
+          <div className="bg-gradient-to-r from-[#14b886] to-[#069468] text-white px-4 py-3 flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <Award className="w-4 h-4 text-emerald-100 shrink-0" />
+              <h3 className="text-sm font-bold tracking-tight">Top Customers</h3>
+            </div>
+            <button
+              type="button"
+              onClick={() => onNavigate('leads')}
+              className="text-xs font-semibold text-white/90 hover:text-white flex items-center gap-1 whitespace-nowrap shrink-0 cursor-pointer"
+            >
+              View All <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+
+          <div className="p-3 overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="border-b border-slate-100 text-[11px] font-semibold text-slate-500">
+                  <th className="py-2 px-2 whitespace-nowrap">Customer</th>
+                  <th className="py-2 px-2 whitespace-nowrap text-center">Invoices</th>
+                  <th className="py-2 px-2 whitespace-nowrap text-right">Revenue</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 text-xs">
+                {topCustomerRows.map((row) => (
+                  <tr
+                    key={row.customer}
+                    onClick={() => onNavigate('leads')}
+                    className="hover:bg-[#eef4fb]/60 transition cursor-pointer"
+                  >
+                    <td className="py-2.5 px-2 font-medium text-[#082458] truncate max-w-[160px]">
+                      {row.customer}
+                    </td>
+                    <td className="py-2.5 px-2 text-slate-700 text-center tabular-nums">
+                      {row.invoices}
+                    </td>
+                    <td className="py-2.5 px-2 font-semibold text-[#082458] text-right whitespace-nowrap tabular-nums">
+                      ₹ {row.revenue.toLocaleString('en-IN')}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Card 3: Recent Activities */}
+        <div
+          id="sum-recent-activities"
+          className="bg-white rounded-2xl border border-slate-200/70 shadow-[0_4px_18px_rgba(8,36,88,0.05)] overflow-hidden flex flex-col"
+        >
+          <div className="bg-gradient-to-r from-[#8a5cf5] to-[#692be0] text-white px-4 py-3 flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <Activity className="w-4 h-4 text-violet-100 shrink-0" />
+              <h3 className="text-sm font-bold tracking-tight">Recent Activities</h3>
+            </div>
+            <button
+              type="button"
               onClick={() => onNavigate('tasks')}
-              className="text-[10px] font-bold text-indigo-600 hover:underline flex items-center"
+              className="text-xs font-semibold text-white/90 hover:text-white flex items-center gap-1 whitespace-nowrap shrink-0 cursor-pointer"
             >
-              View All
+              View All <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
 
-          <div className="space-y-2.5 my-auto">
-            {tasks.slice(0, 4).map((task, index) => (
-              <div key={task.id} className="flex gap-2.5 items-start pb-2.5 border-b border-slate-100 last:border-0 last:pb-0">
-                <span className="text-[9px] font-bold text-indigo-600 bg-indigo-50 px-1 py-0.5 rounded border border-indigo-100 w-16 text-center shrink-0">
-                  {task.time || "10:00 AM"}
-                </span>
-                
-                <div className="flex-1 min-w-0">
-                  <h4 className="text-[11px] font-bold text-slate-800 truncate">{task.title}</h4>
-                  <p className="text-[9px] text-slate-400 line-clamp-1">{task.description}</p>
+          <div className="p-3.5 divide-y divide-slate-100 flex-1 flex flex-col justify-between">
+            {recentActivityRows.map((act) => {
+              const badgeClass =
+                act.tone === 'green'
+                  ? 'bg-emerald-50 text-emerald-600'
+                  : act.tone === 'blue'
+                  ? 'bg-[#eef4fb] text-[#0b74f0]'
+                  : act.tone === 'purple'
+                  ? 'bg-violet-50 text-[#692be0]'
+                  : act.tone === 'amber'
+                  ? 'bg-amber-50 text-amber-600'
+                  : 'bg-[#eef4fb] text-[#082458]';
+
+              return (
+                <div
+                  key={act.id}
+                  onClick={() =>
+                    onNavigate(
+                      act.icon === 'ticket'
+                        ? 'support'
+                        : act.icon === 'task'
+                        ? 'tasks'
+                        : act.icon === 'tenant'
+                        ? userRole === 'Super Admin'
+                          ? 'saas'
+                          : 'leads'
+                        : 'leads'
+                    )
+                  }
+                  className="py-2.5 first:pt-1 last:pb-1 flex items-center justify-between gap-2.5 cursor-pointer hover:bg-[#eef4fb]/60 rounded-lg px-1 transition"
+                >
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <span
+                      className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 ${badgeClass}`}
+                    >
+                      {act.icon === 'check' && <CheckCircle2 className="w-3.5 h-3.5" />}
+                      {act.icon === 'tenant' && <UserPlus className="w-3.5 h-3.5" />}
+                      {act.icon === 'ticket' && <Headphones className="w-3.5 h-3.5" />}
+                      {act.icon === 'task' && <CheckSquare className="w-3.5 h-3.5" />}
+                      {act.icon === 'user' && <UserCheck className="w-3.5 h-3.5" />}
+                    </span>
+                    <span className="text-xs font-medium text-[#082458] truncate">
+                      {act.text}
+                    </span>
+                  </div>
+                  <span className="text-[11px] text-slate-400 whitespace-nowrap shrink-0 tabular-nums">
+                    {act.time}
+                  </span>
                 </div>
-
-                <span className={`text-[9px] px-1 py-0.2 rounded font-bold uppercase tracking-wide ${
-                  task.status === 'Completed' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' :
-                  task.status === 'In Progress' ? 'bg-amber-50 text-amber-700 border border-amber-200' : 'bg-slate-100 text-slate-500 border border-slate-200'
-                }`}>
-                  {task.status}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Analytics Overview Line Chart */}
-        <div id="analytics-overview-panel" className="bg-white p-3.5 rounded border border-slate-200 shadow-none lg:col-span-8 flex flex-col justify-between relative">
-          <div className="flex justify-between items-start mb-1.5">
-            <div>
-              <h3 className="text-xs font-bold text-slate-900 uppercase tracking-tight">Analytics Overview</h3>
-              <p className="text-[10px] text-slate-400">Consolidated progression of capture triggers and net volume</p>
-            </div>
-            
-            <div className="flex items-center gap-3 text-[10px] font-bold">
-              <span className="flex items-center gap-1 text-indigo-600">
-                <span className="w-2 h-2 rounded-full bg-indigo-500"></span> Leads Volume
-              </span>
-              <span className="flex items-center gap-1 text-emerald-600">
-                <span className="w-2 h-2 rounded-full bg-emerald-500"></span> Revenue (Lakhs)
-              </span>
-            </div>
-          </div>
-
-          {/* Interactive SVG Line Graph with Shading */}
-          <div className="relative w-full h-40 pt-1 pb-1">
-            <svg viewBox="0 0 500 120" className="w-full h-full overflow-visible">
-              <defs>
-                <linearGradient id="leadsGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#4f46e5" stopOpacity="0.15" />
-                  <stop offset="100%" stopColor="#4f46e5" stopOpacity="0.0" />
-                </linearGradient>
-                <linearGradient id="revGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#10b981" stopOpacity="0.15" />
-                  <stop offset="100%" stopColor="#10b981" stopOpacity="0.0" />
-                </linearGradient>
-              </defs>
-
-              {/* Grid Lines */}
-              <line x1="0" y1="12" x2="500" y2="12" stroke="#f1f5f9" strokeWidth="1" />
-              <line x1="0" y1="36" x2="500" y2="36" stroke="#f1f5f9" strokeWidth="1" />
-              <line x1="0" y1="60" x2="500" y2="60" stroke="#f1f5f9" strokeWidth="1" />
-              <line x1="0" y1="84" x2="500" y2="84" stroke="#f1f5f9" strokeWidth="1" />
-              <line x1="0" y1="108" x2="500" y2="108" stroke="#cbd5e1" strokeWidth="1.5" />
-
-              {/* Shaded Areas */}
-              <path d={`${getLinePath(graphPoints, 'leads', 800, 100)} L 500,108 L 0,108 Z`} fill="url(#leadsGrad)" />
-              <path d={`${getLinePath(graphPoints, 'revenue', 50, 100)} L 500,108 L 0,108 Z`} fill="url(#revGrad)" />
-
-              {/* Trailing Curves */}
-              <path d={getLinePath(graphPoints, 'leads', 800, 100)} fill="none" stroke="#4f46e5" strokeWidth="2" strokeLinecap="round" />
-              <path d={getLinePath(graphPoints, 'revenue', 50, 100)} fill="none" stroke="#10b981" strokeWidth="2" strokeLinecap="round" />
-
-              {/* Graph Interactive Circles */}
-              {graphPoints.map((pt, idx) => {
-                const x = (idx / (graphPoints.length - 1)) * 500;
-                const yLeads = 100 - (pt.leads / 800) * 100;
-                const yRev = 100 - (pt.revenue / 50) * 100;
-
-                return (
-                  <g key={pt.day} className="group/node">
-                    {/* Leads Node */}
-                    <circle 
-                      cx={x} cy={yLeads} r="3.5" 
-                      fill="#4f46e5" stroke="#ffffff" strokeWidth="1"
-                      className="cursor-pointer hover:r-5 transition"
-                      onMouseEnter={(e) => setHoveredPoint({ x, y: yLeads, day: pt.day, leads: pt.leads, revenue: pt.revenue })}
-                      onMouseLeave={() => setHoveredPoint(null)}
-                    />
-                    {/* Revenue Node */}
-                    <circle 
-                      cx={x} cy={yRev} r="3.5" 
-                      fill="#10b981" stroke="#ffffff" strokeWidth="1"
-                      className="cursor-pointer hover:r-5 transition"
-                      onMouseEnter={(e) => setHoveredPoint({ x, y: yRev, day: pt.day, leads: pt.leads, revenue: pt.revenue })}
-                      onMouseLeave={() => setHoveredPoint(null)}
-                    />
-                  </g>
-                );
-              })}
-            </svg>
-
-            {/* Custom Tooltip Overlay */}
-            {hoveredPoint && (
-              <div 
-                className="absolute bg-slate-900 text-white rounded p-1.5 shadow-xl text-[10px] space-y-0.5 z-30 pointer-events-none"
-                style={{ 
-                  left: `${(hoveredPoint.x / 500) * 88}%`, 
-                  top: `${Math.min(70, hoveredPoint.y - 10)}px` 
-                }}
-              >
-                <p className="font-extrabold text-slate-300">Day {hoveredPoint.day}</p>
-                <div className="flex gap-2">
-                  <span className="text-indigo-300">Leads: <strong>{hoveredPoint.leads}</strong></span>
-                  <span className="text-emerald-300">Revenue: <strong>₹{hoveredPoint.revenue}L</strong></span>
-                </div>
-              </div>
-            )}
-          </div>
-
-          <div className="flex justify-between text-[9px] font-bold text-slate-400 px-1 mt-1">
-            <span>Day 01</span>
-            <span>Day 05</span>
-            <span>Day 10</span>
-            <span>Day 15</span>
-            <span>Day 20</span>
-            <span>Day 21</span>
-            <span>Day 30</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Dynamic Summary Modules Grid (Matches other items from image) */}
-      <div id="summary-modules-grid" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-        
-        {/* Calling Management */}
-        <div id="sum-calling" className="bg-white p-3 rounded border border-slate-200 shadow-none flex flex-col justify-between h-36">
-          <div className="flex justify-between items-start">
-            <span className="flex items-center gap-1 text-[10px] font-bold text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded border border-indigo-150">
-              <Phone className="w-3 h-3" /> Calling Management
-            </span>
-          </div>
-          <div className="space-y-1 my-2 text-[11px]">
-            <div className="flex justify-between text-slate-500 font-medium">
-              <span>Total Calls Today</span>
-              <span className="font-extrabold text-slate-800">{(callLogs.length + 1021).toLocaleString()}</span>
-            </div>
-            <div className="flex justify-between text-slate-500 font-medium">
-              <span>Answered Calls</span>
-              <span className="font-extrabold text-emerald-600">{callLogs.filter(c => c.type === 'Answered').length + 809}</span>
-            </div>
-            <div className="flex justify-between text-slate-500 font-medium">
-              <span>Missed Calls</span>
-              <span className="font-extrabold text-rose-500">{callLogs.filter(c => c.type === 'Missed').length + 211}</span>
-            </div>
-          </div>
-          <button 
-            id="nav-calling"
-            onClick={() => onNavigate('calling')}
-            className="text-[10px] font-bold text-indigo-600 hover:underline flex items-center justify-between"
-          >
-            <span>View Call Logs</span>
-            <ChevronRight className="w-3.5 h-3.5" />
-          </button>
-        </div>
-
-        {/* Customer Support */}
-        <div id="sum-support" className="bg-white p-3 rounded border border-slate-200 shadow-none flex flex-col justify-between h-36">
-          <div className="flex justify-between items-start">
-            <span className="flex items-center gap-1 text-[10px] font-bold text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-150">
-              <Headphones className="w-3 h-3" /> Customer Support
-            </span>
-          </div>
-          <div className="space-y-1 my-2 text-[11px]">
-            <div className="flex justify-between text-slate-500 font-medium">
-              <span>Open Tickets</span>
-              <span className="font-extrabold text-rose-600">{supportTickets.filter(t => t.status === 'Open').length + 54}</span>
-            </div>
-            <div className="flex justify-between text-slate-500 font-medium">
-              <span>In Progress</span>
-              <span className="font-extrabold text-amber-600">{supportTickets.filter(t => t.status === 'In Progress').length + 27}</span>
-            </div>
-            <div className="flex justify-between text-slate-500 font-medium">
-              <span>Resolved Logs</span>
-              <span className="font-extrabold text-emerald-600">{supportTickets.filter(t => t.status === 'Resolved').length + 127}</span>
-            </div>
-          </div>
-          <button 
-            id="nav-support"
-            onClick={() => onNavigate('support')}
-            className="text-[10px] font-bold text-amber-600 hover:underline flex items-center justify-between"
-          >
-            <span>View All Tickets</span>
-            <ChevronRight className="w-3.5 h-3.5" />
-          </button>
-        </div>
-
-        {/* Field & Staff */}
-        <div id="sum-staff" className="bg-white p-3 rounded border border-slate-200 shadow-none flex flex-col justify-between h-36">
-          <div className="flex justify-between items-start">
-            <span className="flex items-center gap-1 text-[10px] font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-150">
-              <MapPin className="w-3 h-3" /> Field & Staff
-            </span>
-          </div>
-          <div className="space-y-1 my-2 text-[11px]">
-            <div className="flex justify-between text-slate-500 font-medium">
-              <span>Active Field Employees</span>
-              <span className="font-extrabold text-slate-800">{fieldStaff.length + 39}</span>
-            </div>
-            <div className="flex justify-between text-slate-500 font-medium">
-              <span>Live Tracking Staff</span>
-              <span className="font-extrabold text-indigo-500">{fieldStaff.filter(s => s.status !== 'Offline').length + 16}</span>
-            </div>
-            <div className="flex justify-between text-slate-500 font-medium">
-              <span>Visits Scheduled Today</span>
-              <span className="font-extrabold text-emerald-600">36</span>
-            </div>
-          </div>
-          <button 
-            id="nav-staff"
-            onClick={() => onNavigate('staff')}
-            className="text-[10px] font-bold text-emerald-600 hover:underline flex items-center justify-between"
-          >
-            <span>View on Map</span>
-            <ChevronRight className="w-3.5 h-3.5" />
-          </button>
-        </div>
-
-        {/* Tasks & Activities */}
-        <div id="sum-tasks" className="bg-white p-3 rounded border border-slate-200 shadow-none flex flex-col justify-between h-36">
-          <div className="flex justify-between items-start">
-            <span className="flex items-center gap-1 text-[10px] font-bold text-purple-600 bg-purple-50 px-1.5 py-0.5 rounded border border-purple-150">
-              <CheckSquare className="w-3 h-3" /> Tasks & Activities
-            </span>
-          </div>
-          <div className="space-y-1 my-2 text-[11px]">
-            <div className="flex justify-between text-slate-500 font-medium">
-              <span>Pending Tasks</span>
-              <span className="font-extrabold text-amber-600">{tasks.filter(t => t.status === 'Pending').length + 32}</span>
-            </div>
-            <div className="flex justify-between text-slate-500 font-medium">
-              <span>In Progress Stages</span>
-              <span className="font-extrabold text-indigo-500">{tasks.filter(t => t.status === 'In Progress').length + 17}</span>
-            </div>
-            <div className="flex justify-between text-slate-500 font-medium">
-              <span>Completed Tasks</span>
-              <span className="font-extrabold text-emerald-600">{tasks.filter(t => t.status === 'Completed').length + 26}</span>
-            </div>
-          </div>
-          <button 
-            id="nav-tasks"
-            onClick={() => onNavigate('tasks')}
-            className="text-[10px] font-bold text-purple-600 hover:underline flex items-center justify-between"
-          >
-            <span>View All Tasks</span>
-            <ChevronRight className="w-3.5 h-3.5" />
-          </button>
-        </div>
-
-        {/* Payroll & HR (Added 2nd row) */}
-        <div id="sum-payroll" className="bg-white p-3 rounded border border-slate-200 shadow-none flex flex-col justify-between h-36">
-          <div className="flex justify-between items-start">
-            <span className="flex items-center gap-1 text-[10px] font-bold text-rose-600 bg-rose-50 px-1.5 py-0.5 rounded border border-rose-150">
-              <CreditCard className="w-3 h-3" /> Payroll & HR
-            </span>
-          </div>
-          <div className="space-y-1 my-2 text-[11px]">
-            <div className="flex justify-between text-slate-500 font-medium">
-              <span>Total Employees</span>
-              <span className="font-extrabold text-slate-800">{employees.length + 121}</span>
-            </div>
-            <div className="flex justify-between text-slate-500 font-medium">
-              <span>Present Today</span>
-              <span className="font-extrabold text-emerald-600">98</span>
-            </div>
-            <div className="flex justify-between text-slate-500 font-medium">
-              <span>Monthly Directs</span>
-              <span className="font-extrabold text-slate-800">₹18.75 L</span>
-            </div>
-          </div>
-          <button 
-            id="nav-payroll"
-            onClick={() => onNavigate('payroll')}
-            className="text-[10px] font-bold text-rose-600 hover:underline flex items-center justify-between"
-          >
-            <span>View Payroll logs</span>
-            <ChevronRight className="w-3.5 h-3.5" />
-          </button>
-        </div>
-
-        {/* Communication Management */}
-        <div id="sum-comms" className="bg-white p-3 rounded border border-slate-200 shadow-none flex flex-col justify-between h-36">
-          <div className="flex justify-between items-start">
-            <span className="flex items-center gap-1 text-[10px] font-bold text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded border border-indigo-150">
-              <MessageSquare className="w-3 h-3" /> Communication
-            </span>
-          </div>
-          <div className="space-y-1 my-2 text-[11px]">
-            <div className="flex justify-between text-slate-500 font-medium">
-              <span>Emails Sent Today</span>
-              <span className="font-extrabold text-slate-800">{commsLogs.filter(c => c.type === 'Email').length + 1249}</span>
-            </div>
-            <div className="flex justify-between text-slate-500 font-medium">
-              <span>SMS Dispatched</span>
-              <span className="font-extrabold text-indigo-500">{commsLogs.filter(c => c.type === 'SMS').length + 2339}</span>
-            </div>
-            <div className="flex justify-between text-slate-500 font-medium">
-              <span>WhatsApp Alerts</span>
-              <span className="font-extrabold text-emerald-500">{commsLogs.filter(c => c.type === 'WhatsApp').length + 1119}</span>
-            </div>
-          </div>
-          <button 
-            id="nav-comms"
-            onClick={() => onNavigate('comms')}
-            className="text-[10px] font-bold text-indigo-600 hover:underline flex items-center justify-between"
-          >
-            <span>View All Logs</span>
-            <ChevronRight className="w-3.5 h-3.5" />
-          </button>
-        </div>
-
-        {/* Security & Access */}
-        <div id="sum-security" className="bg-white p-3 rounded border border-slate-200 shadow-none flex flex-col justify-between h-36">
-          <div className="flex justify-between items-start">
-            <span className="flex items-center gap-1 text-[10px] font-bold text-slate-700 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">
-              <Lock className="w-3 h-3" /> Security & Access
-            </span>
-          </div>
-          <div className="space-y-1 my-2 text-[11px]">
-            <div className="flex justify-between text-slate-500 font-medium">
-              <span>Total System Users</span>
-              <span className="font-extrabold text-slate-800">25</span>
-            </div>
-            <div className="flex justify-between text-slate-500 font-medium">
-              <span>Active Operators</span>
-              <span className="font-extrabold text-emerald-600">22</span>
-            </div>
-            <div className="flex justify-between text-slate-500 font-medium">
-              <span>Defined User Roles</span>
-              <span className="font-extrabold text-indigo-600">6</span>
-            </div>
-          </div>
-          <button 
-            id="nav-security"
-            onClick={() => onNavigate('security')}
-            className="text-[10px] font-bold text-slate-800 hover:underline flex items-center justify-between"
-          >
-            <span>Manage Access Panel</span>
-            <ChevronRight className="w-3.5 h-3.5" />
-          </button>
-        </div>
-
-        {/* Informative Value Addition Panel */}
-        <div id="sum-about-pro" className="bg-[#1E293B] text-slate-100 p-3 rounded border border-slate-800 shadow-none flex flex-col justify-between h-36">
-          <div>
-            <h4 className="text-[9px] font-black uppercase tracking-widest text-emerald-400">Smart Core Engine</h4>
-            <p className="text-[10px] text-slate-400 mt-1 line-clamp-3 leading-snug">
-              Google Gemini intelligence pipelines provide real-time pitch suggestions, communication composing, and response drafting for efficient capacity.
-            </p>
-          </div>
-          <div className="text-[9px] text-slate-400 flex items-center gap-1 pt-1 border-t border-slate-800 select-none">
-            <Shield className="w-3 h-3 text-emerald-400" /> Enterprise secure architecture
+              );
+            })}
           </div>
         </div>
       </div>

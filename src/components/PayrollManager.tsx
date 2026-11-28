@@ -631,7 +631,7 @@ export default function PayrollManager({
       
       {/* Dynamic Toast Messages */}
       {toastMessage && (
-        <div className="fixed bottom-4 right-4 bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py-3.5 shadow-2xl flex items-center gap-2.5 z-50 animate-bounce">
+        <div className="fixed bottom-4 right-4 bg-[#041845] border border-[#1e3a8a]/60 text-white rounded-xl px-4 py-3.5 shadow-2xl flex items-center gap-2.5 z-50 animate-bounce">
           <Sparkles className="w-4 h-4 text-emerald-400" />
           <span className="text-xs font-semibold">{toastMessage}</span>
         </div>
@@ -645,7 +645,7 @@ export default function PayrollManager({
               <CreditCard className="w-5 h-5" />
             </div>
             <div>
-              <h1 className="text-md font-black text-slate-900 tracking-tight">Payroll & HR Management System</h1>
+              <h1 className="text-md font-black text-[#082458] tracking-tight">Payroll & HR System</h1>
               <p className="text-xs text-slate-400">All-in-one dynamic suite for personnel management, leaves, salary calculations, PF/ESI taxes, reimbursement, and appraisals.</p>
             </div>
           </div>
@@ -656,7 +656,7 @@ export default function PayrollManager({
           <button 
             onClick={() => setActiveTab('roster')}
             className={`flex-1 sm:flex-none px-3.5 py-2 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 ${
-              activeTab === 'roster' ? 'bg-white text-slate-900 shadow-xxs' : 'text-slate-500 hover:text-slate-900'
+              activeTab === 'roster' ? 'bg-white text-[#082458] shadow-xxs' : 'text-slate-500 hover:text-[#082458]'
             }`}
           >
             <Users className="w-3.5 h-3.5" /> Employee Management
@@ -665,7 +665,7 @@ export default function PayrollManager({
           <button 
             onClick={() => setActiveTab('attendance_leaves')}
             className={`flex-1 sm:flex-none px-3.5 py-2 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 ${
-              activeTab === 'attendance_leaves' ? 'bg-white text-slate-900 shadow-xxs' : 'text-slate-500 hover:text-slate-900'
+              activeTab === 'attendance_leaves' ? 'bg-white text-[#082458] shadow-xxs' : 'text-slate-500 hover:text-[#082458]'
             }`}
           >
             <Calendar className="w-3.5 h-3.5" /> Leaves & Attendance
@@ -674,7 +674,7 @@ export default function PayrollManager({
           <button 
             onClick={() => setActiveTab('payroll_calc')}
             className={`flex-1 sm:flex-none px-3.5 py-2 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 ${
-              activeTab === 'payroll_calc' ? 'bg-white text-slate-900 shadow-xxs' : 'text-slate-500 hover:text-slate-900'
+              activeTab === 'payroll_calc' ? 'bg-white text-[#082458] shadow-xxs' : 'text-slate-500 hover:text-[#082458]'
             }`}
           >
             <Sliders className="w-3.5 h-3.5" /> Salary & Payouts ({unpaidCount})
@@ -683,7 +683,7 @@ export default function PayrollManager({
           <button 
             onClick={() => setActiveTab('expenses')}
             className={`flex-1 sm:flex-none px-3.5 py-2 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 ${
-              activeTab === 'expenses' ? 'bg-white text-slate-900 shadow-xxs' : 'text-slate-500 hover:text-slate-900'
+              activeTab === 'expenses' ? 'bg-white text-[#082458] shadow-xxs' : 'text-slate-500 hover:text-[#082458]'
             }`}
           >
             <Wallet className="w-3.5 h-3.5" /> Expenses Roster
@@ -692,7 +692,7 @@ export default function PayrollManager({
           <button 
             onClick={() => setActiveTab('performance')}
             className={`flex-1 sm:flex-none px-3.5 py-2 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 ${
-              activeTab === 'performance' ? 'bg-white text-slate-900 shadow-xxs' : 'text-slate-500 hover:text-slate-900'
+              activeTab === 'performance' ? 'bg-white text-[#082458] shadow-xxs' : 'text-slate-500 hover:text-[#082458]'
             }`}
           >
             <Award className="w-3.5 h-3.5" /> Appraisals
@@ -705,7 +705,7 @@ export default function PayrollManager({
         <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-xxs">
           <span className="text-[10px] font-black uppercase text-slate-400 block mb-1">Active Roster Size</span>
           <div className="flex items-center gap-2">
-            <span className="text-xl font-black text-slate-800">{employees.length} Members</span>
+            <span className="text-xl font-black text-[#082458]">{employees.length} Members</span>
           </div>
           <span className="text-[9.5px] text-emerald-500 mt-1 block font-medium">● System in sync with LocalStorage</span>
         </div>
@@ -713,7 +713,7 @@ export default function PayrollManager({
         <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-xxs">
           <span className="text-[10px] font-black uppercase text-slate-400 block mb-1">Today's Presence</span>
           <div className="flex items-baseline gap-1.5">
-            <span className="text-xl font-black text-slate-800">
+            <span className="text-xl font-black text-[#082458]">
               {employees.filter(e => e.attendance === 'Present').length} / {employees.length}
             </span>
             <span className="text-[10px] text-slate-400 font-semibold">Active Today</span>
@@ -736,7 +736,7 @@ export default function PayrollManager({
 
         <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-xxs">
           <span className="text-[10px] font-black uppercase text-slate-400 block mb-1">Reconciled Net Payroll</span>
-          <span className="text-xl font-black text-slate-800 font-mono tracking-tight block">
+          <span className="text-xl font-black text-[#082458] font-mono tracking-tight block">
             {formatINR(totalRosterRevenue)}
           </span>
           <span className="text-[9.5px] text-slate-400 block mt-1 font-semibold text-rose-500">
@@ -755,7 +755,7 @@ export default function PayrollManager({
               <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 pb-3 border-b border-slate-100">
                 <div>
                   <div className="flex items-center gap-2">
-                    <h3 className="text-sm font-black text-slate-950 uppercase tracking-tight">Active Team Directory</h3>
+                    <h3 className="text-sm font-black text-[#041845] uppercase tracking-tight">Active Team Directory</h3>
                     <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 text-[10px] font-extrabold font-mono">
                       {employees.length} Total Workforce
                     </span>
@@ -805,7 +805,7 @@ export default function PayrollManager({
                       className={`px-2.5 py-1 rounded-lg text-[10.5px] font-bold whitespace-nowrap transition flex items-center gap-1.5 cursor-pointer ${
                         departmentFilter === dept.id
                           ? 'bg-rose-50 text-rose-700 border border-rose-200 shadow-xxs'
-                          : 'text-slate-500 hover:text-slate-800 bg-slate-50 hover:bg-slate-100 border border-slate-150'
+                          : 'text-slate-500 hover:text-[#082458] bg-slate-50 hover:bg-slate-100 border border-slate-200'
                       }`}
                     >
                       <span>{dept.label}</span>
@@ -832,14 +832,14 @@ export default function PayrollManager({
                   />
                 </div>
 
-                <div className="flex items-center gap-1 bg-slate-150 p-0.5 rounded-lg text-xs">
+                <div className="flex items-center gap-1 bg-slate-200 p-0.5 rounded-lg text-xs">
                   <span className="text-[9.5px] font-bold text-slate-500 uppercase px-2">Daily Presence:</span>
                   {(['All', 'Present', 'Absent', 'On Leave'] as const).map(tab => (
                     <button
                       key={tab}
                       onClick={() => setStatusFilter(tab)}
                       className={`px-2.5 py-1 rounded-md font-bold text-[10.5px] transition cursor-pointer ${
-                        statusFilter === tab ? 'bg-white text-slate-900 shadow-xxs' : 'text-slate-500 hover:text-slate-800'
+                        statusFilter === tab ? 'bg-white text-[#082458] shadow-xxs' : 'text-slate-500 hover:text-[#082458]'
                       }`}
                     >
                       {tab}
@@ -849,9 +849,9 @@ export default function PayrollManager({
               </div>
 
               {/* Directory Table */}
-              <div className="overflow-x-auto rounded-xl border border-slate-150 bg-white">
+              <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-slate-50 text-slate-500 font-extrabold uppercase text-[8.5px] border-b border-slate-150">
+                  <thead className="bg-slate-50 text-slate-500 font-extrabold uppercase text-[8.5px] border-b border-slate-200">
                     <tr>
                       <th className="p-3">Reference ID</th>
                       <th className="p-3">Full Name</th>
@@ -879,7 +879,7 @@ export default function PayrollManager({
                         >
                           <td className="p-3 font-mono font-bold text-slate-400">{emp.id}</td>
                           <td className="p-3">
-                            <span className="text-slate-900 font-extrabold block">{emp.name}</span>
+                            <span className="text-[#082458] font-extrabold block">{emp.name}</span>
                             <span className="text-[10px] text-slate-400">{emp.role}</span>
                           </td>
                           <td className="p-3 text-slate-700">
@@ -910,14 +910,14 @@ export default function PayrollManager({
                             <div className="flex items-center justify-end gap-1">
                               <button 
                                 onClick={() => { setSelectedEmpId(emp.id); setIsPayslipOpen(true); }}
-                                className="p-1.5 bg-indigo-50 text-indigo-600 rounded-lg border border-indigo-150 hover:bg-indigo-100 hover:text-indigo-900"
+                                className="p-1.5 bg-[#eef4fb] text-[#0b74f0] rounded-lg border border-[#0b74f0]/25 hover:bg-[#dceafb] hover:text-[#082458]"
                                 title="View & Print Payslip"
                               >
                                 <Printer className="w-3.5 h-3.5" />
                               </button>
                               <button 
                                 onClick={() => { setSelectedEmpId(emp.id); setIsEditEmpOpen(true); }}
-                                className="p-1.5 bg-slate-50 text-slate-600 rounded-lg border border-slate-200 hover:bg-slate-100 hover:text-slate-900"
+                                className="p-1.5 bg-slate-50 text-slate-600 rounded-lg border border-slate-200 hover:bg-slate-100 hover:text-[#082458]"
                                 title="Edit employee baseline parameters"
                               >
                                 <Edit2 className="w-3.5 h-3.5" />
@@ -945,7 +945,7 @@ export default function PayrollManager({
           </div>
 
           {/* Detailed Profile drawer: cols span 4 */}
-          <div className="lg:col-span-4 bg-white p-4 rounded-2xl border border-slate-150 shadow-xs flex flex-col justify-between">
+          <div className="lg:col-span-4 bg-white p-4 rounded-2xl border border-slate-200 shadow-xs flex flex-col justify-between">
             {selectedEmp ? (
               <div className="space-y-4">
                 
@@ -954,7 +954,7 @@ export default function PayrollManager({
                   <div className="w-14 h-14 bg-rose-500 text-white rounded-full mx-auto flex items-center justify-center font-black text-lg shadow-sm border border-rose-600/30 mb-2">
                     {selectedEmp.name.split(' ').map(n=>n[0]).join('')}
                   </div>
-                  <h3 className="font-extrabold text-slate-900 text-sm">{selectedEmp.name}</h3>
+                  <h3 className="font-extrabold text-[#082458] text-sm">{selectedEmp.name}</h3>
                   <span className="text-[10px] text-slate-400 font-bold block uppercase tracking-wider">{selectedEmp.role}</span>
                   <div className="mt-2 flex justify-center gap-1.5">
                     <span className="px-2 py-0.5 bg-slate-100 text-slate-600 rounded text-[9.5px] font-black">{selectedEmp.department}</span>
@@ -972,7 +972,7 @@ export default function PayrollManager({
                   
                   <div className="flex justify-between">
                     <span className="text-slate-500">Gross Salary (Base)</span>
-                    <span className="font-mono text-slate-900 font-extrabold">{formatINR(selectedEmp.salary)}</span>
+                    <span className="font-mono text-[#082458] font-extrabold">{formatINR(selectedEmp.salary)}</span>
                   </div>
                   
                   <div className="flex justify-between">
@@ -986,7 +986,7 @@ export default function PayrollManager({
                   </div>
 
                   <div className="border-t border-slate-200 pt-2 flex justify-between items-center">
-                    <span className="font-extrabold text-slate-800">Net Estimated Pay</span>
+                    <span className="font-extrabold text-[#082458]">Net Estimated Pay</span>
                     <span className="font-mono font-black text-rose-600 text-sm">{formatINR(selectBreakdown.calculatedNet)}</span>
                   </div>
                 </div>
@@ -997,7 +997,7 @@ export default function PayrollManager({
                   <div className="grid grid-cols-2 gap-2">
                     <button
                       onClick={() => setIsPayslipOpen(true)}
-                      className="px-3 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl flex items-center justify-center gap-1 shadow-sm text-center"
+                      className="px-3 py-2 bg-[#041845] hover:bg-[#082458] text-white font-bold text-xs rounded-xl flex items-center justify-center gap-1 shadow-sm text-center"
                     >
                       <FileText className="w-3.5 h-3.5" /> View Payslip
                     </button>
@@ -1016,15 +1016,15 @@ export default function PayrollManager({
                   <div className="grid grid-cols-3 gap-2 text-center text-[10px]">
                     <div className="bg-slate-50 p-2 rounded-lg border border-slate-100">
                       <span className="text-slate-400 block font-bold uppercase">Casual</span>
-                      <span className="text-xs font-black text-slate-800">8 / 12 left</span>
+                      <span className="text-xs font-black text-[#082458]">8 / 12 left</span>
                     </div>
                     <div className="bg-slate-50 p-2 rounded-lg border border-slate-100">
                       <span className="text-slate-400 block font-bold uppercase">Sick</span>
-                      <span className="text-xs font-black text-slate-800">5 / 6 left</span>
+                      <span className="text-xs font-black text-[#082458]">5 / 6 left</span>
                     </div>
                     <div className="bg-slate-50 p-2 rounded-lg border border-slate-100">
                       <span className="text-slate-400 block font-bold uppercase">Earned</span>
-                      <span className="text-xs font-black text-slate-800">14 / 15 left</span>
+                      <span className="text-xs font-black text-[#082458]">14 / 15 left</span>
                     </div>
                   </div>
                 </div>
@@ -1047,7 +1047,7 @@ export default function PayrollManager({
           
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 bg-white p-4 rounded-xl border border-slate-100">
             <div>
-              <h3 className="text-sm font-black text-slate-900 uppercase">Attendance & Leave Tracking Dashboard</h3>
+              <h3 className="text-sm font-black text-[#082458] uppercase">Attendance & Leave Tracking Dashboard</h3>
               <p className="text-xs text-slate-400">Audit employee absence parameters, approve customized leave policies, and review active requests.</p>
             </div>
             
@@ -1064,9 +1064,9 @@ export default function PayrollManager({
             <div className="lg:col-span-8 bg-white p-4 rounded-2xl border border-slate-100 shadow-xs">
               <h4 className="text-xs font-black uppercase text-slate-400 tracking-wider mb-3">Incoming Leave Request Pipeline</h4>
               
-              <div className="overflow-x-auto rounded-xl border border-slate-150">
+              <div className="overflow-x-auto rounded-xl border border-slate-200">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-slate-50 text-slate-500 font-extrabold uppercase text-[8.5px] border-b border-slate-150">
+                  <thead className="bg-slate-50 text-slate-500 font-extrabold uppercase text-[8.5px] border-b border-slate-200">
                     <tr>
                       <th className="p-3">Reference ID</th>
                       <th className="p-3">Applicant Name</th>
@@ -1086,7 +1086,7 @@ export default function PayrollManager({
                       leaves.map(req => (
                         <tr key={req.id} className="hover:bg-slate-50/50">
                           <td className="p-3 font-mono font-bold text-slate-400 text-xxs">{req.id}</td>
-                          <td className="p-3 font-bold text-slate-950">{req.employeeName}</td>
+                          <td className="p-3 font-bold text-[#041845]">{req.employeeName}</td>
                           <td className="p-3 font-semibold text-slate-500">{req.leaveType}</td>
                           <td className="p-3">
                             <span className="block font-semibold">{req.startDate} to {req.endDate}</span>
@@ -1130,12 +1130,12 @@ export default function PayrollManager({
             </div>
 
             {/* Leave Policy Balances card info */}
-            <div className="lg:col-span-4 bg-[#0f172a] text-white p-5 rounded-2xl border border-slate-800 shadow-xs space-y-4">
+            <div className="lg:col-span-4 bg-[#0f172a] text-white p-5 rounded-2xl border border-[#1e3a8a]/50 shadow-xs space-y-4">
               <h4 className="text-[10.5px] font-extrabold text-slate-400 uppercase tracking-widest flex items-center gap-1">
                 <Bookmark className="w-3.5 h-3.5 text-rose-500" /> Active Roster Leave Balance Rules
               </h4>
 
-              <p className="text-[11px] text-slate-350 italic">
+              <p className="text-[11px] text-slate-300 italic">
                 Standard institutional leave policies automatically allocated to active employees during financial appraisal cycles.
               </p>
 
@@ -1145,7 +1145,7 @@ export default function PayrollManager({
                     <span>Casual Leave (CL) Allowance</span>
                     <span className="font-bold text-rose-400">12 Days / Year</span>
                   </div>
-                  <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                  <div className="w-full bg-[#082458] h-1.5 rounded-full overflow-hidden">
                     <div className="bg-rose-500 h-full w-[70%]"></div>
                   </div>
                 </div>
@@ -1155,7 +1155,7 @@ export default function PayrollManager({
                     <span>Sick Leave (SL) Allocation</span>
                     <span className="font-bold text-amber-400">6 Days / Year</span>
                   </div>
-                  <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                  <div className="w-full bg-[#082458] h-1.5 rounded-full overflow-hidden">
                     <div className="bg-amber-400 h-full w-[45%]"></div>
                   </div>
                 </div>
@@ -1163,15 +1163,15 @@ export default function PayrollManager({
                 <div>
                   <div className="flex justify-between mb-1">
                     <span>Earned/Special Leave (EL)</span>
-                    <span className="font-bold text-indigo-400">15 Days / Year</span>
+                    <span className="font-bold text-[#16c2ff]">15 Days / Year</span>
                   </div>
-                  <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
-                    <div className="bg-indigo-400 h-full w-[80%]"></div>
+                  <div className="w-full bg-[#082458] h-1.5 rounded-full overflow-hidden">
+                    <div className="bg-[#38bdf8] h-full w-[80%]"></div>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-slate-800/50 p-3 rounded-lg border border-slate-700/60 text-[10px] text-slate-300">
+              <div className="bg-[#082458]/50 p-3 rounded-lg border border-[#1e3a8a]/60/60 text-[10px] text-slate-300">
                 <span className="font-extrabold block text-slate-200 mb-1">⚠️ Policy Note:</span>
                 Unutilized casual leaves do not carry forward into next calendar year. Sick leaves require signed doctor's diagnostics for approvals.
               </div>
@@ -1186,7 +1186,7 @@ export default function PayrollManager({
           
           <div className="bg-white p-4 rounded-xl border border-slate-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
-              <h3 className="text-sm font-black text-slate-900 uppercase">Monthly Payroll Processing Command</h3>
+              <h3 className="text-sm font-black text-[#082458] uppercase">Monthly Payroll Processing Command</h3>
               <p className="text-xs text-slate-400">Run calculations, verify PF/ESI/TDS tax allocations, and initiate direct payouts to staff.</p>
             </div>
 
@@ -1203,10 +1203,10 @@ export default function PayrollManager({
           <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
             
             {/* PF, ESI & Tax Rules Slider Config Box */}
-            <div className="xl:col-span-4 bg-white p-4 rounded-2xl border border-slate-150 shadow-xs space-y-4">
+            <div className="xl:col-span-4 bg-white p-4 rounded-2xl border border-slate-200 shadow-xs space-y-4">
               <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
                 <Sliders className="w-4 h-4 text-rose-500" />
-                <h4 className="text-xs font-black uppercase text-slate-800 tracking-wider">PF, ESI & Tax Percentage Config</h4>
+                <h4 className="text-xs font-black uppercase text-[#082458] tracking-wider">PF, ESI & Tax Percentage Config</h4>
               </div>
 
               <div className="space-y-3.5 text-xs text-slate-600">
@@ -1260,7 +1260,7 @@ export default function PayrollManager({
                 <div>
                   <div className="flex justify-between mb-1 font-bold">
                     <span>Fixed Professional Tax (PT)</span>
-                    <span className="text-slate-800 font-mono">₹ {profTax} (Monthly)</span>
+                    <span className="text-[#082458] font-mono">₹ {profTax} (Monthly)</span>
                   </div>
                   <input 
                     type="number" 
@@ -1285,7 +1285,7 @@ export default function PayrollManager({
             <div className="xl:col-span-8 bg-white p-4 rounded-2xl border border-slate-100 shadow-xs space-y-4">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                 <div>
-                  <h4 className="text-xs font-black uppercase text-slate-800 tracking-wider">Salary Computation Ledger</h4>
+                  <h4 className="text-xs font-black uppercase text-[#082458] tracking-wider">Salary Computation Ledger</h4>
                   <span className="text-[10px] text-slate-400">Displaying {filteredEmployeesOnTerms.length} of {employees.length} employees ({departmentFilter === 'All' ? 'All Departments' : departmentFilter})</span>
                 </div>
                 <div className="flex items-center gap-2 w-full sm:w-auto">
@@ -1302,9 +1302,9 @@ export default function PayrollManager({
                 </div>
               </div>
               
-              <div className="overflow-x-auto rounded-xl border border-slate-150">
+              <div className="overflow-x-auto rounded-xl border border-slate-200">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-slate-50 text-slate-500 font-extrabold uppercase text-[8.5px] border-b border-slate-150">
+                  <thead className="bg-slate-50 text-slate-500 font-extrabold uppercase text-[8.5px] border-b border-slate-200">
                     <tr>
                       <th className="p-3">Employee</th>
                       <th className="p-3">Gross Base</th>
@@ -1312,7 +1312,7 @@ export default function PayrollManager({
                       <th className="p-3">PF ({epfRate}%)</th>
                       <th className="p-3">ESI ({esiRate}%)</th>
                       <th className="p-3">TDS Tax ({tdsRate}%)</th>
-                      <th className="p-3 font-semibold text-slate-900 text-right">Net Payout</th>
+                      <th className="p-3 font-semibold text-[#082458] text-right">Net Payout</th>
                       <th className="p-3 text-center">Status</th>
                       <th className="p-3 text-right">Payslip</th>
                     </tr>
@@ -1323,7 +1323,7 @@ export default function PayrollManager({
                       return (
                         <tr key={emp.id} className="hover:bg-slate-50/50">
                           <td className="p-3">
-                            <span className="font-extrabold text-slate-900 block">{emp.name}</span>
+                            <span className="font-extrabold text-[#082458] block">{emp.name}</span>
                             <span className="text-[10px] text-slate-400 font-mono">{emp.id}</span>
                           </td>
                           <td className="p-3 font-mono text-slate-600 font-semibold">{formatINR(emp.salary)}</td>
@@ -1334,7 +1334,7 @@ export default function PayrollManager({
                           <td className="p-3 text-rose-500 font-mono">-{formatINR(calculations.epfDeduction)}</td>
                           <td className="p-3 text-rose-500 font-mono">-{formatINR(calculations.esiDeduction)}</td>
                           <td className="p-3 text-rose-400 font-mono">-{formatINR(calculations.tdsDeduction)}</td>
-                          <td className="p-3 font-mono font-black text-slate-850 text-right text-emerald-600">
+                          <td className="p-3 font-mono font-black text-[#082458] text-right text-emerald-600">
                             {formatINR(calculations.calculatedNet)}
                           </td>
                           <td className="p-3 text-center">
@@ -1350,7 +1350,7 @@ export default function PayrollManager({
                                 setSelectedEmpId(emp.id);
                                 setIsPayslipOpen(true);
                               }}
-                              className="px-2.5 py-1 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-[10.5px] font-bold inline-flex items-center gap-1 shadow-sm transition"
+                              className="px-2.5 py-1 bg-[#041845] hover:bg-[#082458] text-white rounded-lg text-[10.5px] font-bold inline-flex items-center gap-1 shadow-sm transition"
                               title="Print Statement"
                             >
                               <Printer className="w-3.5 h-3.5" />
@@ -1370,9 +1370,9 @@ export default function PayrollManager({
           {/* Historical Run Audit Trail log */}
           <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-xs">
             <h4 className="text-xs font-black uppercase text-slate-400 tracking-wider mb-2.5">Historical Executed Payroll Runs</h4>
-            <div className="overflow-x-auto rounded-lg border border-slate-150">
+            <div className="overflow-x-auto rounded-lg border border-slate-200">
               <table className="w-full text-left text-xs bg-white">
-                <thead className="bg-slate-50 text-slate-500 font-extrabold uppercase text-[8px] tracking-wide border-b border-slate-150">
+                <thead className="bg-slate-50 text-slate-500 font-extrabold uppercase text-[8px] tracking-wide border-b border-slate-200">
                   <tr>
                     <th className="p-2.5">Run Reference</th>
                     <th className="p-2.5">Billing Period</th>
@@ -1386,12 +1386,12 @@ export default function PayrollManager({
                 <tbody className="divide-y divide-slate-100 font-medium">
                   {payrollHistory.map(hist => (
                     <tr key={hist.id} className="hover:bg-slate-50/50">
-                      <td className="p-2.5 font-mono text-slate-900 font-bold">{hist.id}</td>
-                      <td className="p-2.5 font-extrabold text-slate-800">{hist.monthYear}</td>
+                      <td className="p-2.5 font-mono text-[#082458] font-bold">{hist.id}</td>
+                      <td className="p-2.5 font-extrabold text-[#082458]">{hist.monthYear}</td>
                       <td className="p-2.5 text-slate-500">{hist.disbursedDate}</td>
                       <td className="p-2.5 text-emerald-600 font-mono font-bold">{formatINR(hist.totalAmountPaid)}</td>
                       <td className="p-2.5">{hist.employeesCount} Employees</td>
-                      <td className="p-2.5 font-semibold text-indigo-600 text-xxs">{hist.payoutMethod}</td>
+                      <td className="p-2.5 font-semibold text-[#0b74f0] text-xxs">{hist.payoutMethod}</td>
                       <td className="p-2.5 text-slate-400">{hist.reconciledBy}</td>
                     </tr>
                   ))}
@@ -1409,7 +1409,7 @@ export default function PayrollManager({
           
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 bg-white p-4 rounded-xl border border-slate-100">
             <div>
-              <h3 className="text-sm font-black text-slate-900 uppercase">Expense Claims & Reimbursement Control</h3>
+              <h3 className="text-sm font-black text-[#082458] uppercase">Expense Claims & Reimbursement Control</h3>
               <p className="text-xs text-slate-400">Verify client hospitality vouchers, field travel logs, and issue payouts immediately.</p>
             </div>
 
@@ -1426,9 +1426,9 @@ export default function PayrollManager({
             {/* Expense spreadsheet logs list */}
             <div className="lg:col-span-8 bg-white p-4 rounded-2xl border border-slate-100 shadow-xs">
               <h4 className="text-xs font-black uppercase text-slate-400 tracking-wider mb-3">Claims spreadsheet</h4>
-              <div className="overflow-x-auto rounded-xl border border-slate-150">
+              <div className="overflow-x-auto rounded-xl border border-slate-200">
                 <table className="w-full text-left text-xs bg-white">
-                  <thead className="bg-slate-50 text-slate-500 font-extrabold uppercase text-[8.5px] border-b border-slate-150">
+                  <thead className="bg-slate-50 text-slate-500 font-extrabold uppercase text-[8.5px] border-b border-slate-200">
                     <tr>
                       <th className="p-3">Reference ID</th>
                       <th className="p-3">Claimant Name</th>
@@ -1449,15 +1449,15 @@ export default function PayrollManager({
                       expenses.map(claim => (
                         <tr key={claim.id} className="hover:bg-slate-50/50">
                           <td className="p-3 font-mono font-bold text-slate-400 text-xxs">{claim.id}</td>
-                          <td className="p-3 font-bold text-slate-950">{claim.employeeName}</td>
+                          <td className="p-3 font-bold text-[#041845]">{claim.employeeName}</td>
                           <td className="p-3">
-                            <span className="block font-bold text-slate-800">{claim.title}</span>
+                            <span className="block font-bold text-[#082458]">{claim.title}</span>
                             <span className="text-[10px] text-slate-400 max-w-xxs block truncate" title={claim.notes}>{claim.notes}</span>
                           </td>
                           <td className="p-3">
                             <span className="px-2 py-0.5 bg-slate-100 text-slate-600 rounded text-[9.5px] font-black uppercase">{claim.category}</span>
                           </td>
-                          <td className="p-3 font-mono font-bold text-slate-800">{formatINR(claim.amount)}</td>
+                          <td className="p-3 font-mono font-bold text-[#082458]">{formatINR(claim.amount)}</td>
                           <td className="p-3 text-slate-500 font-medium">{claim.claimDate}</td>
                           <td className="p-3">
                             <span className={`inline-block px-1.5 py-0.5 rounded text-[9.5px] font-extrabold ${
@@ -1497,7 +1497,7 @@ export default function PayrollManager({
             </div>
 
             {/* Claims Audit statistics */}
-            <div className="lg:col-span-4 bg-slate-50 p-4 rounded-2xl border border-slate-150 space-y-4 font-sans text-slate-800 flex flex-col justify-between">
+            <div className="lg:col-span-4 bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-4 font-sans text-[#082458] flex flex-col justify-between">
               <div className="space-y-3.5">
                 <h4 className="text-[10px] font-black uppercase text-slate-400 tracking-wider">Expense Audit Policy Guidelines</h4>
                 <p className="text-[11px] text-slate-500 leading-relaxed">
@@ -1537,7 +1537,7 @@ export default function PayrollManager({
           
           <div className="bg-white p-4 rounded-xl border border-slate-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
             <div>
-              <h3 className="text-sm font-black text-slate-900 uppercase">Appraisals & Performance Evaluator</h3>
+              <h3 className="text-sm font-black text-[#082458] uppercase">Appraisals & Performance Evaluator</h3>
               <p className="text-xs text-slate-400">Record evaluations, adjust operational KRA ratings, and align company goals.</p>
             </div>
           </div>
@@ -1545,10 +1545,10 @@ export default function PayrollManager({
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
             
             {/* Left panel: Selected Employee overview */}
-            <div className="lg:col-span-5 bg-white p-4 rounded-2xl border border-slate-150 shadow-xs space-y-4">
+            <div className="lg:col-span-5 bg-white p-4 rounded-2xl border border-slate-200 shadow-xs space-y-4">
               <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
                 <Award className="w-4 h-4 text-rose-500" />
-                <h4 className="text-xs font-black uppercase text-slate-900 tracking-wider">Focus Performance appraisal</h4>
+                <h4 className="text-xs font-black uppercase text-[#082458] tracking-wider">Focus Performance appraisal</h4>
               </div>
 
               {/* Workforce Employee Selector */}
@@ -1557,7 +1557,7 @@ export default function PayrollManager({
                 <select
                   value={selectedEmpId}
                   onChange={(e) => setSelectedEmpId(e.target.value)}
-                  className="w-full text-xs p-2 bg-slate-50 border border-slate-205 rounded-xl font-bold text-slate-800 focus:bg-white"
+                  className="w-full text-xs p-2 bg-slate-50 border border-slate-205 rounded-xl font-bold text-[#082458] focus:bg-white"
                 >
                   {employees.map(emp => (
                     <option key={emp.id} value={emp.id}>
@@ -1570,11 +1570,11 @@ export default function PayrollManager({
               {selectedEmp ? (
                 <div className="space-y-4 text-xs">
                   <div className="flex items-center gap-3 bg-slate-50 p-3 rounded-xl border border-slate-100">
-                    <div className="w-10 h-10 rounded-full bg-slate-900 text-white font-bold flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-full bg-[#041845] text-white font-bold flex items-center justify-center">
                       {selectedEmp.name.slice(0, 2).toUpperCase()}
                     </div>
                     <div>
-                      <span className="font-extrabold text-slate-900 block">{selectedEmp.name}</span>
+                      <span className="font-extrabold text-[#082458] block">{selectedEmp.name}</span>
                       <span className="text-[10px] text-slate-400 font-bold block bg-white px-2 py-0.5 rounded border border-slate-200 mt-0.5">{selectedEmp.role}</span>
                     </div>
                   </div>
@@ -1610,7 +1610,7 @@ export default function PayrollManager({
 
                   <button
                     onClick={handleSaveManagerReview}
-                    className="w-full py-2 bg-slate-950 text-white font-bold rounded-xl text-center hover:bg-slate-800 transition shadow-sm text-xs"
+                    className="w-full py-2 bg-[#031338] text-white font-bold rounded-xl text-center hover:bg-[#082458] transition shadow-sm text-xs"
                   >
                     Lock Manager Evaluation Score
                   </button>
@@ -1644,17 +1644,17 @@ export default function PayrollManager({
 
               {/* List of active appraisals goals */}
               <div className="space-y-2 text-xs">
-                <div className="p-3 bg-indigo-50/50 border border-indigo-100 rounded-xl flex items-center justify-between">
+                <div className="p-3 bg-[#eef4fb]/50 border border-[#0b74f0]/25 rounded-xl flex items-center justify-between">
                   <div>
-                    <span className="font-extrabold text-slate-800 block">Goal #1: Close &gt; ₹1.5L in field contracts</span>
+                    <span className="font-extrabold text-[#082458] block">Goal #1: Close &gt; ₹1.5L in field contracts</span>
                     <span className="text-[9.5px] text-slate-400 font-bold block mt-0.5">Applies to: Sales & Growth • Weight: 40%</span>
                   </div>
-                  <span className="bg-indigo-100 text-indigo-700 font-bold px-2 py-0.5 rounded text-[9px] uppercase">Active</span>
+                  <span className="bg-[#dceafb] text-[#0b74f0] font-bold px-2 py-0.5 rounded text-[9px] uppercase">Active</span>
                 </div>
 
                 <div className="p-3 bg-emerald-50/50 border border-emerald-100 rounded-xl flex items-center justify-between">
                   <div>
-                    <span className="font-extrabold text-slate-800 block">Goal #2: Maintain customer diagnostics score &gt; 4.5/5</span>
+                    <span className="font-extrabold text-[#082458] block">Goal #2: Maintain customer diagnostics score &gt; 4.5/5</span>
                     <span className="text-[9.5px] text-slate-400 font-bold block mt-0.5">Applies to: Tech Engineers & Delivery • Weight: 30%</span>
                   </div>
                   <span className="bg-emerald-100 text-emerald-700 font-bold px-2 py-0.5 rounded text-[9px] uppercase">Completed</span>
@@ -1662,7 +1662,7 @@ export default function PayrollManager({
 
                 <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between">
                   <div>
-                    <span className="font-extrabold text-slate-800 block">Goal #3: SLA diagnostic turnaround within &lt; 4 hours</span>
+                    <span className="font-extrabold text-[#082458] block">Goal #3: SLA diagnostic turnaround within &lt; 4 hours</span>
                     <span className="text-[9.5px] text-slate-400 font-bold block mt-0.5">Applies to: Operations Command • Weight: 30%</span>
                   </div>
                   <span className="bg-slate-200 text-slate-600 font-bold px-2 py-0.5 rounded text-[9px] uppercase">Deferred</span>
@@ -1677,9 +1677,9 @@ export default function PayrollManager({
 
       {/* ===================== MODAL 1: CREATE RECRUIT PERSONNEL ===================== */}
       {isNewEmpOpen && (
-        <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-[#031338]/60 backdrop-blur-xs flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl max-w-lg w-full p-6 border border-slate-100 shadow-2xl relative">
-            <h3 className="text-sm font-black text-slate-900 uppercase tracking-tight mb-1">Recruit New Employee</h3>
+            <h3 className="text-sm font-black text-[#082458] uppercase tracking-tight mb-1">Recruit New Employee</h3>
             <p className="text-xs text-slate-400 mb-4">Complete physical coordinates to log personnel listings into the active registry.</p>
 
             <form onSubmit={handleCreateEmployeeSubmit} className="space-y-4">
@@ -1768,9 +1768,9 @@ export default function PayrollManager({
 
       {/* ===================== MODAL 2: EDIT PERSONNEL Baseline Parameters ===================== */}
       {isEditEmpOpen && selectedEmp && (
-        <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-[#031338]/60 backdrop-blur-xs flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl max-w-lg w-full p-6 border border-slate-105 shadow-2xl relative">
-            <h3 className="text-sm font-black text-slate-900 uppercase tracking-tight mb-1">Edit Employee Profile</h3>
+            <h3 className="text-sm font-black text-[#082458] uppercase tracking-tight mb-1">Edit Employee Profile</h3>
             <p className="text-xs text-slate-400 mb-4">Modify structural configuration mapping for {selectedEmp.name}.</p>
 
             <form onSubmit={handleEditEmployeeSubmit} className="space-y-4">
@@ -1843,7 +1843,7 @@ export default function PayrollManager({
                 </button>
                 <button 
                   type="submit"
-                  className="px-5 py-2 bg-slate-900 text-white hover:bg-slate-800 rounded-lg text-xs font-bold transition shadow-sm"
+                  className="px-5 py-2 bg-[#041845] text-white hover:bg-[#082458] rounded-lg text-xs font-bold transition shadow-sm"
                 >
                   Approve Configuration Changes
                 </button>
@@ -1855,14 +1855,14 @@ export default function PayrollManager({
 
       {/* ===================== MODAL 3: PAYSILIP GENERATION MODAL ===================== */}
       {isPayslipOpen && selectedEmp && (
-        <div className="fixed inset-0 bg-slate-950/70 backdrop-blur-xs flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-[#031338]/70 backdrop-blur-xs flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-3xl max-w-2xl w-full p-6 border border-slate-200 shadow-2xl relative max-h-[90vh] overflow-y-auto">
             
             {/* Stamp logo and close handler */}
             <div className="flex justify-between items-center pb-4 border-b border-slate-200">
               <div className="flex items-center gap-1.5">
                 <div className="p-1 px-[7px] bg-rose-600 text-white text-[11px] font-black rounded font-mono">VS</div>
-                <span className="text-[11px] font-black text-slate-950 uppercase tracking-widest">Vertex Telecom Systems & SLA Corp</span>
+                <span className="text-[11px] font-black text-[#041845] uppercase tracking-widest">Vertex Telecom Systems & SLA Corp</span>
               </div>
               
               <button 
@@ -1881,7 +1881,7 @@ export default function PayrollManager({
                 <select
                   value={payslipMonth}
                   onChange={(e) => setPayslipMonth(e.target.value)}
-                  className="bg-white border border-slate-200 rounded-lg p-1.5 font-bold text-slate-800 focus:outline-none"
+                  className="bg-white border border-slate-200 rounded-lg p-1.5 font-bold text-[#082458] focus:outline-none"
                 >
                   {['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].map(m => (
                     <option key={m} value={m}>{m}</option>
@@ -1890,7 +1890,7 @@ export default function PayrollManager({
                 <select
                   value={payslipYear}
                   onChange={(e) => setPayslipYear(e.target.value)}
-                  className="bg-white border border-slate-200 rounded-lg p-1.5 font-bold text-slate-800 focus:outline-none"
+                  className="bg-white border border-slate-200 rounded-lg p-1.5 font-bold text-[#082458] focus:outline-none"
                 >
                   {['2025', '2026', '2027', '2028'].map(y => (
                     <option key={y} value={y}>{y}</option>
@@ -1901,10 +1901,10 @@ export default function PayrollManager({
             </div>
 
             {/* Print Slip markup */}
-            <div id="print-slip-document" className="pt-2 space-y-4 font-sans text-xs text-slate-800">
+            <div id="print-slip-document" className="pt-2 space-y-4 font-sans text-xs text-[#082458]">
               
-              <div className="text-center space-y-1 py-1 bg-slate-50 rounded-xl border border-slate-150">
-                <h4 className="font-extrabold text-slate-900 uppercase text-xs">Salary Statement Circular</h4>
+              <div className="text-center space-y-1 py-1 bg-slate-50 rounded-xl border border-slate-200">
+                <h4 className="font-extrabold text-[#082458] uppercase text-xs">Salary Statement Circular</h4>
                 <p className="text-[10px] text-slate-400 font-bold">Billing Cycle: {payslipMonth} {payslipYear} &bull; Issued securely via NACH API</p>
               </div>
 
@@ -1912,13 +1912,13 @@ export default function PayrollManager({
               <div className="grid grid-cols-2 gap-4 pb-2 border-b border-slate-100">
                 <div>
                   <span className="text-[9px] font-extrabold uppercase text-slate-400 block">Recipient Worker Detail:</span>
-                  <span className="font-bold text-slate-900 text-sm block">{selectedEmp.name}</span>
+                  <span className="font-bold text-[#082458] text-sm block">{selectedEmp.name}</span>
                   <span className="text-[10.5px] text-slate-500 font-medium">{selectedEmp.role}</span>
                   <span className="text-[10.5px] text-slate-500 block">Department: {selectedEmp.department}</span>
                 </div>
                 <div>
                   <span className="text-[9px] font-extrabold uppercase text-slate-400 block text-right">Payment Coordinates:</span>
-                  <p className="text-right text-slate-900 font-mono font-bold block mt-0.5">Reference ID: {selectedEmp.id}-CY9</p>
+                  <p className="text-right text-[#082458] font-mono font-bold block mt-0.5">Reference ID: {selectedEmp.id}-CY9</p>
                   <p className="text-right text-slate-500">Method: Instant IMPS NEFT Transfer</p>
                   <p className="text-right font-black text-emerald-600 uppercase text-[9px]">Status: Reconciled & Paid</p>
                 </div>
@@ -1950,7 +1950,7 @@ export default function PayrollManager({
                     <span className="font-mono">+{formatINR(selectedEmp.allowance)}</span>
                   </div>
 
-                  <div className="border-t border-slate-200 pt-1.5 flex justify-between font-bold text-slate-900 bg-slate-50 px-2 py-1 rounded">
+                  <div className="border-t border-slate-200 pt-1.5 flex justify-between font-bold text-[#082458] bg-slate-50 px-2 py-1 rounded">
                     <span>Gross Earnings Sum</span>
                     <span className="font-mono">{formatINR(selectedEmp.salary + selectedEmp.allowance)}</span>
                   </div>
@@ -1960,22 +1960,22 @@ export default function PayrollManager({
                 <div className="space-y-2 border-l border-slate-100 pl-4">
                   <span className="text-[9.5px] font-black text-slate-400 uppercase tracking-wider block border-b border-slate-100 pb-1">Statutory Deductions</span>
                   
-                  <div className="flex justify-between text-slate-650">
+                  <div className="flex justify-between text-slate-600">
                     <span>Employee Provident Fund ({epfRate}%)</span>
                     <span className="font-mono">-{formatINR(selectBreakdown.epfDeduction)}</span>
                   </div>
 
-                  <div className="flex justify-between text-slate-650">
+                  <div className="flex justify-between text-slate-600">
                     <span>Employee State Insurance ({esiRate}%)</span>
                     <span className="font-mono">-{formatINR(selectBreakdown.esiDeduction)}</span>
                   </div>
 
-                  <div className="flex justify-between text-slate-650">
+                  <div className="flex justify-between text-slate-600">
                     <span>Tax Withheld / TDS ({tdsRate}%)</span>
                     <span className="font-mono">-{formatINR(selectBreakdown.tdsDeduction)}</span>
                   </div>
 
-                  <div className="flex justify-between text-slate-650">
+                  <div className="flex justify-between text-slate-600">
                     <span>Professional Tax (PT Rate)</span>
                     <span className="font-mono">-{formatINR(selectBreakdown.profTax)}</span>
                   </div>
@@ -1991,7 +1991,7 @@ export default function PayrollManager({
               <div className="bg-[#1e293b] text-white p-4 rounded-2xl flex justify-between items-center mt-6">
                 <div>
                   <span className="text-[9.5px] text-slate-400 uppercase font-black tracking-widest block">Net Settled Salary</span>
-                  <p className="text-[10px] text-slate-350 italic mt-0.5 mt-1">Certified secure bank wire transfer.</p>
+                  <p className="text-[10px] text-slate-300 italic mt-0.5 mt-1">Certified secure bank wire transfer.</p>
                 </div>
                 <span className="text-lg font-black font-mono tracking-tight text-emerald-400">
                   {formatINR(selectBreakdown.calculatedNet)}
@@ -2031,7 +2031,7 @@ export default function PayrollManager({
                       window.print();
                     }
                   }}
-                  className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl flex items-center gap-1.5 shadow-sm transition cursor-pointer"
+                  className="px-4 py-2 bg-[#0b74f0] hover:bg-[#005be0] text-white font-bold text-xs rounded-xl flex items-center gap-1.5 shadow-sm transition cursor-pointer"
                 >
                   <Printer className="w-4 h-4" /> Print Statement
                 </button>
@@ -2045,9 +2045,9 @@ export default function PayrollManager({
 
       {/* ===================== MODAL 4: LOG LEAVE REQUEST FORM ===================== */}
       {isLeaveRequestOpen && (
-        <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-[#031338]/60 backdrop-blur-xs flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl max-w-md w-full p-6 border border-slate-105 shadow-2xl relative">
-            <h3 className="text-sm font-black text-slate-900 uppercase tracking-tight mb-2">Apply for Leave Allocation</h3>
+            <h3 className="text-sm font-black text-[#082458] uppercase tracking-tight mb-2">Apply for Leave Allocation</h3>
             
             <form onSubmit={handleRequestLeave} className="space-y-4">
               <div>
@@ -2136,9 +2136,9 @@ export default function PayrollManager({
 
       {/* ===================== MODAL 5: EXPENSE CLAIMS FORM ===================== */}
       {isExpenseClaimOpen && (
-        <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-[#031338]/60 backdrop-blur-xs flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl max-w-md w-full p-6 border border-slate-105 shadow-2xl relative">
-            <h3 className="text-sm font-black text-slate-900 uppercase tracking-tight mb-2">Claim Reimbursement Settlement</h3>
+            <h3 className="text-sm font-black text-[#082458] uppercase tracking-tight mb-2">Claim Reimbursement Settlement</h3>
             
             <form onSubmit={handleSubmitExpenseClaim} className="space-y-4">
               <div>

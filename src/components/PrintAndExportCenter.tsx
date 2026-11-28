@@ -778,7 +778,7 @@ export default function PrintAndExportCenter({ isOpen, onClose, document, userEm
   };
 
   return (
-    <div className="fixed inset-0 bg-slate-900/70 backdrop-blur-xs flex items-center justify-center z-[100] p-4 animate-fadeIn">
+    <div className="fixed inset-0 bg-[#041845]/70 backdrop-blur-xs flex items-center justify-center z-[100] p-4 animate-fadeIn">
       {/* Container Card */}
       <div className="bg-slate-50 rounded-2xl max-w-4xl w-full border border-slate-200 shadow-2xl overflow-hidden grid grid-cols-1 md:grid-cols-12 max-h-[90vh]">
         
@@ -794,23 +794,23 @@ export default function PrintAndExportCenter({ isOpen, onClose, document, userEm
           {/* Actual sheet of paper styled UI */}
           <div 
             id="app-print-override-area"
-            className="w-full max-w-[620px] bg-white border border-slate-200 shadow-lg rounded-xl p-6 relative select-text font-sans text-slate-800"
+            className="w-full max-w-[620px] bg-white border border-slate-200 shadow-lg rounded-xl p-6 relative select-text font-sans text-[#082458]"
           >
             {/* Header watermarks */}
-            <div className="border-b-2 border-indigo-600 pb-3 mb-5 flex justify-between items-start">
+            <div className="border-b-2 border-[#0b74f0] pb-3 mb-5 flex justify-between items-start">
               <div>
-                <h1 className="text-sm font-black text-indigo-600 tracking-wider uppercase">EXP CRM ENTERPRISE</h1>
+                <h1 className="text-sm font-black text-[#0b74f0] tracking-wider uppercase">EXP CRM ENTERPRISE</h1>
                 <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">Automated Intelligence Operations</p>
               </div>
               <div className="text-right text-[10px] text-slate-500 font-medium">
                 <p><strong>Issued At:</strong> {timestamp}</p>
-                <p className="font-mono text-red-650 mt-0.5"><strong>Secure Hash:</strong> {uniqueHash}</p>
+                <p className="font-mono text-rose-600 mt-0.5"><strong>Secure Hash:</strong> {uniqueHash}</p>
               </div>
             </div>
 
             {/* Title */}
-            <h2 className="text-xs font-black text-slate-900 uppercase border-b pb-1 mb-4 flex items-center gap-1 tracking-wider">
-              <FileText className="w-4 h-4 text-indigo-500" />
+            <h2 className="text-xs font-black text-[#082458] uppercase border-b pb-1 mb-4 flex items-center gap-1 tracking-wider">
+              <FileText className="w-4 h-4 text-[#0b74f0]" />
               {title}
             </h2>
 
@@ -821,15 +821,15 @@ export default function PrintAndExportCenter({ isOpen, onClose, document, userEm
                   <div className="bg-slate-50 p-3 rounded-lg border grid grid-cols-2 gap-2">
                     <div>
                       <p className="text-[9px] font-black text-slate-400 uppercase">SKU Invoice Number</p>
-                      <p className="font-mono text-slate-900 font-bold">{data.id || 'N/A'}</p>
+                      <p className="font-mono text-[#082458] font-bold">{data.id || 'N/A'}</p>
                     </div>
                     <div>
                       <p className="text-[9px] font-black text-slate-400 uppercase">Settled Recipient</p>
-                      <p className="text-slate-900 font-bold">{data.clientName || 'N/A'}</p>
+                      <p className="text-[#082458] font-bold">{data.clientName || 'N/A'}</p>
                     </div>
                     <div className="col-span-2">
                       <p className="text-[9px] font-black text-slate-400 uppercase">Purchased Enterprise Account Name</p>
-                      <p className="text-slate-900 font-bold">{data.companyName || 'N/A'}</p>
+                      <p className="text-[#082458] font-bold">{data.companyName || 'N/A'}</p>
                     </div>
                   </div>
 
@@ -844,10 +844,10 @@ export default function PrintAndExportCenter({ isOpen, onClose, document, userEm
                       <tbody className="divide-y text-xs">
                         <tr>
                           <td className="p-2.5">
-                            <span className="font-bold text-slate-900">{data.itemName || 'N/A'}</span>
+                            <span className="font-bold text-[#082458]">{data.itemName || 'N/A'}</span>
                             <span className="block text-[10px] text-slate-400">Enterprise deployment setup package</span>
                           </td>
-                          <td className="p-2.5 text-right font-bold text-slate-900">₹{data.rawPrice?.toLocaleString('en-IN') || '0'}</td>
+                          <td className="p-2.5 text-right font-bold text-[#082458]">₹{data.rawPrice?.toLocaleString('en-IN') || '0'}</td>
                         </tr>
                         <tr className="text-slate-500 bg-red-50/20">
                           <td className="p-2.5 italic">Contract Discount Added (-5%)</td>
@@ -857,7 +857,7 @@ export default function PrintAndExportCenter({ isOpen, onClose, document, userEm
                           <td className="p-2.5">GST Taxes Allocated (18%)</td>
                           <td className="p-2.5 text-right font-medium">+₹{data.gstPrice?.toLocaleString('en-IN') || '0'}</td>
                         </tr>
-                        <tr className="bg-indigo-50/50 font-black text-indigo-700 text-sm border-t-2">
+                        <tr className="bg-[#eef4fb]/50 font-black text-[#0b74f0] text-sm border-t-2">
                           <td className="p-2.5">NET DUE COMMITTED</td>
                           <td className="p-2.5 text-right text-lg">₹{data.netPrice?.toLocaleString('en-IN') || '0'}</td>
                         </tr>
@@ -875,11 +875,11 @@ export default function PrintAndExportCenter({ isOpen, onClose, document, userEm
                   <div className="bg-slate-50 p-3 rounded-lg border grid grid-cols-2 gap-2">
                     <div>
                       <p className="text-[9px] font-black text-slate-400 uppercase">Quotation Number</p>
-                      <p className="font-mono text-slate-900 font-bold">{data.id || 'N/A'}</p>
+                      <p className="font-mono text-[#082458] font-bold">{data.id || 'N/A'}</p>
                     </div>
                     <div>
                       <p className="text-[9px] font-black text-slate-400 uppercase">Client Propect</p>
-                      <p className="text-slate-900 font-bold">{data.leadName || 'N/A'}</p>
+                      <p className="text-[#082458] font-bold">{data.leadName || 'N/A'}</p>
                     </div>
                   </div>
 
@@ -888,17 +888,17 @@ export default function PrintAndExportCenter({ isOpen, onClose, document, userEm
                       <tbody className="divide-y">
                         <tr>
                           <td className="p-2.5 font-bold text-slate-500">Proposed Scope Deliverable</td>
-                          <td className="p-2.5 text-slate-900 font-bold">{data.itemName || 'N/A'}</td>
+                          <td className="p-2.5 text-[#082458] font-bold">{data.itemName || 'N/A'}</td>
                         </tr>
                         <tr>
                           <td className="p-2.5 font-bold text-slate-500">Base Raw Value</td>
-                          <td className="p-2.5 text-slate-900 font-bold">₹{data.rawPrice?.toLocaleString('en-IN') || '0'}</td>
+                          <td className="p-2.5 text-[#082458] font-bold">₹{data.rawPrice?.toLocaleString('en-IN') || '0'}</td>
                         </tr>
                         <tr>
                           <td className="p-2.5 font-bold text-slate-500">Applied Discount</td>
-                          <td className="p-2.5 text-red-650 font-bold">-₹{data.discountPrice?.toLocaleString('en-IN') || '0'}</td>
+                          <td className="p-2.5 text-rose-600 font-bold">-₹{data.discountPrice?.toLocaleString('en-IN') || '0'}</td>
                         </tr>
-                        <tr className="bg-indigo-50/50 font-black text-indigo-750">
+                        <tr className="bg-[#eef4fb]/50 font-black text-[#0b74f0]">
                           <td className="p-2.5 text-sm">Quoted Net Estimate</td>
                           <td className="p-2.5 text-right text-sm">₹{data.netPrice?.toLocaleString('en-IN') || '0'}</td>
                         </tr>
@@ -931,11 +931,11 @@ export default function PrintAndExportCenter({ isOpen, onClose, document, userEm
                 const formatINR = (val: number) => '₹' + val.toLocaleString('en-IN');
 
                 return (
-                  <div className="space-y-4 text-slate-800 text-xs font-sans">
+                  <div className="space-y-4 text-[#082458] text-xs font-sans">
                     
                     {/* Header */}
                     <div className="text-center space-y-1 py-2 bg-slate-50 rounded-xl border border-slate-205">
-                      <h4 className="font-extrabold text-slate-900 uppercase text-xs tracking-wider">Salary Statement Circular</h4>
+                      <h4 className="font-extrabold text-[#082458] uppercase text-xs tracking-wider">Salary Statement Circular</h4>
                       <p className="text-[10px] text-slate-400 font-bold">Billing Cycle: {cycle} • Issued securely via NACH API</p>
                     </div>
 
@@ -943,13 +943,13 @@ export default function PrintAndExportCenter({ isOpen, onClose, document, userEm
                     <div className="grid grid-cols-2 gap-4 pb-2.5 border-b border-slate-100">
                       <div>
                         <span className="text-[9px] font-extrabold uppercase text-slate-400 block tracking-wider">Recipient Worker Detail:</span>
-                        <span className="font-bold text-slate-900 text-sm block mt-0.5">{data.name || 'N/A'}</span>
+                        <span className="font-bold text-[#082458] text-sm block mt-0.5">{data.name || 'N/A'}</span>
                         <span className="text-[10.5px] text-slate-500 font-medium">{data.role || 'N/A'}</span>
                         <span className="text-[10.5px] text-slate-500 block">Department: {data.department || 'N/A'}</span>
                       </div>
                       <div className="text-right">
                         <span className="text-[9px] font-extrabold uppercase text-slate-400 block tracking-wider">Payment Coordinates:</span>
-                        <p className="font-mono font-bold text-slate-900 text-[11px] block mt-0.5">Reference ID: {data.employeeId || data.id || 'N/A'}-CY9</p>
+                        <p className="font-mono font-bold text-[#082458] text-[11px] block mt-0.5">Reference ID: {data.employeeId || data.id || 'N/A'}-CY9</p>
                         <p className="text-slate-500 text-[10.5px]">Method: Instant IMPS NEFT Transfer</p>
                         <p className="font-black text-emerald-600 uppercase text-[9px] mt-0.5">Status: Reconciled & Paid</p>
                       </div>
@@ -963,17 +963,17 @@ export default function PrintAndExportCenter({ isOpen, onClose, document, userEm
                         
                         <div className="flex justify-between font-medium">
                           <span>Basic Salary (50% baseline)</span>
-                          <span className="font-mono text-slate-900">{formatINR(basic)}</span>
+                          <span className="font-mono text-[#082458]">{formatINR(basic)}</span>
                         </div>
 
                         <div className="flex justify-between font-medium">
                           <span>House Rent allowance (HRA) (25%)</span>
-                          <span className="font-mono text-slate-900">{formatINR(hra)}</span>
+                          <span className="font-mono text-[#082458]">{formatINR(hra)}</span>
                         </div>
 
                         <div className="flex justify-between font-medium">
                           <span>Special Allowance (25%)</span>
-                          <span className="font-mono text-slate-900">{formatINR(specialAllowance)}</span>
+                          <span className="font-mono text-[#082458]">{formatINR(specialAllowance)}</span>
                         </div>
 
                         <div className="flex justify-between font-medium text-emerald-600">
@@ -981,7 +981,7 @@ export default function PrintAndExportCenter({ isOpen, onClose, document, userEm
                           <span className="font-mono">+{formatINR(allowance)}</span>
                         </div>
 
-                        <div className="border-t border-slate-200 pt-1.5 flex justify-between font-bold text-slate-900 bg-slate-50 px-2 py-1 rounded">
+                        <div className="border-t border-slate-200 pt-1.5 flex justify-between font-bold text-[#082458] bg-slate-50 px-2 py-1 rounded">
                           <span>Gross Earnings Sum</span>
                           <span className="font-mono">{formatINR(grossEarnings)}</span>
                         </div>
@@ -991,22 +991,22 @@ export default function PrintAndExportCenter({ isOpen, onClose, document, userEm
                       <div className="space-y-2 border-l border-slate-100 pl-4">
                         <span className="text-[9.5px] font-black text-slate-400 uppercase tracking-wider block border-b border-slate-100 pb-1">Statutory Deductions</span>
                         
-                        <div className="flex justify-between text-slate-650">
+                        <div className="flex justify-between text-slate-600">
                           <span>Employee Provident Fund (12%)</span>
                           <span className="font-mono">-{formatINR(epf)}</span>
                         </div>
 
-                        <div className="flex justify-between text-slate-650">
+                        <div className="flex justify-between text-slate-600">
                           <span>Employee State Insurance (0.75%)</span>
                           <span className="font-mono">-{formatINR(esi)}</span>
                         </div>
 
-                        <div className="flex justify-between text-slate-650">
+                        <div className="flex justify-between text-slate-600">
                           <span>Tax Withheld / TDS (10%)</span>
                           <span className="font-mono">-{formatINR(tds)}</span>
                         </div>
 
-                        <div className="flex justify-between text-slate-650">
+                        <div className="flex justify-between text-slate-600">
                           <span>Professional Tax (PT Rate)</span>
                           <span className="font-mono">-{formatINR(profTax)}</span>
                         </div>
@@ -1019,10 +1019,10 @@ export default function PrintAndExportCenter({ isOpen, onClose, document, userEm
                     </div>
 
                     {/* Net settled payload */}
-                    <div className="bg-slate-900 text-white p-4 rounded-2xl flex justify-between items-center mt-6">
+                    <div className="bg-[#041845] text-white p-4 rounded-2xl flex justify-between items-center mt-6">
                       <div>
                         <span className="text-[9.5px] text-slate-400 uppercase font-black tracking-widest block">Net Settled Salary</span>
-                        <p className="text-[10px] text-slate-350 italic mt-0.5">Certified secure bank wire transfer.</p>
+                        <p className="text-[10px] text-slate-300 italic mt-0.5">Certified secure bank wire transfer.</p>
                       </div>
                       <span className="text-lg font-black font-mono tracking-tight text-emerald-400">
                         {formatINR(netPay)}
@@ -1043,11 +1043,11 @@ export default function PrintAndExportCenter({ isOpen, onClose, document, userEm
                   <div className="grid grid-cols-2 gap-3 bg-slate-50 p-4 border rounded-xl">
                     <div>
                       <p className="text-[9px] font-black text-slate-400 uppercase">Account Name</p>
-                      <p className="text-[13px] font-black text-slate-900">{data.name}</p>
+                      <p className="text-[13px] font-black text-[#082458]">{data.name}</p>
                     </div>
                     <div>
                       <p className="text-[9px] font-black text-slate-400 uppercase">Corporate Domain</p>
-                      <p className="text-[13px] font-bold text-slate-650">{data.company}</p>
+                      <p className="text-[13px] font-bold text-slate-600">{data.company}</p>
                     </div>
                     <div>
                       <p className="text-[9px] font-black text-slate-400 uppercase">Roster Status</p>
@@ -1057,11 +1057,11 @@ export default function PrintAndExportCenter({ isOpen, onClose, document, userEm
                     </div>
                     <div>
                       <p className="text-[9px] font-black text-slate-400 uppercase">Traffic Source</p>
-                      <p className="text-slate-800 font-medium">{data.source}</p>
+                      <p className="text-[#082458] font-medium">{data.source}</p>
                     </div>
                     <div>
                       <p className="text-[9px] font-black text-slate-400 uppercase">Value Estimate</p>
-                      <p className="text-slate-900 font-extrabold text-sm text-indigo-600">₹{data.value?.toLocaleString('en-IN') || '0'}</p>
+                      <p className="text-[#082458] font-extrabold text-sm text-[#0b74f0]">₹{data.value?.toLocaleString('en-IN') || '0'}</p>
                     </div>
                     <div>
                       <p className="text-[9px] font-black text-slate-400 uppercase">Roster Registered</p>
@@ -1075,8 +1075,8 @@ export default function PrintAndExportCenter({ isOpen, onClose, document, userEm
                   </div>
 
                   {data.aiInsight && (
-                    <div className="border border-indigo-150 bg-indigo-50/30 p-3 rounded-xl space-y-2">
-                      <h4 className="text-[10px] font-extrabold text-indigo-700 uppercase tracking-widest">★ System AI Lead Diagnostic Summary</h4>
+                    <div className="border border-[#0b74f0]/25 bg-[#eef4fb]/30 p-3 rounded-xl space-y-2">
+                      <h4 className="text-[10px] font-extrabold text-[#0b74f0] uppercase tracking-widest">★ System AI Lead Diagnostic Summary</h4>
                       <div className="grid grid-cols-2 gap-2 text-xxs font-sans text-slate-600">
                         <div>
                           <strong>Close Probability:</strong> {data.aiInsight.closeProbability}%
@@ -1088,7 +1088,7 @@ export default function PrintAndExportCenter({ isOpen, onClose, document, userEm
                           <strong>Advisory Engagement Pitch:</strong> "{data.aiInsight.pitch}"
                         </div>
                         <div className="col-span-2">
-                          <strong>Highest Recommended Action:</strong> <span className="text-indigo-600 font-bold">{data.aiInsight.recommendedAction}</span>
+                          <strong>Highest Recommended Action:</strong> <span className="text-[#0b74f0] font-bold">{data.aiInsight.recommendedAction}</span>
                         </div>
                       </div>
                     </div>
@@ -1101,11 +1101,11 @@ export default function PrintAndExportCenter({ isOpen, onClose, document, userEm
                   <div className="p-3 bg-red-50/20 border border-red-100 rounded-xl grid grid-cols-2 gap-2 text-xs">
                     <div>
                       <span className="text-[9px] text-slate-400 uppercase block font-bold">Ticket reference ID</span>
-                      <strong className="text-slate-900 font-mono">{data.id}</strong>
+                      <strong className="text-[#082458] font-mono">{data.id}</strong>
                     </div>
                     <div>
                       <span className="text-[9px] text-slate-400 uppercase block font-bold">Subject Theme</span>
-                      <strong className="text-slate-900">{data.subject}</strong>
+                      <strong className="text-[#082458]">{data.subject}</strong>
                     </div>
                     <div>
                       <span className="text-[9px] text-slate-400 uppercase block font-bold">Priority Status</span>
@@ -1113,7 +1113,7 @@ export default function PrintAndExportCenter({ isOpen, onClose, document, userEm
                     </div>
                     <div>
                       <span className="text-[9px] text-slate-400 uppercase block font-bold">Category</span>
-                      <span className="font-bold text-indigo-650">{data.category} Desk</span>
+                      <span className="font-bold text-[#0b74f0]">{data.category} Desk</span>
                     </div>
                   </div>
 
@@ -1125,7 +1125,7 @@ export default function PrintAndExportCenter({ isOpen, onClose, document, userEm
                   {data.aiResponseDraft && (
                     <div className="p-3 bg-emerald-50/20 border border-emerald-150 rounded-xl space-y-1">
                       <p className="text-[9px] font-black text-emerald-800 uppercase tracking-wide">✔ Generated Support Reply Draft Action</p>
-                      <p className="text-slate-800 leading-relaxed leading-none">{data.aiResponseDraft}</p>
+                      <p className="text-[#082458] leading-relaxed leading-none">{data.aiResponseDraft}</p>
                     </div>
                   )}
                 </div>
@@ -1136,15 +1136,15 @@ export default function PrintAndExportCenter({ isOpen, onClose, document, userEm
                   <div className="bg-orange-50/20 border border-orange-100 rounded-xl p-3 grid grid-cols-2 gap-2">
                     <div>
                       <span className="text-[9px] text-slate-400 block uppercase font-bold">Telephony voucher Log ID</span>
-                      <strong className="text-slate-900 font-mono">{data.id}</strong>
+                      <strong className="text-[#082458] font-mono">{data.id}</strong>
                     </div>
                     <div>
                       <span className="text-[9px] text-slate-400 block uppercase font-bold">Registered Representative</span>
-                      <strong className="text-slate-900">{data.agentName}</strong>
+                      <strong className="text-[#082458]">{data.agentName}</strong>
                     </div>
                     <div>
                       <span className="text-[9px] text-slate-400 block uppercase font-bold">Lead Contact targeted</span>
-                      <strong className="text-slate-900">{data.clientName} ({data.clientPhone})</strong>
+                      <strong className="text-[#082458]">{data.clientName} ({data.clientPhone})</strong>
                     </div>
                     <div>
                       <span className="text-[9px] text-slate-400 block uppercase font-bold">Total Call Duration</span>
@@ -1154,7 +1154,7 @@ export default function PrintAndExportCenter({ isOpen, onClose, document, userEm
 
                   <div className="p-3 bg-slate-50 border rounded-xl">
                     <p className="text-[9px] font-black text-slate-400 uppercase">Telephony Interaction Memo Log</p>
-                    <p className="text-slate-800 italic leading-relaxed mt-1">"{data.notes || 'No call summary logged.'}"</p>
+                    <p className="text-[#082458] italic leading-relaxed mt-1">"{data.notes || 'No call summary logged.'}"</p>
                   </div>
                 </div>
               )}
@@ -1164,15 +1164,15 @@ export default function PrintAndExportCenter({ isOpen, onClose, document, userEm
                   <div className="p-3 bg-slate-50 rounded-xl border grid grid-cols-2 gap-2 text-xs">
                     <div>
                       <span className="text-[9px] text-slate-400 uppercase block font-bold">Task referenceID</span>
-                      <strong className="text-slate-900 font-mono">{data.id}</strong>
+                      <strong className="text-[#082458] font-mono">{data.id}</strong>
                     </div>
                     <div>
                       <span className="text-[9px] text-slate-400 uppercase block font-bold">Roster Handler Assignee</span>
-                      <strong className="text-indigo-600">{data.assignedTo || 'Unassigned'}</strong>
+                      <strong className="text-[#0b74f0]">{data.assignedTo || 'Unassigned'}</strong>
                     </div>
                     <div className="col-span-2">
                       <span className="text-[9px] text-slate-400 uppercase block font-bold">Topic Name</span>
-                      <strong className="text-slate-900 text-sm">{data.title}</strong>
+                      <strong className="text-[#082458] text-sm">{data.title}</strong>
                     </div>
                     <div>
                       <span className="text-[9px] text-slate-400 uppercase block font-bold">Task Type</span>
@@ -1190,8 +1190,8 @@ export default function PrintAndExportCenter({ isOpen, onClose, document, userEm
                   </div>
 
                   {data.meetingDetails && (
-                    <div className="bg-indigo-50/20 border border-indigo-150 p-3 rounded-xl space-y-2">
-                      <h4 className="text-[10px] font-extrabold text-indigo-700 uppercase tracking-widest">★ Virtual Conference Params</h4>
+                    <div className="bg-[#eef4fb]/20 border border-[#0b74f0]/25 p-3 rounded-xl space-y-2">
+                      <h4 className="text-[10px] font-extrabold text-[#0b74f0] uppercase tracking-widest">★ Virtual Conference Params</h4>
                       <div className="grid grid-cols-2 gap-2 text-xxs font-sans text-slate-600">
                         <div>
                           <strong>Mode:</strong> {data.meetingDetails.type}
@@ -1201,7 +1201,7 @@ export default function PrintAndExportCenter({ isOpen, onClose, document, userEm
                         </div>
                         {data.meetingDetails.link && (
                           <div className="col-span-2">
-                            <strong>Meeting URL:</strong> <a href={data.meetingDetails.link} className="text-indigo-600 hover:underline break-all">{data.meetingDetails.link}</a>
+                            <strong>Meeting URL:</strong> <a href={data.meetingDetails.link} className="text-[#0b74f0] hover:underline break-all">{data.meetingDetails.link}</a>
                           </div>
                         )}
                         {data.meetingDetails.location && (
@@ -1247,7 +1247,7 @@ export default function PrintAndExportCenter({ isOpen, onClose, document, userEm
               {type === 'security_profile' && data && (
                 <div className="space-y-4">
                   <div className="border rounded-xl p-3 bg-red-50/10 border-red-200">
-                    <h4 className="font-extrabold text-slate-900 leading-none">Security Clearance Credentials</h4>
+                    <h4 className="font-extrabold text-[#082458] leading-none">Security Clearance Credentials</h4>
                     <p className="text-[10px] text-slate-500 font-semibold mt-1.5 uppercase tracking-wide">Workspace Role: {data.role}</p>
                   </div>
 
@@ -1256,7 +1256,7 @@ export default function PrintAndExportCenter({ isOpen, onClose, document, userEm
                     <div className="space-y-2 max-h-[250px] overflow-y-auto">
                       {data.permissions && Object.entries(data.permissions).map(([perm, val]) => (
                         <div key={perm} className="flex justify-between items-center text-xs py-1 border-b border-slate-200 last:border-b-0">
-                          <code className="text-[10.5px] font-mono text-slate-650">{perm}</code>
+                          <code className="text-[10.5px] font-mono text-slate-600">{perm}</code>
                           <span className={`text-[9.5px] font-black uppercase px-2 py-0.5 rounded ${val ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-200 text-slate-500'}`}>
                             {val ? 'GRANTED' : 'RESTRICTED'}
                           </span>
@@ -1276,16 +1276,16 @@ export default function PrintAndExportCenter({ isOpen, onClose, document, userEm
         </div>
 
         {/* Right Side: Copy/Export actions drawer */}
-        <div className="md:col-span-4 p-6 flex flex-col justify-between bg-white text-slate-800 space-y-6">
+        <div className="md:col-span-4 p-6 flex flex-col justify-between bg-white text-[#082458] space-y-6">
           <div className="space-y-4">
             <div className="flex justify-between items-center pb-2 border-b">
               <div>
-                <h3 className="text-xs font-black text-slate-900 uppercase">Export Center</h3>
+                <h3 className="text-xs font-black text-[#082458] uppercase">Export Center</h3>
                 <p className="text-[10px] text-slate-400">Ready to save, print, or share</p>
               </div>
               <button 
                 onClick={onClose}
-                className="p-1 px-1.5 bg-slate-100 text-slate-700 hover:bg-slate-200 hover:text-slate-950 font-bold text-xs rounded-lg transition"
+                className="p-1 px-1.5 bg-slate-100 text-slate-700 hover:bg-slate-200 hover:text-[#041845] font-bold text-xs rounded-lg transition"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -1305,7 +1305,7 @@ export default function PrintAndExportCenter({ isOpen, onClose, document, userEm
             <div className="space-y-2.5 pt-2">
               <button
                 onClick={handleNativePrint}
-                className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs rounded-xl flex items-center justify-center gap-2 shadow-md transition"
+                className="w-full py-2.5 bg-[#0b74f0] hover:bg-[#005be0] text-white font-extrabold text-xs rounded-xl flex items-center justify-center gap-2 shadow-md transition"
               >
                 <Printer className="w-4 h-4" />
                 System Print (PDF)
@@ -1316,7 +1316,7 @@ export default function PrintAndExportCenter({ isOpen, onClose, document, userEm
                 className={`w-full py-2.5 font-extrabold text-xs rounded-xl flex items-center justify-center gap-2 border transition ${
                   copied === 'rich' 
                     ? 'bg-emerald-50 text-emerald-700 border-emerald-300' 
-                    : 'bg-white hover:bg-slate-50 text-slate-800 border-slate-200 shadow-sm'
+                    : 'bg-white hover:bg-slate-50 text-[#082458] border-slate-200 shadow-sm'
                 }`}
               >
                 {copied === 'rich' ? <Check className="w-4 h-4 text-emerald-600" /> : <Clipboard className="w-4 h-4 text-slate-500" />}
@@ -1328,7 +1328,7 @@ export default function PrintAndExportCenter({ isOpen, onClose, document, userEm
                 className={`w-full py-2.5 font-extrabold text-xs rounded-xl flex items-center justify-center gap-2 border transition ${
                   copied === 'plain' 
                     ? 'bg-emerald-50 text-emerald-700 border-emerald-300' 
-                    : 'bg-white hover:bg-slate-50 text-slate-800 border-slate-200 shadow-sm'
+                    : 'bg-white hover:bg-slate-50 text-[#082458] border-slate-200 shadow-sm'
                 }`}
               >
                 {copied === 'plain' ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4 text-slate-500" />}
@@ -1340,7 +1340,7 @@ export default function PrintAndExportCenter({ isOpen, onClose, document, userEm
                 className={`w-full py-2.5 font-extrabold text-xs rounded-xl flex items-center justify-center gap-2 border transition ${
                   downloaded 
                     ? 'bg-emerald-50 text-emerald-700 border-emerald-300' 
-                    : 'bg-white hover:bg-slate-50 text-slate-800 border-slate-200 shadow-sm'
+                    : 'bg-white hover:bg-slate-50 text-[#082458] border-slate-200 shadow-sm'
                 }`}
               >
                 {downloaded ? <Check className="w-4 h-4 text-emerald-600" /> : <Download className="w-4 h-4 text-slate-500" />}
@@ -1400,7 +1400,7 @@ export default function PrintAndExportCenter({ isOpen, onClose, document, userEm
                           setWaDispatched(false);
                         }}
                         placeholder="Customer registered mobile"
-                        className="w-full pl-8 pr-2.5 py-1.5 bg-white border border-emerald-200 rounded-lg text-xs font-mono text-slate-800 outline-none focus:border-[#128C7E]"
+                        className="w-full pl-8 pr-2.5 py-1.5 bg-white border border-emerald-200 rounded-lg text-xs font-mono text-[#082458] outline-none focus:border-[#128C7E]"
                       />
                     </div>
 

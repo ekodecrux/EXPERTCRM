@@ -66,7 +66,7 @@ export const CRMBadgeLogo: React.FC<{ darkTheme?: boolean; className?: string }>
     <div className={`flex flex-col items-center select-none animate-fadeIn ${className}`}>
       <div className={`p-3 sm:p-4 rounded-3xl ${
         darkTheme 
-          ? 'bg-gradient-to-b from-slate-900/80 to-slate-950/90 border border-sky-500/20 shadow-[0_0_30px_rgba(14,165,233,0.15)]' 
+          ? 'bg-gradient-to-b from-[#082458]/90 to-[#031338]/95 border border-[#16c2ff]/30 shadow-[0_0_30px_rgba(22,194,255,0.2)]' 
           : 'bg-white border border-slate-200/90 shadow-xl'
       }`}>
         <img

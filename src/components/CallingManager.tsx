@@ -1290,7 +1290,7 @@ export default function CallingManager({
         <div className="bg-red-50 border-l-4 border-red-500 p-2.5 rounded shadow-sm">
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-2">
-              <AlertOctagon className="w-4 h-4 text-red-650 animate-pulse shrink-0" />
+              <AlertOctagon className="w-4 h-4 text-rose-600 animate-pulse shrink-0" />
               <div>
                 <span className="text-[11px] font-extrabold text-red-800 uppercase tracking-tight">VIP Missed Call Alerts ({missedCallAlerts.filter(m => m.isUnread).length} Unaddressed)</span>
                 <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1 text-[10.5px] text-slate-700">
@@ -1301,7 +1301,7 @@ export default function CallingManager({
                       <span className="text-slate-400 text-[9px] font-mono">({alert.time})</span>
                       <button 
                         onClick={() => handleCallBack(alert.id, alert.phone, alert.clientName)}
-                        className="text-indigo-600 hover:text-indigo-800 font-bold ml-1 text-[10px] hover:underline"
+                        className="text-[#0b74f0] hover:text-[#005be0] font-bold ml-1 text-[10px] hover:underline"
                       >
                         [☎️ Dial Back]
                       </button>
@@ -1336,7 +1336,7 @@ export default function CallingManager({
           <div className="w-16 h-16 rounded-full bg-rose-50 border border-rose-200 text-rose-600 flex items-center justify-center mx-auto mb-4">
             <Lock className="w-8 h-8" />
           </div>
-          <h2 className="text-base font-bold text-slate-900 mb-1">Calling Management Restricted</h2>
+          <h2 className="text-base font-bold text-[#082458] mb-1">Calling Restricted</h2>
           <p className="text-xs text-slate-600 mb-4 leading-relaxed">
             Only authorized call agents with an approved mobile application pairing license, and Call Center Managers have access to this module.
           </p>
@@ -1356,7 +1356,7 @@ export default function CallingManager({
                 setAgents(prev => prev.map(a => a.email.toLowerCase() === (userSession?.email || '').toLowerCase() ? { ...a, isAuthorized: true } : a));
                 alert("Authorization granted. You can now access the calling management suite.");
               }}
-              className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-2"
+              className="px-4 py-2 bg-[#0b74f0] hover:bg-[#005be0] text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-2"
             >
               <Key className="w-3.5 h-3.5" />
               Request / Claim Agent License
@@ -1366,7 +1366,7 @@ export default function CallingManager({
                 setShowMobileSimulator(true);
                 setSimulatorAgentId('AGT-101');
               }}
-              className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-2"
+              className="px-4 py-2 bg-[#041845] hover:bg-[#082458] text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-2"
             >
               <Smartphone className="w-3.5 h-3.5 text-sky-400" />
               Launch Agent Mobile App Simulator
@@ -1380,12 +1380,12 @@ export default function CallingManager({
           {/* Top Header Operations Bar */}
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 bg-gradient-to-br from-indigo-500 to-sky-600 text-white rounded-xl shadow-xs">
+              <div className="p-2.5 bg-gradient-to-br from-[#0b78f4] to-sky-600 text-white rounded-xl shadow-xs">
                 <Headphones className="w-5 h-5" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h2 className="text-xs font-black text-slate-900 uppercase tracking-wider">Calling Management Suite</h2>
+                  <h2 className="text-xs font-black text-[#082458] uppercase tracking-wider">Calling Suite</h2>
                   <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[9px] font-extrabold flex items-center gap-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                     Mobile Sync Live
@@ -1404,12 +1404,12 @@ export default function CallingManager({
                   setShowMobileSimulator(true);
                   setSimulatorAgentId(currentAgentProfile?.id || 'AGT-101');
                 }}
-                className="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-[11px] font-bold flex items-center gap-1.5 shadow-sm transition active:scale-95 cursor-pointer"
+                className="px-3 py-1.5 rounded-lg bg-[#0b74f0] hover:bg-[#005be0] text-white text-[11px] font-bold flex items-center gap-1.5 shadow-sm transition active:scale-95 cursor-pointer"
                 title="Launch the dedicated Call Agent Mobile Application simulator"
               >
                 <Smartphone className="w-4 h-4 text-sky-300 animate-bounce" />
                 <span>Launch Agent Mobile App</span>
-                <span className="px-1.5 py-0.2 rounded bg-indigo-800 text-[9px] uppercase font-black tracking-wider">Live</span>
+                <span className="px-1.5 py-0.2 rounded bg-[#0844a4] text-[9px] uppercase font-black tracking-wider">Live</span>
               </button>
 
               <button
@@ -1417,7 +1417,7 @@ export default function CallingManager({
                 className="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold flex items-center gap-1.5 border border-slate-200 transition cursor-pointer"
                 title="View Mobile App Installation Guide & Pairing QR Code"
               >
-                <QrCode className="w-3.5 h-3.5 text-indigo-600" />
+                <QrCode className="w-3.5 h-3.5 text-[#0b74f0]" />
                 <span>Install App / QR</span>
               </button>
             </div>
@@ -1429,7 +1429,7 @@ export default function CallingManager({
               onClick={() => setActiveTab('monitor')}
               className={`px-3 py-1.5 rounded-lg text-[11px] font-bold border transition flex items-center gap-1.5 shrink-0 ${
                 activeTab === 'monitor' 
-                  ? 'bg-slate-900 text-white border-slate-900 shadow-xs' 
+                  ? 'bg-[#041845] text-white border-[#082458] shadow-xs' 
                   : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
               }`}
             >
@@ -1444,13 +1444,13 @@ export default function CallingManager({
               onClick={() => setActiveTab('agents')}
               className={`px-3 py-1.5 rounded-lg text-[11px] font-bold border transition flex items-center gap-1.5 shrink-0 ${
                 activeTab === 'agents' 
-                  ? 'bg-slate-900 text-white border-slate-900 shadow-xs' 
+                  ? 'bg-[#041845] text-white border-[#082458] shadow-xs' 
                   : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
               }`}
             >
-              <ShieldCheck className="w-3.5 h-3.5 text-indigo-400" />
+              <ShieldCheck className="w-3.5 h-3.5 text-[#16c2ff]" />
               <span>Authorized Call Agents</span>
-              <span className="px-1.5 py-0.2 rounded-full bg-slate-800 text-[9px] font-mono text-indigo-300">
+              <span className="px-1.5 py-0.2 rounded-full bg-[#082458] text-[9px] font-mono text-[#16c2ff]">
                 {agents.filter(a => a.isAuthorized).length}
               </span>
             </button>
@@ -1459,13 +1459,13 @@ export default function CallingManager({
               onClick={() => setActiveTab('synced_logs')}
               className={`px-3 py-1.5 rounded-lg text-[11px] font-bold border transition flex items-center gap-1.5 shrink-0 ${
                 activeTab === 'synced_logs' 
-                  ? 'bg-slate-900 text-white border-slate-900 shadow-xs' 
+                  ? 'bg-[#041845] text-white border-[#082458] shadow-xs' 
                   : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
               }`}
             >
               <Radio className="w-3.5 h-3.5 text-sky-400" />
               <span>Synced Mobile Logs</span>
-              <span className="px-1.5 py-0.2 rounded-full bg-slate-800 text-[9px] font-mono text-sky-300">
+              <span className="px-1.5 py-0.2 rounded-full bg-[#082458] text-[9px] font-mono text-sky-300">
                 {callLogs.length}
               </span>
             </button>
@@ -1474,7 +1474,7 @@ export default function CallingManager({
               onClick={() => setActiveTab('dialer')}
               className={`px-3 py-1.5 rounded-lg text-[11px] font-bold border transition flex items-center gap-1.5 shrink-0 ${
                 activeTab === 'dialer' 
-                  ? 'bg-slate-900 text-white border-slate-900 shadow-xs' 
+                  ? 'bg-[#041845] text-white border-[#082458] shadow-xs' 
                   : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
               }`}
             >
@@ -1486,7 +1486,7 @@ export default function CallingManager({
               onClick={() => setActiveTab('ivr')}
               className={`px-3 py-1.5 rounded-lg text-[11px] font-bold border transition flex items-center gap-1.5 shrink-0 ${
                 activeTab === 'ivr' 
-                  ? 'bg-slate-900 text-white border-slate-900 shadow-xs' 
+                  ? 'bg-[#041845] text-white border-[#082458] shadow-xs' 
                   : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
               }`}
             >
@@ -1498,7 +1498,7 @@ export default function CallingManager({
               onClick={() => setActiveTab('reports')}
               className={`px-3 py-1.5 rounded-lg text-[11px] font-bold border transition flex items-center gap-1.5 shrink-0 ${
                 activeTab === 'reports' 
-                  ? 'bg-slate-900 text-white border-slate-900 shadow-xs' 
+                  ? 'bg-[#041845] text-white border-[#082458] shadow-xs' 
                   : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
               }`}
             >
@@ -1510,7 +1510,7 @@ export default function CallingManager({
               onClick={() => setActiveTab('settings')}
               className={`px-3 py-1.5 rounded-lg text-[11px] font-bold border transition flex items-center gap-1.5 shrink-0 ${
                 activeTab === 'settings' 
-                  ? 'bg-slate-900 text-white border-slate-900 shadow-xs' 
+                  ? 'bg-[#041845] text-white border-[#082458] shadow-xs' 
                   : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
               }`}
             >
@@ -1530,7 +1530,7 @@ export default function CallingManager({
             <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs">
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Authorized Agents</span>
               <div className="flex items-baseline gap-2 mt-1">
-                <span className="text-xl font-black text-slate-900">{agents.filter(a => a.isAuthorized).length}</span>
+                <span className="text-xl font-black text-[#082458]">{agents.filter(a => a.isAuthorized).length}</span>
                 <span className="text-[10px] text-slate-500">/ {agents.length} enrolled</span>
               </div>
               <span className="text-[9px] text-emerald-600 font-bold block mt-0.5">Mobile licenses provisioned</span>
@@ -1575,7 +1575,7 @@ export default function CallingManager({
             <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs">
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Avg Handling Time (AHT)</span>
               <div className="flex items-baseline gap-2 mt-1">
-                <span className="text-xl font-black text-indigo-600">3m 42s</span>
+                <span className="text-xl font-black text-[#0b74f0]">3m 42s</span>
                 <span className="text-[10px] text-emerald-600 font-bold">+12% speed</span>
               </div>
               <span className="text-[9px] text-slate-400 block mt-0.5">Mobile wrap-up automation</span>
@@ -1583,12 +1583,12 @@ export default function CallingManager({
           </div>
 
           {/* Manager Radar Action Notice */}
-          <div className="p-3 bg-indigo-50 border border-indigo-200 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-indigo-900 text-xs">
+          <div className="p-3 bg-[#eef4fb] border border-[#0b74f0]/25 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-[#082458] text-xs">
             <div className="flex items-center gap-2.5 min-w-0">
-              <Radio className="w-4 h-4 text-indigo-600 shrink-0 animate-pulse" />
+              <Radio className="w-4 h-4 text-[#0b74f0] shrink-0 animate-pulse" />
               <div>
                 <span className="font-bold block">Manager Live Activity Radar Active</span>
-                <p className="text-[11px] text-indigo-700 leading-tight">
+                <p className="text-[11px] text-[#0b74f0] leading-tight">
                   Call agents make calls via their paired smartphone app. Call initiation, duration, and disposition are automatically synchronized to this desktop screen in real time.
                 </p>
               </div>
@@ -1599,7 +1599,7 @@ export default function CallingManager({
                   setShowMobileSimulator(true);
                   setSimulatorAgentId('AGT-101');
                 }}
-                className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-[11px] font-bold flex items-center gap-1.5 transition shadow-xs cursor-pointer"
+                className="px-3 py-1.5 bg-[#0b74f0] hover:bg-[#005be0] text-white rounded-lg text-[11px] font-bold flex items-center gap-1.5 transition shadow-xs cursor-pointer"
               >
                 <Smartphone className="w-3.5 h-3.5 text-sky-300" />
                 <span>Open Mobile Simulator</span>
@@ -1648,7 +1648,7 @@ export default function CallingManager({
 
                       <div className="min-w-0">
                         <div className="flex items-center gap-1.5">
-                          <h4 className="text-sm font-black text-slate-900 truncate">{agent.name}</h4>
+                          <h4 className="text-sm font-black text-[#082458] truncate">{agent.name}</h4>
                           {agent.isAuthorized ? (
                             <span className="px-1.5 py-0.2 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 text-[9px] font-extrabold" title="Authorized Call Agent">
                               AUTHORIZED
@@ -1683,13 +1683,13 @@ export default function CallingManager({
 
                   {/* Active Call Details Strip (If on call) */}
                   {isOnCall && agent.currentCall && (
-                    <div className="p-3.5 bg-gradient-to-r from-rose-50 to-indigo-50/40 border-b border-rose-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+                    <div className="p-3.5 bg-gradient-to-r from-rose-50 to-[#eef4fb]/40 border-b border-rose-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
                       <div className="space-y-0.5">
                         <div className="flex items-center gap-1.5">
                           <span className="px-1.5 py-0.2 rounded bg-rose-600 text-white text-[9px] font-black uppercase tracking-widest animate-pulse">
                             REC LIVE
                           </span>
-                          <strong className="text-slate-900 font-bold">{agent.currentCall.clientName}</strong>
+                          <strong className="text-[#082458] font-bold">{agent.currentCall.clientName}</strong>
                           <span className="text-slate-500 font-mono text-[11px]">({agent.currentCall.clientPhone})</span>
                         </div>
                         <div className="text-[10px] text-slate-600 flex items-center gap-3 font-medium">
@@ -1704,7 +1704,7 @@ export default function CallingManager({
                       <div className="flex items-center gap-1.5 shrink-0">
                         <button
                           onClick={() => setListeningAgent(agent)}
-                          className="px-2.5 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-[10.5px] font-bold flex items-center gap-1 shadow-xs transition cursor-pointer"
+                          className="px-2.5 py-1.5 bg-[#0b74f0] hover:bg-[#005be0] text-white rounded-lg text-[10.5px] font-bold flex items-center gap-1 shadow-xs transition cursor-pointer"
                           title="Listen in to live call audio stream"
                         >
                           <Headphones className="w-3.5 h-3.5 text-sky-300" />
@@ -1720,7 +1720,7 @@ export default function CallingManager({
                           className="px-2.5 py-1.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 rounded-lg text-[10.5px] font-bold flex items-center gap-1 transition cursor-pointer"
                           title="Send silent whisper guidance to agent's phone screen"
                         >
-                          <MessageSquare className="w-3.5 h-3.5 text-indigo-600" />
+                          <MessageSquare className="w-3.5 h-3.5 text-[#0b74f0]" />
                           <span>Whisper</span>
                         </button>
                       </div>
@@ -1732,7 +1732,7 @@ export default function CallingManager({
                     <div className="flex items-center gap-2 min-w-0">
                       <Smartphone className="w-4 h-4 text-slate-500 shrink-0" />
                       <div className="min-w-0">
-                        <span className="font-bold text-slate-800 text-[11px] block truncate">{agent.device}</span>
+                        <span className="font-bold text-[#082458] text-[11px] block truncate">{agent.device}</span>
                         <span className="text-[9.5px] text-slate-400 font-mono">
                           ID: {agent.deviceId} • App {agent.appVersion}
                         </span>
@@ -1752,7 +1752,7 @@ export default function CallingManager({
                     <div className="grid grid-cols-4 gap-2 text-center text-[10px]">
                       <div className="bg-slate-50 p-1.5 rounded-md border border-slate-100">
                         <span className="text-slate-400 block text-[9px] uppercase font-bold">Calls</span>
-                        <strong className="text-slate-800 text-xs font-black">{agent.metrics.totalCalls}</strong>
+                        <strong className="text-[#082458] text-xs font-black">{agent.metrics.totalCalls}</strong>
                       </div>
                       <div className="bg-slate-50 p-1.5 rounded-md border border-slate-100">
                         <span className="text-slate-400 block text-[9px] uppercase font-bold">Connect</span>
@@ -1760,11 +1760,11 @@ export default function CallingManager({
                       </div>
                       <div className="bg-slate-50 p-1.5 rounded-md border border-slate-100">
                         <span className="text-slate-400 block text-[9px] uppercase font-bold">Talk Time</span>
-                        <strong className="text-slate-800 text-xs font-black">{agent.metrics.talkTimeMinutes}m</strong>
+                        <strong className="text-[#082458] text-xs font-black">{agent.metrics.talkTimeMinutes}m</strong>
                       </div>
                       <div className="bg-slate-50 p-1.5 rounded-md border border-slate-100">
                         <span className="text-slate-400 block text-[9px] uppercase font-bold">Avg Mins</span>
-                        <strong className="text-indigo-600 text-xs font-black">
+                        <strong className="text-[#0b74f0] text-xs font-black">
                           {Math.round(agent.metrics.avgDurationSecs / 60)}m
                         </strong>
                       </div>
@@ -1797,7 +1797,7 @@ export default function CallingManager({
                           setShowMobileSimulator(true);
                           setSimulatorAgentId(agent.id);
                         }}
-                        className="px-2.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-[10.5px] font-bold flex items-center gap-1 transition cursor-pointer"
+                        className="px-2.5 py-1.5 bg-[#041845] hover:bg-[#082458] text-white rounded-lg text-[10.5px] font-bold flex items-center gap-1 transition cursor-pointer"
                         title="Open Mobile App simulator as this agent"
                       >
                         <Smartphone className="w-3.5 h-3.5 text-sky-400" />
@@ -1809,7 +1809,7 @@ export default function CallingManager({
                         className="p-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg border border-slate-200 transition cursor-pointer"
                         title="View device pairing code and QR code"
                       >
-                        <QrCode className="w-3.5 h-3.5 text-indigo-600" />
+                        <QrCode className="w-3.5 h-3.5 text-[#0b74f0]" />
                       </button>
                     </div>
                   </div>
@@ -1829,7 +1829,7 @@ export default function CallingManager({
           {/* Top Controls Header */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
             <div>
-              <h3 className="text-sm font-black text-slate-900 uppercase tracking-wider">
+              <h3 className="text-sm font-black text-[#082458] uppercase tracking-wider">
                 Call Agents & Device Provisioning Registry
               </h3>
               <p className="text-xs text-slate-500 mt-0.5">
@@ -1842,7 +1842,7 @@ export default function CallingManager({
 
               <button
                 onClick={() => setShowNewAgentModal(true)}
-                className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 shadow-xs transition cursor-pointer"
+                className="px-3 py-1.5 bg-[#0b74f0] hover:bg-[#005be0] text-white rounded-lg text-xs font-bold flex items-center gap-1.5 shadow-xs transition cursor-pointer"
               >
                 <UserPlus className="w-3.5 h-3.5" />
                 <span>Authorize New Agent</span>
@@ -1868,7 +1868,7 @@ export default function CallingManager({
                   setDownloadFeedback({ message: 'Downloaded expert-call-agent-standalone.html (Offline Web App)', url: res.url });
                   setTimeout(() => setDownloadFeedback(null), 5000);
                 }}
-                className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-bold flex items-center gap-1.5 shadow-xs transition cursor-pointer"
+                className="px-3 py-1.5 bg-[#082458] hover:bg-[#0b347a] text-slate-200 rounded-lg text-xs font-bold flex items-center gap-1.5 shadow-xs transition cursor-pointer"
                 title="Download single-file offline Web App bundle"
               >
                 <FileText className="w-3.5 h-3.5 text-sky-300" />
@@ -1888,7 +1888,7 @@ export default function CallingManager({
                 <a
                   href={downloadFeedback.url}
                   download
-                  className="text-xs text-indigo-600 font-bold hover:underline"
+                  className="text-xs text-[#0b74f0] font-bold hover:underline"
                 >
                   Direct Download Link
                 </a>
@@ -1922,22 +1922,22 @@ export default function CallingManager({
                             className="w-8 h-8 rounded-full border border-slate-200 object-cover shrink-0"
                           />
                           <div>
-                            <span className="font-bold text-slate-900 block">{agent.name}</span>
+                            <span className="font-bold text-[#082458] block">{agent.name}</span>
                             <span className="text-[10px] text-slate-400 font-mono">{agent.email} • {agent.phone}</span>
                           </div>
                         </div>
                       </td>
                       <td className="py-3 px-4">
                         <div className="flex items-center gap-1.5">
-                          <Smartphone className="w-3.5 h-3.5 text-indigo-500 shrink-0" />
+                          <Smartphone className="w-3.5 h-3.5 text-[#0b74f0] shrink-0" />
                           <div>
-                            <strong className="text-slate-800 text-[11px] block">{agent.device}</strong>
+                            <strong className="text-[#082458] text-[11px] block">{agent.device}</strong>
                             <span className="text-[9.5px] text-slate-400 font-mono">Build: {agent.appVersion}</span>
                           </div>
                         </div>
                       </td>
                       <td className="py-3 px-4">
-                        <span className="px-2 py-0.5 rounded bg-slate-100 border border-slate-200 font-mono font-bold text-slate-800 text-[10px]">
+                        <span className="px-2 py-0.5 rounded bg-slate-100 border border-slate-200 font-mono font-bold text-[#082458] text-[10px]">
                           {agent.pairingToken}
                         </span>
                       </td>
@@ -1981,7 +1981,7 @@ export default function CallingManager({
                             className="px-2 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10.5px] font-bold flex items-center gap-1 transition cursor-pointer"
                             title="Show QR Code & Pairing Token"
                           >
-                            <QrCode className="w-3 h-3 text-indigo-600" />
+                            <QrCode className="w-3 h-3 text-[#0b74f0]" />
                             <span>Pair</span>
                           </button>
                           <button
@@ -1989,7 +1989,7 @@ export default function CallingManager({
                               setShowMobileSimulator(true);
                               setSimulatorAgentId(agent.id);
                             }}
-                            className="px-2 py-1 rounded bg-slate-900 hover:bg-slate-800 text-white text-[10.5px] font-bold flex items-center gap-1 transition cursor-pointer"
+                            className="px-2 py-1 rounded bg-[#041845] hover:bg-[#082458] text-white text-[10.5px] font-bold flex items-center gap-1 transition cursor-pointer"
                             title="Test Mobile Calling App"
                           >
                             <Smartphone className="w-3 h-3 text-sky-400" />
@@ -2005,21 +2005,21 @@ export default function CallingManager({
           </div>
 
           {/* Provisioning Workflow Instruction Guide */}
-          <div className="bg-slate-900 text-white p-5 rounded-2xl border border-slate-800">
+          <div className="bg-[#041845] text-white p-5 rounded-2xl border border-[#1e3a8a]/50">
             <h4 className="text-xs font-black uppercase tracking-wider text-sky-400 mb-3 flex items-center gap-2">
               <Zap className="w-4 h-4 text-amber-400" />
               <span>Mobile Application Calling & Telephony Sync Protocol</span>
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-300">
-              <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1.5">
-                <span className="text-[10px] font-mono text-indigo-400 font-bold uppercase">Step 1 • Installation</span>
+              <div className="p-3 bg-[#031338] rounded-xl border border-[#1e3a8a]/50 space-y-1.5">
+                <span className="text-[10px] font-mono text-[#16c2ff] font-bold uppercase">Step 1 • Installation</span>
                 <h5 className="font-bold text-white">Separate Mobile Application</h5>
                 <p className="text-[11px] text-slate-400 leading-relaxed">
                   Call agents install the <strong>Expert Call Agent Companion</strong> APK on their Android phone or iOS mobile device. Access is locked behind authorized pairing tokens.
                 </p>
               </div>
 
-              <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1.5">
+              <div className="p-3 bg-[#031338] rounded-xl border border-[#1e3a8a]/50 space-y-1.5">
                 <span className="text-[10px] font-mono text-emerald-400 font-bold uppercase">Step 2 • Automatic Trigger</span>
                 <h5 className="font-bold text-white">Outbound & Inbound Tracking</h5>
                 <p className="text-[11px] text-slate-400 leading-relaxed">
@@ -2027,7 +2027,7 @@ export default function CallingManager({
                 </p>
               </div>
 
-              <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1.5">
+              <div className="p-3 bg-[#031338] rounded-xl border border-[#1e3a8a]/50 space-y-1.5">
                 <span className="text-[10px] font-mono text-sky-400 font-bold uppercase">Step 3 • Desktop Monitoring</span>
                 <h5 className="font-bold text-white">Manager Oversight & CRM Sync</h5>
                 <p className="text-[11px] text-slate-400 leading-relaxed">
@@ -2054,7 +2054,7 @@ export default function CallingManager({
                   placeholder="Search synchronized calls..." 
                   value={syncedSearch}
                   onChange={(e) => setSyncedSearch(e.target.value)}
-                  className="pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-500 w-56"
+                  className="pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#0b74f0] w-56"
                 />
               </div>
 
@@ -2095,7 +2095,7 @@ export default function CallingManager({
                   setShowMobileSimulator(true);
                   setSimulatorAgentId('AGT-101');
                 }}
-                className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold flex items-center gap-1 transition shadow-xs cursor-pointer"
+                className="px-3 py-1.5 bg-[#0b74f0] hover:bg-[#005be0] text-white rounded-lg text-xs font-bold flex items-center gap-1 transition shadow-xs cursor-pointer"
               >
                 <Smartphone className="w-3.5 h-3.5 text-sky-300" />
                 <span>Simulate Call on Mobile</span>
@@ -2132,17 +2132,17 @@ export default function CallingManager({
                     .map((log) => (
                       <tr key={log.id} className="hover:bg-slate-50/80 transition">
                         <td className="py-3 px-4">
-                          <strong className="text-slate-900 block font-bold">{log.clientName}</strong>
+                          <strong className="text-[#082458] block font-bold">{log.clientName}</strong>
                           <span className="text-[10px] font-mono text-slate-500">{log.clientPhone}</span>
                         </td>
                         
                         <td className="py-3 px-4">
                           <div className="flex items-center gap-1.5">
-                            <span className="p-1 rounded bg-indigo-50 text-indigo-600">
+                            <span className="p-1 rounded bg-[#eef4fb] text-[#0b74f0]">
                               <Smartphone className="w-3.5 h-3.5" />
                             </span>
                             <div>
-                              <strong className="text-slate-800 text-[11px] block">{log.agentName}</strong>
+                              <strong className="text-[#082458] text-[11px] block">{log.agentName}</strong>
                               <span className="text-[9.5px] text-emerald-600 font-extrabold flex items-center gap-0.5">
                                 <Zap className="w-2.5 h-2.5 text-amber-500" />
                                 {log.syncSource || 'Mobile App'}
@@ -2178,18 +2178,18 @@ export default function CallingManager({
                           <div className="flex items-center gap-2">
                             <button
                               onClick={() => handlePlayAudio(log.id, log.duration)}
-                              className="p-1 rounded-full bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-600 transition cursor-pointer"
+                              className="p-1 rounded-full bg-slate-100 hover:bg-[#dceafb] hover:text-[#005be0] text-slate-600 transition cursor-pointer"
                               title="Play synchronized mobile recording"
                             >
                               {playingAudioId === log.id ? (
-                                <Pause className="w-3.5 h-3.5 text-indigo-600" />
+                                <Pause className="w-3.5 h-3.5 text-[#0b74f0]" />
                               ) : (
                                 <Play className="w-3.5 h-3.5" />
                               )}
                             </button>
                             <div className="w-16 h-2 bg-slate-100 rounded-full overflow-hidden">
                               <div 
-                                className="h-full bg-indigo-600 transition-all duration-300" 
+                                className="h-full bg-[#0b74f0] transition-all duration-300" 
                                 style={{ width: `${playbackProgress[log.id] || 0}%` }}
                               />
                             </div>
@@ -2208,7 +2208,7 @@ export default function CallingManager({
                             onClick={() => {
                               (window as any).__triggerGlobalDial?.(log.clientPhone, log.clientName);
                             }}
-                            className="p-1.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-indigo-600 transition cursor-pointer"
+                            className="p-1.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-[#005be0] transition cursor-pointer"
                             title="Call back client"
                           >
                             <Phone className="w-3.5 h-3.5" />
@@ -2229,12 +2229,12 @@ export default function CallingManager({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-3.5">
           
           {/* Active Call Dialer Terminal */}
-          <div className="bg-slate-950 text-slate-100 p-3 rounded border border-slate-900 lg:col-span-4 flex flex-col justify-between min-h-[580px] lg:min-h-[640px] relative overflow-y-auto">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/20 rounded-full blur-3xl"></div>
+          <div className="bg-[#031338] text-slate-100 p-3 rounded border border-[#082458] lg:col-span-4 flex flex-col justify-between min-h-[580px] lg:min-h-[640px] relative overflow-y-auto">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-[#0b74f0]/20 rounded-full blur-3xl"></div>
             
             <div className="flex justify-between items-center z-15">
               <div>
-                <span className="text-[9px] uppercase font-bold tracking-widest text-indigo-400">VoIP Network Link</span>
+                <span className="text-[9px] uppercase font-bold tracking-widest text-[#16c2ff]">VoIP Network Link</span>
                 <h3 className="text-[11px] font-bold text-slate-300">Workspace Phone Console</h3>
               </div>
               <span className="text-[8px] font-mono tracking-widest bg-emerald-950 text-emerald-450 px-1.5 py-0.2 rounded border border-emerald-900 uppercase">
@@ -2247,7 +2247,7 @@ export default function CallingManager({
               <div className="my-auto space-y-4">
                 
                 {/* Dial Entry input */}
-                <div className="bg-slate-900 border border-slate-800 rounded p-2 text-center relative">
+                <div className="bg-[#041845] border border-[#1e3a8a]/50 rounded p-2 text-center relative">
                   <span className="text-[9px] block text-slate-500 text-left font-mono">Dial Input Line:</span>
                   <input 
                     type="text" 
@@ -2271,7 +2271,7 @@ export default function CallingManager({
                         setDialNumber(prev => prev + key);
                         setDialName('Direct Keypad Dial');
                       }}
-                      className="h-8 rounded bg-slate-900 hover:bg-slate-850 border border-slate-800 flex items-center justify-center text-xs font-bold text-slate-300 hover:text-white"
+                      className="h-8 rounded bg-[#041845] hover:bg-[#082458] border border-[#1e3a8a]/50 flex items-center justify-center text-xs font-bold text-slate-300 hover:text-white"
                     >
                       {key}
                     </button>
@@ -2295,20 +2295,20 @@ export default function CallingManager({
                     )}
                   </div>
                   {quickContacts.length === 0 ? (
-                    <div className="text-[9.5px] text-slate-550 italic bg-slate-900/40 p-2 rounded text-center border border-slate-900">
+                    <div className="text-[9.5px] text-slate-550 italic bg-[#041845]/40 p-2 rounded text-center border border-[#082458]">
                       No contacts. Add fresh contacts below.
                     </div>
                   ) : (
                     <div className="flex gap-1 overflow-x-auto pb-1.5 scrollbar-thin">
                       {quickContacts.map((qc, idx) => (
-                        <div key={qc.phone + '-' + idx} className="flex items-center shrink-0 gap-0.5 bg-slate-900 rounded border border-slate-800">
+                        <div key={qc.phone + '-' + idx} className="flex items-center shrink-0 gap-0.5 bg-[#041845] rounded border border-[#1e3a8a]/50">
                           <button
                             onClick={() => {
                               setDialNumber(qc.phone);
                               setDialName(qc.name);
                             }}
                             className={`px-2 py-1 text-[10px] rounded-l font-medium transition ${
-                              dialNumber === qc.phone ? 'bg-indigo-900/40 text-indigo-250 border-r border-indigo-500 font-extrabold' : 'text-slate-350 hover:bg-slate-800'
+                              dialNumber === qc.phone ? 'bg-[#082458]/40 text-sky-200 border-r border-[#0b74f0] font-extrabold' : 'text-slate-300 hover:bg-[#082458]'
                             }`}
                           >
                             {qc.name}
@@ -2321,7 +2321,7 @@ export default function CallingManager({
                                 setDialName('Manual Input Contact');
                               }
                             }}
-                            className="p-1 px-1.5 text-slate-500 hover:text-red-400 font-bold text-[9px] transition-all border-l border-slate-800 hover:bg-slate-800"
+                            className="p-1 px-1.5 text-slate-500 hover:text-red-400 font-bold text-[9px] transition-all border-l border-[#1e3a8a]/50 hover:bg-[#082458]"
                             title="Delete Contact"
                           >
                             ✕
@@ -2333,20 +2333,20 @@ export default function CallingManager({
                 </div>
 
                 {/* Add Fresh Contact inline block */}
-                <div className="bg-slate-900/40 p-2 rounded border border-slate-900/80 space-y-1.5">
-                  <span className="text-[8.5px] font-mono text-indigo-400 uppercase tracking-widest block text-left">Add Fresh Dial Contact</span>
+                <div className="bg-[#041845]/40 p-2 rounded border border-[#082458]/80 space-y-1.5">
+                  <span className="text-[8.5px] font-mono text-[#16c2ff] uppercase tracking-widest block text-left">Add Fresh Dial Contact</span>
                   <div className="grid grid-cols-2 gap-1">
                     <input 
                       type="text"
                       id="fresh-contact-name"
                       placeholder="Name (e.g. Amit)"
-                      className="bg-slate-950 text-slate-200 p-1 px-1.5 rounded font-sans text-[10px] focus:outline-none focus:ring-1 focus:ring-indigo-500 border border-slate-800"
+                      className="bg-[#031338] text-slate-200 p-1 px-1.5 rounded font-sans text-[10px] focus:outline-none focus:ring-1 focus:ring-[#0b74f0] border border-[#1e3a8a]/50"
                     />
                     <input 
                       type="text"
                       id="fresh-contact-phone"
                       placeholder="Phone (e.g. 984501)"
-                      className="bg-slate-950 text-slate-200 p-1 px-1.5 rounded font-mono text-[10px] focus:outline-none focus:ring-1 focus:ring-indigo-500 border border-slate-800"
+                      className="bg-[#031338] text-slate-200 p-1 px-1.5 rounded font-mono text-[10px] focus:outline-none focus:ring-1 focus:ring-[#0b74f0] border border-[#1e3a8a]/50"
                     />
                   </div>
                   <button
@@ -2366,7 +2366,7 @@ export default function CallingManager({
                         phoneInput.value = '';
                       }
                     }}
-                    className="w-full py-1 bg-indigo-650 hover:bg-indigo-700 text-white rounded text-[9.5px] font-bold uppercase tracking-wider transition cursor-pointer"
+                    className="w-full py-1 bg-[#0b74f0] hover:bg-[#005be0] text-white rounded text-[9.5px] font-bold uppercase tracking-wider transition cursor-pointer"
                   >
                     + Add Fresh Contact
                   </button>
@@ -2376,20 +2376,20 @@ export default function CallingManager({
                   <button 
                     onClick={() => handleInitiateCall(dialNumber, dialName)}
                     disabled={!dialNumber}
-                    className="flex-1 py-1.5 bg-indigo-600 hover:bg-indigo-750 disabled:bg-slate-800 disabled:text-slate-600 text-white rounded text-[11px] font-bold uppercase tracking-wider flex items-center justify-center gap-1 border border-indigo-500 cursor-pointer"
+                    className="flex-1 py-1.5 bg-[#0b74f0] hover:bg-[#005be0] disabled:bg-[#082458] disabled:text-slate-600 text-white rounded text-[11px] font-bold uppercase tracking-wider flex items-center justify-center gap-1 border border-[#0b74f0] cursor-pointer"
                   >
                     <Phone className="w-3.5 h-3.5" /> Start Call
                   </button>
                   <button 
                     onClick={simulateIncomingCall}
-                    className="flex-1 py-1.5 bg-slate-900 hover:bg-slate-850 text-slate-300 rounded text-[10px] font-bold uppercase tracking-wider flex items-center justify-center gap-1 border border-slate-800 cursor-pointer"
+                    className="flex-1 py-1.5 bg-[#041845] hover:bg-[#082458] text-slate-300 rounded text-[10px] font-bold uppercase tracking-wider flex items-center justify-center gap-1 border border-[#1e3a8a]/50 cursor-pointer"
                   >
                     <RefreshCw className="w-3.5 h-3.5 animate-spin-slow" /> Simulate Inbound
                   </button>
                 </div>
 
                 {/* Auto incoming calls controller toggle */}
-                <div className="bg-slate-900/60 p-2 rounded border border-slate-800/80 mt-1.5 flex items-center justify-between">
+                <div className="bg-[#041845]/60 p-2 rounded border border-[#1e3a8a]/50/80 mt-1.5 flex items-center justify-between">
                   <div className="flex items-center gap-1.5">
                     <span className={`w-2 h-2 rounded-full ${autoIncomingActive ? 'bg-emerald-500 animate-pulse' : 'bg-slate-550'}`} />
                     <span className="text-[9.5px] uppercase font-bold text-slate-400">Background Inbound Stream</span>
@@ -2401,7 +2401,7 @@ export default function CallingManager({
                       onChange={(e) => setAutoIncomingActive(e.target.checked)}
                       className="sr-only peer"
                     />
-                    <div className="w-7 h-4 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-slate-400 after:border-slate-400 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-indigo-600 peer-checked:after:bg-white peer-checked:after:border-white"></div>
+                    <div className="w-7 h-4 bg-[#082458] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-slate-400 after:border-slate-400 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-[#0b74f0] peer-checked:after:bg-white peer-checked:after:border-white"></div>
                   </label>
                 </div>
               </div>
@@ -2409,13 +2409,13 @@ export default function CallingManager({
               // ACTIVE CALL STREAM PANEL
               <div className="my-auto space-y-4">
                 <div className="text-center relative">
-                  <span className="text-[10px] font-black text-indigo-400 tracking-widest uppercase block">
+                  <span className="text-[10px] font-black text-[#16c2ff] tracking-widest uppercase block">
                     {activeCallStatus === 'ringing' ? '☎️ AWAITING ESTABLISHMENT' : `${callDirection} CALL ESTABLISHED`}
                   </span>
-                  <p className="text-xs font-black text-white px-2 py-1 truncate bg-slate-900 border border-slate-850 rounded mt-2">{dialName}</p>
+                  <p className="text-xs font-black text-white px-2 py-1 truncate bg-[#041845] border border-[#1e3a8a]/50 rounded mt-2">{dialName}</p>
                   <p className="text-[10px] text-slate-400 font-mono mt-1">Number: {dialNumber}</p>
                   {activeCallStatus === 'connected' ? (
-                    <p className="text-xl font-bold font-mono text-indigo-400 mt-2">{formatTime(callDuration)}</p>
+                    <p className="text-xl font-bold font-mono text-[#16c2ff] mt-2">{formatTime(callDuration)}</p>
                   ) : (
                     <p className="text-xs font-bold text-amber-400 animate-pulse mt-2 uppercase tracking-wide">
                       {callDirection === 'Incoming' ? 'Incoming Ringing...' : 'Dialing Trunk Proxy...'}
@@ -2425,7 +2425,7 @@ export default function CallingManager({
 
                 {/* Soundwave Visualizer / Ringing Pulsar */}
                 {activeCallStatus === 'connected' ? (
-                  <div className="h-8 flex items-center justify-center gap-1 bg-slate-900 rounded border border-slate-850/60 overflow-hidden relative px-1">
+                  <div className="h-8 flex items-center justify-center gap-1 bg-[#041845] rounded border border-[#1e3a8a]/50/60 overflow-hidden relative px-1">
                     <span className="absolute left-1.5 text-[8px] font-mono uppercase tracking-widest text-slate-500 z-10 font-bold">Line Feed</span>
                     <span className="absolute right-1.5 text-[8px] font-mono uppercase text-teal-400 bg-teal-950 px-1 py-0.2 rounded border border-teal-900 z-10 font-bold animate-pulse">
                       {realVoiceConnected ? '🎙️ Mic Active' : '🎙️ Fallback Voice'}
@@ -2433,13 +2433,13 @@ export default function CallingManager({
                     {voiceBars.map((barHeight, idx) => (
                       <div 
                         key={idx} 
-                        className={`w-1 bg-indigo-450 rounded transition-all duration-75`} 
+                        className={`w-1 bg-[#16c2ff] rounded transition-all duration-75`} 
                         style={{ height: `${barHeight}px` }}
                       />
                     ))}
                   </div>
                 ) : (
-                  <div className="h-8 flex items-center justify-center gap-1 bg-slate-900 rounded border border-slate-850/60 overflow-hidden relative">
+                  <div className="h-8 flex items-center justify-center gap-1 bg-[#041845] rounded border border-[#1e3a8a]/50/60 overflow-hidden relative">
                     <span className="absolute left-1.5 text-[8px] font-mono uppercase tracking-widest text-slate-500 z-10 font-bold">Line Feed</span>
                     <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest animate-pulse flex items-center gap-1">
                       <span className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-ping"></span>
@@ -2450,10 +2450,10 @@ export default function CallingManager({
 
                 {/* Call Recording Simulation Controller (only shown when connected) */}
                 {activeCallStatus === 'connected' && (
-                  <div className="bg-slate-900/60 p-2 rounded border border-slate-850 flex items-center justify-between">
+                  <div className="bg-[#041845]/60 p-2 rounded border border-[#1e3a8a]/50 flex items-center justify-between">
                     <div>
                       <span className="text-[8.5px] uppercase font-bold text-slate-500 block">Digital Recording Sync</span>
-                      <span className="text-[10px] text-slate-350 font-mono">
+                      <span className="text-[10px] text-slate-300 font-mono">
                         {recordingActive ? `Recording Call... (${formatTime(recordingDur)})` : 'Recording Stopped'}
                       </span>
                     </div>
@@ -2468,7 +2468,7 @@ export default function CallingManager({
                         }
                       }}
                       className={`p-1.5 rounded flex items-center gap-1 text-[10px] font-bold uppercase transition ${
-                        recordingActive ? 'bg-red-950 text-red-400 border border-red-900 animate-pulse' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                        recordingActive ? 'bg-red-950 text-red-400 border border-red-900 animate-pulse' : 'bg-[#082458] text-slate-300 hover:bg-[#0b347a]'
                       }`}
                     >
                       <Mic className="w-3.5 h-3.5" />
@@ -2478,9 +2478,9 @@ export default function CallingManager({
                 )}
 
                 {/* Active Dynamic Voice Transcript Logs */}
-                <div ref={transcriptEndRef} className="bg-slate-900 border border-slate-855 rounded p-2 h-24 overflow-y-auto space-y-1 text-left font-mono text-[9.5px] text-slate-300 select-all">
+                <div ref={transcriptEndRef} className="bg-[#041845] border border-slate-855 rounded p-2 h-24 overflow-y-auto space-y-1 text-left font-mono text-[9.5px] text-slate-300 select-all">
                   {liveTranscript.map((txt, index) => (
-                    <p key={index} className={txt.startsWith('Agent:') ? 'text-indigo-300' : txt.startsWith('Customer:') ? 'text-teal-300' : 'text-slate-500 font-bold'}>
+                    <p key={index} className={txt.startsWith('Agent:') ? 'text-[#16c2ff]' : txt.startsWith('Customer:') ? 'text-teal-300' : 'text-slate-500 font-bold'}>
                       {txt}
                     </p>
                   ))}
@@ -2499,15 +2499,15 @@ export default function CallingManager({
                         </button>
                         <button 
                           onClick={handleDeclineCall}
-                          className="flex-1 py-1.5 bg-red-650 hover:bg-red-700 text-white rounded text-[11px] font-bold uppercase tracking-wider flex items-center justify-center gap-1 border border-red-700"
+                          className="flex-1 py-1.5 bg-rose-600 hover:bg-red-700 text-white rounded text-[11px] font-bold uppercase tracking-wider flex items-center justify-center gap-1 border border-red-700"
                         >
                           <PhoneOff className="w-3.5 h-3.5" /> Decline
                         </button>
                       </div>
                     ) : (
                       <div className="space-y-2 w-full">
-                        <div className="bg-slate-900 p-2 rounded border border-slate-850 space-y-1.5">
-                          <span className="text-[8.5px] uppercase font-black text-indigo-400 block tracking-widest text-center">Simulate Customer Action</span>
+                        <div className="bg-[#041845] p-2 rounded border border-[#1e3a8a]/50 space-y-1.5">
+                          <span className="text-[8.5px] uppercase font-black text-[#16c2ff] block tracking-widest text-center">Simulate Customer Action</span>
                           <div className="grid grid-cols-2 gap-1.5">
                             <button 
                               onClick={() => {
@@ -2566,7 +2566,7 @@ export default function CallingManager({
                               setRecordingActive(true);
                               setRecordingDur(0);
                             }}
-                            className="w-full py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded text-[10px] font-bold uppercase tracking-wide flex items-center justify-center gap-1 border border-indigo-500 cursor-pointer"
+                            className="w-full py-1.5 bg-[#0b74f0] hover:bg-[#005be0] text-white rounded text-[10px] font-bold uppercase tracking-wide flex items-center justify-center gap-1 border border-[#0b74f0] cursor-pointer"
                           >
                             <Mic className="w-3 h-3" /> Route to Voicemail
                           </button>
@@ -2574,7 +2574,7 @@ export default function CallingManager({
 
                         <button 
                           onClick={handleDeclineCall}
-                          className="w-full py-1.5 bg-red-650 hover:bg-red-700 text-white rounded text-[11px] font-bold uppercase tracking-wider flex items-center justify-center gap-1 border border-red-700 cursor-pointer"
+                          className="w-full py-1.5 bg-rose-600 hover:bg-red-700 text-white rounded text-[11px] font-bold uppercase tracking-wider flex items-center justify-center gap-1 border border-red-700 cursor-pointer"
                         >
                           <PhoneOff className="w-3.5 h-3.5" /> Cancel Dial
                         </button>
@@ -2583,7 +2583,7 @@ export default function CallingManager({
                   ) : (
                     <button 
                       onClick={handleEndCall}
-                      className="w-full py-1.5 bg-red-650 hover:bg-red-700 text-white rounded text-[11px] font-bold uppercase tracking-wider flex items-center justify-center gap-1 border border-red-700"
+                      className="w-full py-1.5 bg-rose-600 hover:bg-red-700 text-white rounded text-[11px] font-bold uppercase tracking-wider flex items-center justify-center gap-1 border border-red-700"
                     >
                       <PhoneOff className="w-3.5 h-3.5" /> Disconnect Call & Auto-Log
                     </button>
@@ -2592,7 +2592,7 @@ export default function CallingManager({
               </div>
             )}
 
-            <div className="text-[9px] text-slate-500 border-t border-slate-850 pt-1.5 flex items-center justify-between font-mono">
+            <div className="text-[9px] text-slate-500 border-t border-[#1e3a8a]/50 pt-1.5 flex items-center justify-between font-mono">
               <span>Trunks: Mumbai SSL proxy Gateway</span>
               <span>Proxy spoofing IP SEC</span>
             </div>
@@ -2605,7 +2605,7 @@ export default function CallingManager({
               {/* Filter tools row */}
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-3 pb-2 border-b border-slate-100">
                 <div>
-                  <h3 className="text-xs font-bold text-slate-900 uppercase tracking-tight font-sans">Call Inbound & Outbound History</h3>
+                  <h3 className="text-xs font-bold text-[#082458] uppercase tracking-tight font-sans">Call Inbound & Outbound History</h3>
                   <p className="text-[10px] text-slate-400">Total index of verified proxy calls and recording playback vaults</p>
                 </div>
                 
@@ -2613,7 +2613,7 @@ export default function CallingManager({
                   {onClearLogs && callLogs.length > 0 && (
                     <button
                       onClick={onClearLogs}
-                      className="px-2.5 py-1 bg-white hover:bg-red-50 text-red-600 hover:text-red-750 border-red-200 border rounded text-[11px] font-bold flex items-center gap-1.5 transition whitespace-nowrap shadow-xxs cursor-pointer"
+                      className="px-2.5 py-1 bg-white hover:bg-red-50 text-red-600 hover:text-rose-700 border-red-200 border rounded text-[11px] font-bold flex items-center gap-1.5 transition whitespace-nowrap shadow-xxs cursor-pointer"
                       title="Wipe All Call History Logs"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
@@ -2623,7 +2623,7 @@ export default function CallingManager({
 
                   <button
                     onClick={() => setShowBulkUpload(!showBulkUpload)}
-                    className={`px-2.5 py-1 bg-white hover:bg-slate-50 text-indigo-600 hover:text-indigo-850 border-indigo-200 border rounded text-[11px] font-bold flex items-center gap-1.5 transition whitespace-nowrap shadow-xxs ${showBulkUpload ? 'bg-indigo-50 border-indigo-500 ring-1 ring-indigo-500' : ''}`}
+                    className={`px-2.5 py-1 bg-white hover:bg-slate-50 text-[#0b74f0] hover:text-[#082458] border-[#0b74f0]/25 border rounded text-[11px] font-bold flex items-center gap-1.5 transition whitespace-nowrap shadow-xxs ${showBulkUpload ? 'bg-[#eef4fb] border-[#0b74f0] ring-1 ring-[#0b74f0]' : ''}`}
                     title="Toggle Bulk CSV Importer Workspace"
                   >
                     <Upload className="w-3.5 h-3.5" />
@@ -2635,7 +2635,7 @@ export default function CallingManager({
                     <input 
                       type="text" 
                       placeholder="Search logs..."
-                      className="w-full text-[10.5px] p-1 pl-6.5 border border-slate-200 bg-slate-50 rounded focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:bg-white font-sans"
+                      className="w-full text-[10.5px] p-1 pl-6.5 border border-slate-200 bg-slate-50 rounded focus:outline-none focus:ring-1 focus:ring-[#0b74f0] focus:bg-white font-sans"
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                     />
@@ -2646,12 +2646,12 @@ export default function CallingManager({
               {/* Collapsible CSV Bulk Upload Desk */}
               {showBulkUpload && (
                 <div className="mb-4 p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-4 shadow-inner relative overflow-hidden transition-all duration-300">
-                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-500 to-indigo-500"></div>
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-500 to-[#005be0]"></div>
                   
                   <div className="flex items-start justify-between">
                     <div>
-                      <h4 className="text-[11.5px] font-black text-slate-800 uppercase tracking-tight flex items-center gap-1.5">
-                        <Database className="w-4 h-4 text-indigo-600 shadow-sm" />
+                      <h4 className="text-[11.5px] font-black text-[#082458] uppercase tracking-tight flex items-center gap-1.5">
+                        <Database className="w-4 h-4 text-[#0b74f0] shadow-sm" />
                         CSV Telephony Bulk Importer
                       </h4>
                       <p className="text-[10px] text-slate-400 mt-0.5">
@@ -2660,7 +2660,7 @@ export default function CallingManager({
                     </div>
                     <button 
                       onClick={() => setShowBulkUpload(false)}
-                      className="text-slate-400 hover:text-slate-650 p-1 rounded-full hover:bg-slate-200/50"
+                      className="text-slate-400 hover:text-slate-600 p-1 rounded-full hover:bg-slate-200/50"
                     >
                       <X className="w-4 h-4" />
                     </button>
@@ -2678,7 +2678,7 @@ export default function CallingManager({
                         onDrop={handleDrop}
                         className={`border-2 border-dashed rounded-xl p-5 text-center transition-all cursor-pointer relative ${
                           dragActive 
-                            ? "border-indigo-550 bg-indigo-50" 
+                            ? "border-[#0b74f0] bg-[#eef4fb]" 
                             : "border-slate-250 bg-white hover:border-slate-400 hover:bg-neutral-50/40"
                         }`}
                       >
@@ -2690,7 +2690,7 @@ export default function CallingManager({
                           className="hidden"
                         />
                         <label htmlFor="csv-file-input" className="cursor-pointer space-y-2 block">
-                          <div className="mx-auto w-9 h-9 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 shadow-xxs">
+                          <div className="mx-auto w-9 h-9 rounded-full bg-[#eef4fb] flex items-center justify-center text-[#0b74f0] shadow-xxs">
                             <Upload className="w-4.5 h-4.5" />
                           </div>
                           <div>
@@ -2710,9 +2710,9 @@ export default function CallingManager({
                       <div className="bg-white p-2.5 rounded-xl border border-slate-200 text-[9.5px] text-slate-500 leading-normal font-medium">
                         <p className="text-slate-700 font-extrabold mb-1 uppercase tracking-tight text-[8.5px]">Expected Schema Headers:</p>
                         <div className="grid grid-cols-2 gap-1 font-mono text-[8.5px]">
-                          <span className="bg-slate-100 px-1 py-0.5 rounded text-indigo-600">clientName</span>
-                          <span className="bg-slate-100 px-1 py-0.5 rounded text-indigo-600">clientPhone</span>
-                          <span className="bg-slate-100 px-1 py-0.5 rounded text-indigo-600">type (status)</span>
+                          <span className="bg-slate-100 px-1 py-0.5 rounded text-[#0b74f0]">clientName</span>
+                          <span className="bg-slate-100 px-1 py-0.5 rounded text-[#0b74f0]">clientPhone</span>
+                          <span className="bg-slate-100 px-1 py-0.5 rounded text-[#0b74f0]">type (status)</span>
                           <span className="bg-slate-100 px-1 py-0.5 rounded text-emerald-600">direction</span>
                           <span className="bg-slate-100 px-1 py-0.5 rounded text-slate-600">duration</span>
                           <span className="bg-slate-100 px-1 py-0.5 rounded text-slate-600">agentName</span>
@@ -2723,7 +2723,7 @@ export default function CallingManager({
                         <button
                           onClick={handleDownloadTemplate}
                           type="button"
-                          className="flex-1 py-1.5 bg-white hover:bg-neutral-50 text-slate-700 border border-slate-250 hover:border-slate-350 rounded-lg text-[10px] font-extrabold flex items-center justify-center gap-1 transition shadow-xxs"
+                          className="flex-1 py-1.5 bg-white hover:bg-neutral-50 text-slate-700 border border-slate-250 hover:border-slate-300 rounded-lg text-[10px] font-extrabold flex items-center justify-center gap-1 transition shadow-xxs"
                         >
                           <Download className="w-3 h-3 text-slate-500 placeholder-lucide" />
                           Save Template
@@ -2731,9 +2731,9 @@ export default function CallingManager({
                         <button
                           onClick={handleLoadMockCSVRows}
                           type="button"
-                          className="flex-1 py-1.5 bg-indigo-50/50 hover:bg-indigo-50 text-indigo-750 border border-indigo-150 rounded-lg text-[10px] font-extrabold flex items-center justify-center gap-1 transition"
+                          className="flex-1 py-1.5 bg-[#eef4fb]/50 hover:bg-[#dceafb] text-[#0b74f0] border border-[#0b74f0]/25 rounded-lg text-[10px] font-extrabold flex items-center justify-center gap-1 transition"
                         >
-                          <Sparkles className="w-3 h-3 text-indigo-500 shrink-0" />
+                          <Sparkles className="w-3 h-3 text-[#0b74f0] shrink-0" />
                           Load Mock CRM
                         </button>
                       </div>
@@ -2742,7 +2742,7 @@ export default function CallingManager({
 
                   {/* Feedback states: upload error */}
                   {bulkUploadError && (
-                    <div className="bg-red-50 border border-red-150 p-2.5 rounded-xl flex items-center gap-2 text-[10.5px] text-red-750 font-semibold shadow-xxs">
+                    <div className="bg-red-50 border border-red-150 p-2.5 rounded-xl flex items-center gap-2 text-[10.5px] text-rose-700 font-semibold shadow-xxs">
                       <AlertCircle className="w-4 h-4 text-red-500 shrink-0" />
                       <span>{bulkUploadError}</span>
                     </div>
@@ -2774,7 +2774,7 @@ export default function CallingManager({
                       {/* Spreadsheet layout staging table */}
                       <div className="border border-slate-200 rounded-xl bg-white overflow-hidden max-h-48 overflow-y-auto shadow-inner">
                         <table className="w-full text-left text-[10.5px]">
-                          <thead className="bg-slate-100 text-slate-500 text-[8px] uppercase tracking-wider font-extrabold border-b border-slate-150 sticky top-0 z-10">
+                          <thead className="bg-slate-100 text-slate-500 text-[8px] uppercase tracking-wider font-extrabold border-b border-slate-200 sticky top-0 z-10">
                             <tr>
                               <th className="px-2.5 py-1.5">Recipient</th>
                               <th className="px-2.5 py-1.5">Direct Line</th>
@@ -2795,7 +2795,7 @@ export default function CallingManager({
                                     type="text" 
                                     value={row.clientName}
                                     onChange={(e) => handleEditStagedRow(idx, 'clientName', e.target.value)}
-                                    className="font-bold text-slate-800 bg-transparent border-b border-transparent focus:border-indigo-400 focus:bg-white focus:outline-none py-0.5 w-[110px]"
+                                    className="font-bold text-[#082458] bg-transparent border-b border-transparent focus:border-[#38bdf8] focus:bg-white focus:outline-none py-0.5 w-[110px]"
                                   />
                                 </td>
                                 <td className="px-2.5 py-1">
@@ -2803,7 +2803,7 @@ export default function CallingManager({
                                     type="text" 
                                     value={row.clientPhone}
                                     onChange={(e) => handleEditStagedRow(idx, 'clientPhone', e.target.value)}
-                                    className="font-mono text-slate-500 bg-transparent border-b border-transparent focus:border-indigo-400 focus:bg-white focus:outline-none py-0.5 w-[90px]"
+                                    className="font-mono text-slate-500 bg-transparent border-b border-transparent focus:border-[#38bdf8] focus:bg-white focus:outline-none py-0.5 w-[90px]"
                                   />
                                 </td>
                                 <td className="px-2 py-1">
@@ -2831,7 +2831,7 @@ export default function CallingManager({
                                     type="text" 
                                     value={row.duration}
                                     onChange={(e) => handleEditStagedRow(idx, 'duration', e.target.value)}
-                                    className="font-mono bg-transparent border-b border-transparent focus:border-indigo-400 focus:bg-white focus:outline-none py-0.5 w-[55px]"
+                                    className="font-mono bg-transparent border-b border-transparent focus:border-[#38bdf8] focus:bg-white focus:outline-none py-0.5 w-[55px]"
                                   />
                                 </td>
                                 <td className="px-2.5 py-1">
@@ -2839,7 +2839,7 @@ export default function CallingManager({
                                     type="text" 
                                     value={row.agentName}
                                     onChange={(e) => handleEditStagedRow(idx, 'agentName', e.target.value)}
-                                    className="bg-transparent border-b border-transparent focus:border-indigo-400 focus:bg-white focus:outline-none py-0.5 w-[90px]"
+                                    className="bg-transparent border-b border-transparent focus:border-[#38bdf8] focus:bg-white focus:outline-none py-0.5 w-[90px]"
                                   />
                                 </td>
                                 <td className="px-2.5 py-1">
@@ -2847,7 +2847,7 @@ export default function CallingManager({
                                     type="text" 
                                     value={row.notes}
                                     onChange={(e) => handleEditStagedRow(idx, 'notes', e.target.value)}
-                                    className="text-slate-550 bg-transparent border-b border-transparent focus:border-indigo-400 focus:bg-white focus:outline-none py-0.5 w-[150px] truncate"
+                                    className="text-slate-550 bg-transparent border-b border-transparent focus:border-[#38bdf8] focus:bg-white focus:outline-none py-0.5 w-[150px] truncate"
                                     title={row.notes}
                                   />
                                 </td>
@@ -2864,7 +2864,7 @@ export default function CallingManager({
                                 <td className="px-2 py-1 text-center">
                                   <button 
                                     onClick={() => handleRemoveStagedRow(idx)}
-                                    className="text-red-400 hover:text-red-650 p-1 rounded hover:bg-red-50"
+                                    className="text-red-400 hover:text-rose-600 p-1 rounded hover:bg-red-50"
                                     type="button"
                                     title="Exclude row"
                                   >
@@ -2880,12 +2880,12 @@ export default function CallingManager({
                       {/* Staged Execution trigger bar */}
                       <div className="flex items-center justify-between border-t border-slate-200/80 pt-2.5">
                         <div className="text-[10px] text-slate-500 font-semibold">
-                          All <span className="font-extrabold text-slate-800">{parsedRows.filter(r => r.status === 'Valid').length} valid</span> records will immediately sync into your dashboards.
+                          All <span className="font-extrabold text-[#082458]">{parsedRows.filter(r => r.status === 'Valid').length} valid</span> records will immediately sync into your dashboards.
                         </div>
                         <button
                           onClick={handleExecuteBulkImport}
                           type="button"
-                          className="px-4 py-1.5 bg-indigo-650 hover:bg-indigo-750 text-white rounded-lg text-[11px] font-black uppercase tracking-wider flex items-center gap-1.5 transition shadow"
+                          className="px-4 py-1.5 bg-[#0b74f0] hover:bg-[#005be0] text-white rounded-lg text-[11px] font-black uppercase tracking-wider flex items-center gap-1.5 transition shadow"
                         >
                           <CheckCircle2 className="w-4 h-4 text-white" />
                           Execute Bulk Handshake
@@ -2905,7 +2905,7 @@ export default function CallingManager({
                     onClick={() => setDirectionFilter(dir)}
                     className={`px-2 py-0.5 rounded text-[10px] font-bold border transition ${
                       directionFilter === dir 
-                        ? 'bg-indigo-50 text-indigo-800 border-indigo-200 font-black' 
+                        ? 'bg-[#eef4fb] text-[#082458] border-[#0b74f0]/25 font-black' 
                         : 'bg-white hover:bg-slate-50 text-slate-600 border-slate-200'
                     }`}
                   >
@@ -2943,7 +2943,7 @@ export default function CallingManager({
                       return (
                         <tr key={log.id} className="hover:bg-slate-50/50 transition">
                           <td className="px-2 py-2">
-                            <div className="font-bold text-slate-900 text-[11px] leading-tight">{log.clientName}</div>
+                            <div className="font-bold text-[#082458] text-[11px] leading-tight">{log.clientName}</div>
                             <div className="text-[10px] font-mono text-slate-400">{log.clientPhone}</div>
                           </td>
                           <td className="px-2 py-2">
@@ -2955,7 +2955,7 @@ export default function CallingManager({
                           </td>
                           <td className="px-1 py-2">
                             <span className={`px-1.2 py-0.2 rounded text-[8px] font-bold uppercase ${
-                              log.type === 'Answered' ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-650'
+                              log.type === 'Answered' ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-rose-600'
                             }`}>
                               {log.type}
                             </span>
@@ -2973,8 +2973,8 @@ export default function CallingManager({
                                   onClick={() => handlePlayAudio(log.id, log.duration)}
                                   className={`p-1 rounded-full border transition ${
                                     playingAudioId === log.id 
-                                      ? 'bg-indigo-100 text-indigo-700 border-indigo-300' 
-                                      : 'bg-indigo-50 text-indigo-600 border-indigo-150 hover:bg-indigo-100'
+                                      ? 'bg-[#dceafb] text-[#0b74f0] border-[#0b74f0]/25' 
+                                      : 'bg-[#eef4fb] text-[#0b74f0] border-[#0b74f0]/25 hover:bg-[#dceafb]'
                                   }`}
                                   title="Playback Recording"
                                 >
@@ -2983,17 +2983,17 @@ export default function CallingManager({
                                 {playingAudioId === log.id && (
                                   <div className="w-8 h-1 bg-slate-250 rounded overflow-hidden">
                                     <div 
-                                      className="bg-indigo-650 h-full transition-all duration-300"
+                                      className="bg-[#0b74f0] h-full transition-all duration-300"
                                       style={{ width: `${playbackProgress[log.id] || 0}%` }}
                                     />
                                   </div>
                                 )}
-                                <span className="text-[7.5px] text-indigo-600 font-bold uppercase tracking-wider">
+                                <span className="text-[7.5px] text-[#0b74f0] font-bold uppercase tracking-wider">
                                   {meta.recordingLength || 'REC'}
                                 </span>
                               </div>
                             ) : (
-                              <span className="text-slate-350 text-[9px] italic">-</span>
+                              <span className="text-slate-300 text-[9px] italic">-</span>
                             )}
                           </td>
                           <td className="px-2 py-2 text-right">
@@ -3019,7 +3019,7 @@ export default function CallingManager({
                               {onDeleteLog && (
                                 <button 
                                   onClick={() => onDeleteLog(log.id)}
-                                  className="px-2 py-1 text-[9px] bg-red-50 hover:bg-red-100 text-red-650 hover:text-red-700 font-bold rounded flex items-center gap-1 shrink-0 cursor-pointer"
+                                  className="px-2 py-1 text-[9px] bg-red-50 hover:bg-red-100 text-rose-600 hover:text-red-700 font-bold rounded flex items-center gap-1 shrink-0 cursor-pointer"
                                   title="Delete this call log"
                                 >
                                   <Trash2 className="w-3 h-3" /> Delete
@@ -3052,8 +3052,8 @@ export default function CallingManager({
             
             <div className="lg:col-span-7 space-y-3">
               <div className="flex items-center gap-2">
-                <Shuffle className="w-5 h-5 text-indigo-600" />
-                <h3 className="text-xs font-bold text-slate-900 uppercase tracking-tight">Interactive Voice Response (IVR) Logic Flow</h3>
+                <Shuffle className="w-5 h-5 text-[#0b74f0]" />
+                <h3 className="text-xs font-bold text-[#082458] uppercase tracking-tight">Interactive Voice Response (IVR) Logic Flow</h3>
               </div>
               <p className="text-[10px] text-slate-400 leading-relaxed">
                 Design the automated voice gateway. Inbound customers dial onto the proxy server and traverse nodes 
@@ -3075,25 +3075,25 @@ export default function CallingManager({
 
               {/* Graphic Flow Layout */}
               <div className="border border-slate-200 rounded p-3 bg-slate-50 space-y-3 font-sans">
-                <span className="text-[8.5px] font-mono uppercase bg-indigo-100 text-indigo-750 px-1.5 py-0.2 rounded font-bold">Flow chart Architecture</span>
+                <span className="text-[8.5px] font-mono uppercase bg-[#dceafb] text-[#0b74f0] px-1.5 py-0.2 rounded font-bold">Flow chart Architecture</span>
                 
                 {/* Visual flowchart graph layout */}
                 <div className="flex flex-col gap-2 font-mono text-[10px] font-semibold text-slate-700">
-                  <div className="p-2 border border-dashed border-slate-350 bg-white rounded text-center">
+                  <div className="p-2 border border-dashed border-slate-300 bg-white rounded text-center">
                     📞 Inbound Call Detected
                   </div>
                   <div className="flex justify-center">↓</div>
-                  <div className="p-2 border border-slate-250 bg-indigo-50/50 rounded flex flex-col items-center">
+                  <div className="p-2 border border-slate-250 bg-[#eef4fb]/50 rounded flex flex-col items-center">
                     <span className="text-[8px] uppercase tracking-widest text-slate-400 font-extrabold">Welcome Greeting Node</span>
                     <p className="text-center italic text-slate-600 text-[9.5px]">"Thank you for calling Expert CRM..."</p>
                   </div>
                   <div className="flex justify-center">↓</div>
 
                   <div className="grid grid-cols-3 gap-2 text-center text-[9.5px]">
-                    <div className="p-2 border rounded bg-indigo-600/5 hover:bg-indigo-600/10 border-indigo-300">
-                      <div className="font-extrabold text-indigo-700">[KEY 1]</div>
+                    <div className="p-2 border rounded bg-[#0b74f0]/5 hover:bg-[#005be0]/10 border-[#0b74f0]/25">
+                      <div className="font-extrabold text-[#0b74f0]">[KEY 1]</div>
                       <div className="text-slate-500 mt-0.5">Corporate Sales</div>
-                      <div className="text-[8.5px] font-mono text-indigo-500 mt-1 font-bold">→ Rep Rajesh</div>
+                      <div className="text-[8.5px] font-mono text-[#0b74f0] mt-1 font-bold">→ Rep Rajesh</div>
                     </div>
                     <div className="p-2 border rounded bg-[#10b981]/5 hover:bg-[#10b981]/15 border-emerald-300">
                       <div className="font-extrabold text-emerald-700">[KEY 2]</div>
@@ -3111,21 +3111,21 @@ export default function CallingManager({
             </div>
 
             {/* Interactive simulator pad */}
-            <div className="lg:col-span-5 bg-slate-950 text-white p-3 rounded border border-slate-900 flex flex-col justify-between h-[450px]">
+            <div className="lg:col-span-5 bg-[#031338] text-white p-3 rounded border border-[#082458] flex flex-col justify-between h-[450px]">
               <div>
-                <span className="text-[9px] uppercase font-bold text-indigo-400 block tracking-wider">Live Sandbox Sandbox</span>
+                <span className="text-[9px] uppercase font-bold text-[#16c2ff] block tracking-wider">Live Sandbox Sandbox</span>
                 <h4 className="text-[12px] font-bold text-slate-100">Interactive IVR Keypad Simulator</h4>
                 <p className="text-[9.5px] text-slate-400 mt-0.5">Mock dialing client side to review audio menu sequences.</p>
               </div>
 
               {!ivrSimulatorActive ? (
                 <div className="my-auto text-center space-y-3">
-                  <div className="w-12 h-12 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center mx-auto animate-pulse">
-                    <Shuffle className="w-5 h-5 text-indigo-400" />
+                  <div className="w-12 h-12 rounded-full bg-[#041845] border border-[#1e3a8a]/50 flex items-center justify-center mx-auto animate-pulse">
+                    <Shuffle className="w-5 h-5 text-[#16c2ff]" />
                   </div>
                   <button
                     onClick={handleStartIvrSimulator}
-                    className="px-3.5 py-1.5 bg-indigo-650 hover:bg-indigo-700 text-white rounded font-bold text-[10.5px] uppercase tracking-wider"
+                    className="px-3.5 py-1.5 bg-[#0b74f0] hover:bg-[#005be0] text-white rounded font-bold text-[10.5px] uppercase tracking-wider"
                   >
                     Initiate IVR Call Simulator
                   </button>
@@ -3133,23 +3133,23 @@ export default function CallingManager({
               ) : (
                 <div className="my-auto space-y-3.5">
                   <div className="text-center">
-                    <div className="inline-block bg-indigo-950 text-indigo-350 border border-indigo-850 px-2.5 py-0.5 rounded font-mono text-[9px] uppercase tracking-widest animate-pulse">
+                    <div className="inline-block bg-[#041845] text-[#16c2ff] border border-[#0844a4] px-2.5 py-0.5 rounded font-mono text-[9px] uppercase tracking-widest animate-pulse">
                       Playing Node Greeting...
                     </div>
                     
                     {/* Live tree state tags */}
                     <div className="mt-2 flex justify-center gap-1.5 text-[9px] font-mono font-bold">
-                      <span className={`px-1.5 py-0.2 rounded ${ivrNode === 'welcome' ? 'bg-indigo-500 text-white' : 'bg-slate-900 text-slate-400'}`}>Welcome</span>
-                      <span className={`px-1.5 py-0.2 rounded ${ivrNode === 'routing_sales' ? 'bg-indigo-500 text-white' : 'bg-slate-900 text-slate-400'}`}>Sales Desk</span>
-                      <span className={`px-1.5 py-0.2 rounded ${ivrNode === 'routing_support' ? 'bg-indigo-500 text-white' : 'bg-slate-900 text-slate-400'}`}>SLA Support</span>
-                      <span className={`px-1.5 py-0.2 rounded ${ivrNode === 'routing_billing' ? 'bg-indigo-500 text-white' : 'bg-slate-900 text-slate-400'}`}>Billing</span>
+                      <span className={`px-1.5 py-0.2 rounded ${ivrNode === 'welcome' ? 'bg-[#0b74f0] text-white' : 'bg-[#041845] text-slate-400'}`}>Welcome</span>
+                      <span className={`px-1.5 py-0.2 rounded ${ivrNode === 'routing_sales' ? 'bg-[#0b74f0] text-white' : 'bg-[#041845] text-slate-400'}`}>Sales Desk</span>
+                      <span className={`px-1.5 py-0.2 rounded ${ivrNode === 'routing_support' ? 'bg-[#0b74f0] text-white' : 'bg-[#041845] text-slate-400'}`}>SLA Support</span>
+                      <span className={`px-1.5 py-0.2 rounded ${ivrNode === 'routing_billing' ? 'bg-[#0b74f0] text-white' : 'bg-[#041845] text-slate-400'}`}>Billing</span>
                     </div>
                   </div>
 
                   {/* Scrolled IVR Transcripts */}
-                  <div className="bg-slate-900 rounded p-2 h-26 overflow-y-auto space-y-1.5 font-mono text-[9px] text-slate-350 text-left border border-slate-850">
+                  <div className="bg-[#041845] rounded p-2 h-26 overflow-y-auto space-y-1.5 font-mono text-[9px] text-slate-300 text-left border border-[#1e3a8a]/50">
                     {ivrTranscript.map((t, idx) => (
-                      <p key={idx} className={t.includes('User Key:') ? 'text-indigo-400' : 'text-slate-300'}>
+                      <p key={idx} className={t.includes('User Key:') ? 'text-[#16c2ff]' : 'text-slate-300'}>
                         {t}
                       </p>
                     ))}
@@ -3161,7 +3161,7 @@ export default function CallingManager({
                       <button
                         key={key}
                         onClick={() => handleIvrKeyPress(key)}
-                        className="h-6 rounded bg-slate-900 hover:bg-slate-800 border border-slate-850 text-[10px] font-bold text-slate-300"
+                        className="h-6 rounded bg-[#041845] hover:bg-[#082458] border border-[#1e3a8a]/50 text-[10px] font-bold text-slate-300"
                       >
                         {key}
                       </button>
@@ -3171,13 +3171,13 @@ export default function CallingManager({
                   <div className="flex gap-1">
                     <button
                       onClick={() => closeIvrSimulator(true)}
-                      className="flex-1 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded text-[10px] font-bold uppercase"
+                      className="flex-1 py-1 bg-[#0b74f0] hover:bg-[#005be0] text-white rounded text-[10px] font-bold uppercase"
                     >
                       Answered (Disconnect & Logs)
                     </button>
                     <button
                       onClick={() => closeIvrSimulator(false)}
-                      className="flex-1 py-1 bg-red-650 hover:bg-red-700 text-white rounded text-[10px] font-bold uppercase"
+                      className="flex-1 py-1 bg-rose-600 hover:bg-red-700 text-white rounded text-[10px] font-bold uppercase"
                     >
                       Decline Inbound
                     </button>
@@ -3203,12 +3203,12 @@ export default function CallingManager({
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             <div className="p-3 bg-white rounded border border-slate-200">
               <span className="text-[10px] uppercase font-bold text-slate-450 block">Aggregated Calls Vol</span>
-              <h4 className="text-base font-extrabold text-slate-800 mt-0.5">{callLogs.length + 152} Total</h4>
+              <h4 className="text-base font-extrabold text-[#082458] mt-0.5">{callLogs.length + 152} Total</h4>
               <p className="text-[9px] text-[#10b981] font-bold mt-1">▲ 14% vs last week campaign</p>
             </div>
             <div className="p-3 bg-white rounded border border-slate-200">
               <span className="text-[10px] uppercase font-bold text-slate-450 block">Average Handling Time</span>
-              <h4 className="text-base font-extrabold text-slate-800 mt-0.5">3m 48s</h4>
+              <h4 className="text-base font-extrabold text-[#082458] mt-0.5">3m 48s</h4>
               <p className="text-[9px] text-slate-450 mt-1 font-mono">Target benchmark AHT &lt; 4m</p>
             </div>
             <div className="p-3 bg-white rounded border border-slate-200">
@@ -3218,7 +3218,7 @@ export default function CallingManager({
             </div>
             <div className="p-3 bg-white rounded border border-slate-200">
               <span className="text-[10px] uppercase font-bold text-slate-450 block">Missed call speed back</span>
-              <h4 className="text-base font-extrabold text-indigo-655 mt-0.5">&lt; 15 mins</h4>
+              <h4 className="text-base font-extrabold text-[#0b74f0] mt-0.5">&lt; 15 mins</h4>
               <p className="text-[9px] text-slate-400 mt-1">VIP callouts flagged immediately</p>
             </div>
           </div>
@@ -3227,8 +3227,8 @@ export default function CallingManager({
             
             {/* Core Agent Stats list */}
             <div className="md:col-span-8 bg-white p-3 rounded border border-slate-200">
-              <h3 className="text-xs font-bold text-slate-900 uppercase tracking-tight mb-2 flex items-center gap-1">
-                <UserCheck className="w-4 h-4 text-indigo-600" />
+              <h3 className="text-xs font-bold text-[#082458] uppercase tracking-tight mb-2 flex items-center gap-1">
+                <UserCheck className="w-4 h-4 text-[#0b74f0]" />
                 Active Agent Call Metrics Benchmarking (Daily)
               </h3>
               <p className="text-[10px] text-slate-400 mb-4">
@@ -3236,7 +3236,7 @@ export default function CallingManager({
               </p>
 
               <div className="overflow-x-auto">
-                <table className="w-full text-left text-slate-650 text-[11px]">
+                <table className="w-full text-left text-slate-600 text-[11px]">
                   <thead className="bg-slate-50 text-slate-450 border-b border-slate-200 text-[8.5px] font-black uppercase tracking-wider">
                     <tr>
                       <th className="px-2 py-1.5">Agent Officer Profiles</th>
@@ -3255,13 +3255,13 @@ export default function CallingManager({
                       { name: 'Agent Vikram Birla', dials: 29, rate: 84, aht: '6m 10s', csat: 4.5 }
                     ].map(agent => (
                       <tr key={agent.name} className="hover:bg-slate-50/50">
-                        <td className="px-2 py-2.5 font-bold text-slate-800">{agent.name}</td>
+                        <td className="px-2 py-2.5 font-bold text-[#082458]">{agent.name}</td>
                         <td className="px-2 py-2.5 font-bold text-slate-600">{agent.dials} calls</td>
                         <td className="px-2 py-2.5">
                           <div className="flex items-center gap-2">
                             <span className="font-semibold text-slate-700">{agent.rate}%</span>
                             <div className="w-16 h-1.5 bg-slate-100 rounded overflow-hidden">
-                              <div className="bg-indigo-600 h-full" style={{ width: `${agent.rate}%` }} />
+                              <div className="bg-[#0b74f0] h-full" style={{ width: `${agent.rate}%` }} />
                             </div>
                           </div>
                         </td>
@@ -3283,19 +3283,19 @@ export default function CallingManager({
 
             {/* Inbound Call Categories chart mockup */}
             <div className="md:col-span-4 bg-white p-3 rounded border border-slate-200 space-y-3.5">
-              <h3 className="text-xs font-bold text-slate-900 uppercase tracking-tight">Call Volume Breakdown</h3>
+              <h3 className="text-xs font-bold text-[#082458] uppercase tracking-tight">Call Volume Breakdown</h3>
               <p className="text-[10px] text-slate-400">Campaign category analytics on active inbound trunks.</p>
 
               <div className="space-y-2 pt-1">
                 {[
-                  { label: 'Outbound sales follow-up', count: 68, pct: 45, color: 'bg-indigo-600' },
+                  { label: 'Outbound sales follow-up', count: 68, pct: 45, color: 'bg-[#0b74f0]' },
                   { label: 'SLA priority tickets callback', count: 42, pct: 28, color: 'bg-green-500' },
                   { label: 'Quotation pricing negotiation', count: 26, pct: 17, color: 'bg-purple-500' },
                   { label: 'Billing Invoices inquiry', count: 16, pct: 10, color: 'bg-amber-500' }
                 ].map(item => (
                   <div key={item.label} className="space-y-1">
                     <div className="flex justify-between items-center text-[10px]">
-                      <span className="text-slate-650 font-bold truncate max-w-[150px]">{item.label}</span>
+                      <span className="text-slate-600 font-bold truncate max-w-[150px]">{item.label}</span>
                       <span className="font-mono text-slate-400">({item.count} calls) <strong>{item.pct}%</strong></span>
                     </div>
                     <div className="w-full h-1.5 bg-slate-100 rounded overflow-hidden">
@@ -3325,8 +3325,8 @@ export default function CallingManager({
           <div className="bg-white p-5 rounded border border-slate-200">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-slate-100 pb-4 mb-4">
               <div>
-                <h3 className="text-xs font-bold text-slate-900 uppercase tracking-tight flex items-center gap-1.5">
-                  <Shield className="w-5 h-5 text-indigo-600 animate-pulse" />
+                <h3 className="text-xs font-bold text-[#082458] uppercase tracking-tight flex items-center gap-1.5">
+                  <Shield className="w-5 h-5 text-[#0b74f0] animate-pulse" />
                   Credentials & Gateway Configuration
                 </h3>
                 <p className="text-[10px] text-slate-400 mt-0.5">
@@ -3344,7 +3344,7 @@ export default function CallingManager({
               
               {/* Card 1: Twilio Telephony Node */}
               <div className="p-4 bg-slate-50 rounded border border-slate-200 space-y-3.5">
-                <span className="text-[10px] uppercase font-bold text-indigo-600 tracking-wider flex items-center gap-1">
+                <span className="text-[10px] uppercase font-bold text-[#0b74f0] tracking-wider flex items-center gap-1">
                   <PhoneCall className="w-4 h-4" /> Twilio Telephony & Channels Config
                 </span>
                 <div className="space-y-2.5 text-xs font-medium">
@@ -3400,7 +3400,7 @@ export default function CallingManager({
 
               {/* Card 2: Corporate Outbound SMTP Settings */}
               <div className="p-4 bg-slate-50 rounded border border-slate-200 space-y-3.5">
-                <span className="text-[10px] uppercase font-bold text-indigo-600 tracking-wider flex items-center gap-1">
+                <span className="text-[10px] uppercase font-bold text-[#0b74f0] tracking-wider flex items-center gap-1">
                   <Mail className="w-4 h-4" /> Corporate SMTP Email Relays
                 </span>
                 <div className="space-y-2.5 text-xs font-medium">
@@ -3447,7 +3447,7 @@ export default function CallingManager({
 
               {/* Card 3: Razorpay & Groq AI keys */}
               <div className="p-4 bg-slate-50 rounded border border-slate-200 space-y-3.5">
-                <span className="text-[10px] uppercase font-bold text-indigo-600 tracking-wider flex items-center gap-1">
+                <span className="text-[10px] uppercase font-bold text-[#0b74f0] tracking-wider flex items-center gap-1">
                   <Lock className="w-4 h-4" /> Razorpay & AI Copilot Integrations
                 </span>
                 <div className="space-y-2.5 text-xs font-medium">
@@ -3485,7 +3485,7 @@ export default function CallingManager({
 
               {/* Card 4: Cloudflare Security Shield */}
               <div className="p-4 bg-slate-50 rounded border border-slate-200 space-y-3.5">
-                <span className="text-[10px] uppercase font-bold text-indigo-600 tracking-wider flex items-center gap-1">
+                <span className="text-[10px] uppercase font-bold text-[#0b74f0] tracking-wider flex items-center gap-1">
                   <Shield className="w-4 h-4" /> Cloudflare Security Shield
                 </span>
                 <div className="space-y-2.5 text-xs font-medium">
@@ -3536,7 +3536,7 @@ export default function CallingManager({
                   setSaveAlert('All present system user credentials wiped.');
                   setTimeout(() => setSaveAlert(null), 3000);
                 }}
-                className="px-4 py-2 border border-red-200 text-red-650 rounded text-xs font-bold hover:bg-red-50 transition cursor-pointer"
+                className="px-4 py-2 border border-red-200 text-rose-600 rounded text-xs font-bold hover:bg-red-50 transition cursor-pointer"
               >
                 Wipe All Credentials
               </button>
@@ -3575,7 +3575,7 @@ export default function CallingManager({
                     setSaveAlert('Credentials updated successfully!');
                     setTimeout(() => setSaveAlert(null), 3000);
                   }}
-                  className="px-5 py-2 bg-indigo-650 hover:bg-indigo-700 text-white rounded text-xs font-bold transition shadow-sm cursor-pointer"
+                  className="px-5 py-2 bg-[#0b74f0] hover:bg-[#005be0] text-white rounded text-xs font-bold transition shadow-sm cursor-pointer"
                 >
                   Save Credentials Configuration
                 </button>
@@ -3587,13 +3587,13 @@ export default function CallingManager({
 
       {/* ==================== MODAL 1: MOBILE APPLICATION SIMULATOR ==================== */}
       {showMobileSimulator && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn">
-          <div className="bg-slate-900 border border-slate-700 rounded-3xl p-4 sm:p-6 shadow-2xl max-w-4xl w-full flex flex-col md:flex-row gap-6 relative max-h-[92vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 bg-[#031338]/80 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn">
+          <div className="bg-[#041845] border border-[#1e3a8a]/60 rounded-3xl p-4 sm:p-6 shadow-2xl max-w-4xl w-full flex flex-col md:flex-row gap-6 relative max-h-[92vh] overflow-y-auto">
             
             {/* Close Button */}
             <button
               onClick={() => setShowMobileSimulator(false)}
-              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-white rounded-full bg-slate-800/80 hover:bg-slate-700 transition z-50 cursor-pointer"
+              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-white rounded-full bg-[#082458]/80 hover:bg-[#0b347a] transition z-50 cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
@@ -3616,7 +3616,7 @@ export default function CallingManager({
             <div className="w-full md:w-80 flex flex-col justify-between text-white space-y-4 pt-2">
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
-                  <span className="p-1.5 rounded-lg bg-indigo-600 text-white">
+                  <span className="p-1.5 rounded-lg bg-[#0b74f0] text-white">
                     <Smartphone className="w-4 h-4" />
                   </span>
                   <div>
@@ -3627,7 +3627,7 @@ export default function CallingManager({
                   </div>
                 </div>
 
-                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs text-slate-300 space-y-2">
+                <div className="p-3 bg-[#031338] rounded-xl border border-[#1e3a8a]/50 text-xs text-slate-300 space-y-2">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-450 flex items-center gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                     Live Cloud Sync Connected
@@ -3644,14 +3644,14 @@ export default function CallingManager({
                   </ol>
                 </div>
 
-                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs space-y-2">
+                <div className="p-3 bg-[#031338] rounded-xl border border-[#1e3a8a]/50 text-xs space-y-2">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
                     Switch Active Simulator Agent:
                   </span>
                   <select
                     value={simulatorAgentId}
                     onChange={(e) => setSimulatorAgentId(e.target.value)}
-                    className="w-full text-xs p-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-medium focus:outline-none"
+                    className="w-full text-xs p-2 bg-[#041845] border border-[#1e3a8a]/60 rounded-lg text-white font-medium focus:outline-none"
                   >
                     {agents.map((ag) => (
                       <option key={ag.id} value={ag.id}>
@@ -3662,10 +3662,10 @@ export default function CallingManager({
                 </div>
               </div>
 
-              <div className="space-y-2 pt-4 border-t border-slate-800">
+              <div className="space-y-2 pt-4 border-t border-[#1e3a8a]/50">
                 <button
                   onClick={() => setShowMobileSimulator(false)}
-                  className="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition cursor-pointer"
+                  className="w-full py-2 bg-[#0b74f0] hover:bg-[#005be0] text-white rounded-xl text-xs font-bold transition cursor-pointer"
                 >
                   View Desktop Manager Radar
                 </button>
@@ -3681,11 +3681,11 @@ export default function CallingManager({
 
       {/* ==================== MODAL 2: MANAGER LISTEN-IN (LIVE AUDIO & TRANSCRIPT) ==================== */}
       {listeningAgent && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn">
-          <div className="bg-slate-900 border border-slate-700 rounded-2xl p-6 shadow-2xl max-w-lg w-full text-white space-y-5 relative">
+        <div className="fixed inset-0 z-50 bg-[#031338]/80 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn">
+          <div className="bg-[#041845] border border-[#1e3a8a]/60 rounded-2xl p-6 shadow-2xl max-w-lg w-full text-white space-y-5 relative">
             <button
               onClick={() => setListeningAgent(null)}
-              className="absolute top-4 right-4 p-1.5 text-slate-400 hover:text-white rounded-lg bg-slate-800 transition cursor-pointer"
+              className="absolute top-4 right-4 p-1.5 text-slate-400 hover:text-white rounded-lg bg-[#082458] transition cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -3708,7 +3708,7 @@ export default function CallingManager({
             </div>
 
             {/* Live Audio Waveform Simulation */}
-            <div className="p-4 bg-slate-950 rounded-xl border border-slate-800 text-center space-y-2">
+            <div className="p-4 bg-[#031338] rounded-xl border border-[#1e3a8a]/50 text-center space-y-2">
               <span className="text-[9.5px] font-mono text-emerald-450 uppercase tracking-widest">
                 HD Voice Stream • Encrypted Trunk
               </span>
@@ -3716,7 +3716,7 @@ export default function CallingManager({
                 {[15, 35, 60, 25, 75, 40, 65, 30, 50, 20, 70, 35, 55, 18, 45].map((h, i) => (
                   <div
                     key={i}
-                    className="w-1.5 bg-gradient-to-t from-indigo-500 to-rose-400 rounded-full animate-pulse"
+                    className="w-1.5 bg-gradient-to-t from-[#0b78f4] to-rose-400 rounded-full animate-pulse"
                     style={{
                       height: `${h}px`,
                       animationDuration: `${0.4 + (i % 5) * 0.15}s`
@@ -3724,7 +3724,7 @@ export default function CallingManager({
                   />
                 ))}
               </div>
-              <div className="flex items-center justify-between text-[10px] text-slate-500 font-mono px-2 pt-1 border-t border-slate-900">
+              <div className="flex items-center justify-between text-[10px] text-slate-500 font-mono px-2 pt-1 border-t border-[#082458]">
                 <span>Bitrate: 128 kbps Opus</span>
                 <span className="text-rose-400 font-bold">Latency: 14ms (Direct Mobile Push)</span>
               </div>
@@ -3735,15 +3735,15 @@ export default function CallingManager({
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
                 Live Speech-to-Text Transcription:
               </span>
-              <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs space-y-2 max-h-36 overflow-y-auto">
-                <div className="text-indigo-300">
-                  <strong className="text-indigo-400">Agent ({listeningAgent.name}):</strong> "Good morning! I am following up on your request regarding our CRM solution."
+              <div className="p-3 bg-[#031338] rounded-xl border border-[#1e3a8a]/50 text-xs space-y-2 max-h-36 overflow-y-auto">
+                <div className="text-[#16c2ff]">
+                  <strong className="text-[#16c2ff]">Agent ({listeningAgent.name}):</strong> "Good morning! I am following up on your request regarding our CRM solution."
                 </div>
                 <div className="text-slate-300">
                   <strong className="text-slate-400">Client ({listeningAgent.currentCall?.clientName || 'Prospect'}):</strong> "Hello! We wanted to confirm how your mobile calling synchronization operates."
                 </div>
-                <div className="text-indigo-300">
-                  <strong className="text-indigo-400">Agent ({listeningAgent.name}):</strong> "All call agents use our mobile companion app. The moments we connect or hang up, call duration and notes are auto-triggered to our desktop."
+                <div className="text-[#16c2ff]">
+                  <strong className="text-[#16c2ff]">Agent ({listeningAgent.name}):</strong> "All call agents use our mobile companion app. The moments we connect or hang up, call duration and notes are auto-triggered to our desktop."
                 </div>
                 <div className="text-slate-400 italic text-[11px] animate-pulse">
                   [Live conversation streaming in real time...]
@@ -3759,14 +3759,14 @@ export default function CallingManager({
                   setListeningAgent(null);
                   setWhisperMessage('');
                 }}
-                className="flex-1 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer"
+                className="flex-1 py-2 bg-[#0b74f0] hover:bg-[#005be0] text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer"
               >
                 <MessageSquare className="w-3.5 h-3.5" />
                 <span>Whisper to Agent's Phone</span>
               </button>
               <button
                 onClick={() => setListeningAgent(null)}
-                className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-bold transition cursor-pointer"
+                className="px-4 py-2 bg-[#082458] hover:bg-[#0b347a] text-slate-300 rounded-xl text-xs font-bold transition cursor-pointer"
               >
                 Close Stream
               </button>
@@ -3777,11 +3777,11 @@ export default function CallingManager({
 
       {/* ==================== MODAL 3: MANAGER WHISPER TO MOBILE SCREEN ==================== */}
       {whisperingAgent && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn">
-          <div className="bg-slate-900 border border-slate-700 rounded-2xl p-6 shadow-2xl max-w-md w-full text-white space-y-4 relative">
+        <div className="fixed inset-0 z-50 bg-[#031338]/80 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn">
+          <div className="bg-[#041845] border border-[#1e3a8a]/60 rounded-2xl p-6 shadow-2xl max-w-md w-full text-white space-y-4 relative">
             <button
               onClick={() => setWhisperingAgent(null)}
-              className="absolute top-4 right-4 p-1.5 text-slate-400 hover:text-white rounded-lg bg-slate-800 transition cursor-pointer"
+              className="absolute top-4 right-4 p-1.5 text-slate-400 hover:text-white rounded-lg bg-[#082458] transition cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -3810,7 +3810,7 @@ export default function CallingManager({
                 value={whisperMessage}
                 onChange={(e) => setWhisperMessage(e.target.value)}
                 placeholder="E.g., Remind client that quarterly onboarding support is complimentary if closed today."
-                className="w-full text-xs p-3 rounded-xl bg-slate-950 border border-slate-700 focus:outline-none focus:border-indigo-500 text-white placeholder-slate-500"
+                className="w-full text-xs p-3 rounded-xl bg-[#031338] border border-[#1e3a8a]/60 focus:outline-none focus:border-[#0b74f0] text-white placeholder-slate-500"
               />
 
               {/* Quick suggestions */}
@@ -3823,7 +3823,7 @@ export default function CallingManager({
                   <button
                     key={chip}
                     onClick={() => setWhisperMessage(chip)}
-                    className="text-[9.5px] px-2 py-0.5 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 cursor-pointer"
+                    className="text-[9.5px] px-2 py-0.5 rounded-full bg-[#082458] hover:bg-[#0b347a] text-slate-300 border border-[#1e3a8a]/60 cursor-pointer"
                   >
                     +{chip}
                   </button>
@@ -3855,7 +3855,7 @@ export default function CallingManager({
                   }, 1200);
                 }}
                 disabled={!whisperMessage.trim()}
-                className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full py-2.5 bg-[#0b74f0] hover:bg-[#005be0] disabled:opacity-50 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer"
               >
                 <Send className="w-3.5 h-3.5" />
                 <span>Send Whisper Prompt</span>
@@ -3867,21 +3867,21 @@ export default function CallingManager({
 
       {/* ==================== MODAL 4: MOBILE APP PAIRING & DOWNLOAD CENTER ==================== */}
       {showPairingModal && (
-        <div className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 animate-fadeIn">
-          <div className="bg-slate-900 border border-slate-700 rounded-3xl p-5 sm:p-6 shadow-2xl max-w-lg w-full text-white space-y-4 text-center relative max-h-[95vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 bg-[#031338]/85 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 animate-fadeIn">
+          <div className="bg-[#041845] border border-[#1e3a8a]/60 rounded-3xl p-5 sm:p-6 shadow-2xl max-w-lg w-full text-white space-y-4 text-center relative max-h-[95vh] overflow-y-auto">
             <button
               onClick={() => {
                 setShowPairingModal(null);
                 setCopiedLinkFeedback(null);
                 setApkDownloadSuccess(false);
               }}
-              className="absolute top-4 right-4 p-1.5 text-slate-400 hover:text-white rounded-lg bg-slate-800 transition cursor-pointer"
+              className="absolute top-4 right-4 p-1.5 text-slate-400 hover:text-white rounded-lg bg-[#082458] transition cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
 
             <div>
-              <span className="text-[10px] font-mono text-indigo-400 uppercase tracking-widest font-bold">
+              <span className="text-[10px] font-mono text-[#16c2ff] uppercase tracking-widest font-bold">
                 Mobile Provisioning & Installation Hub
               </span>
               <h3 className="text-base font-black text-white mt-0.5">
@@ -3891,7 +3891,7 @@ export default function CallingManager({
             </div>
 
             {/* Platform Selector Tabs */}
-            <div className="flex rounded-xl bg-slate-950 p-1 border border-slate-800 gap-1 text-xs">
+            <div className="flex rounded-xl bg-[#031338] p-1 border border-[#1e3a8a]/50 gap-1 text-xs">
               <button
                 onClick={() => setPairingPlatformTab('android')}
                 className={`flex-1 py-1.5 rounded-lg font-bold transition flex items-center justify-center gap-1.5 ${
@@ -3907,7 +3907,7 @@ export default function CallingManager({
                 onClick={() => setPairingPlatformTab('pwa')}
                 className={`flex-1 py-1.5 rounded-lg font-bold transition flex items-center justify-center gap-1.5 ${
                   pairingPlatformTab === 'pwa'
-                    ? 'bg-indigo-600 text-white shadow-xs'
+                    ? 'bg-[#0b74f0] text-white shadow-xs'
                     : 'text-slate-400 hover:text-white'
                 }`}
               >
@@ -3918,7 +3918,7 @@ export default function CallingManager({
                 onClick={() => setPairingPlatformTab('qr')}
                 className={`flex-1 py-1.5 rounded-lg font-bold transition flex items-center justify-center gap-1.5 ${
                   pairingPlatformTab === 'qr'
-                    ? 'bg-indigo-600 text-white shadow-xs'
+                    ? 'bg-[#0b74f0] text-white shadow-xs'
                     : 'text-slate-400 hover:text-white'
                 }`}
               >
@@ -3942,12 +3942,12 @@ export default function CallingManager({
             {pairingPlatformTab === 'android' && (
               <div className="space-y-3 text-left">
                 {/* Genuine APK Release Specification Header */}
-                <div className="flex flex-wrap items-center gap-1.5 p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-[10.5px]">
+                <div className="flex flex-wrap items-center gap-1.5 p-2.5 rounded-xl bg-[#031338] border border-[#1e3a8a]/50 text-[10.5px]">
                   <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30 flex items-center gap-1">
                     <Check className="w-3 h-3 text-emerald-400" />
                     <span>Verified Production APK</span>
                   </span>
-                  <span className="px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 font-bold border border-indigo-500/30">
+                  <span className="px-2 py-0.5 rounded-full bg-[#0b74f0]/20 text-[#16c2ff] font-bold border border-[#0b74f0]/30">
                     Dual Signed (v1 & v2 Schemes)
                   </span>
                   <span className="px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 font-mono text-[9.5px]">
@@ -3977,7 +3977,7 @@ export default function CallingManager({
                       setApkDownloadSuccess(true);
                       setTimeout(() => setApkDownloadSuccess(false), 6000);
                     }}
-                    className="w-full py-2.5 px-3 bg-slate-800 hover:bg-slate-700 active:scale-98 text-slate-200 rounded-xl font-bold text-xs flex items-center justify-center gap-2 border border-slate-700 transition cursor-pointer"
+                    className="w-full py-2.5 px-3 bg-[#082458] hover:bg-[#0b347a] active:scale-98 text-slate-200 rounded-xl font-bold text-xs flex items-center justify-center gap-2 border border-[#1e3a8a]/60 transition cursor-pointer"
                   >
                     <FileText className="w-4 h-4 text-sky-400" />
                     <span>Download Standalone Offline App (.html single-file bundle)</span>
@@ -3997,7 +3997,7 @@ export default function CallingManager({
                 )}
 
                 {/* Direct Manual Download Links (if automatic browser download was blocked by sandbox) */}
-                <div className="p-3 bg-slate-950/70 rounded-xl border border-slate-800 space-y-1.5 text-xs text-slate-300">
+                <div className="p-3 bg-[#031338]/70 rounded-xl border border-[#1e3a8a]/50 space-y-1.5 text-xs text-slate-300">
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] font-mono text-amber-400 font-bold uppercase tracking-wider">
                       Troubleshooting / Manual Direct Links:
@@ -4028,7 +4028,7 @@ export default function CallingManager({
                 </div>
 
                 {/* Android Steps */}
-                <div className="p-3.5 bg-slate-950 rounded-2xl border border-slate-800 space-y-2 text-xs text-slate-300">
+                <div className="p-3.5 bg-[#031338] rounded-2xl border border-[#1e3a8a]/50 space-y-2 text-xs text-slate-300">
                   <span className="text-[10px] font-mono text-emerald-400 font-bold uppercase tracking-wider block">
                     Installation Steps for Android:
                   </span>
@@ -4044,7 +4044,7 @@ export default function CallingManager({
 
             {/* TAB: 1-CLICK PWA INSTALL */}
             {pairingPlatformTab === 'pwa' && (
-              <div className="space-y-3.5 text-left p-3.5 bg-slate-950 rounded-2xl border border-slate-800">
+              <div className="space-y-3.5 text-left p-3.5 bg-[#031338] rounded-2xl border border-[#1e3a8a]/50">
                 <div className="flex items-center gap-2">
                   <Sparkles className="w-4 h-4 text-amber-400" />
                   <span className="text-xs font-bold text-white uppercase tracking-wider">
@@ -4063,7 +4063,7 @@ export default function CallingManager({
                   />
                 </div>
 
-                <div className="p-3 rounded-xl bg-indigo-950/50 border border-indigo-900/60 text-[10.5px] text-indigo-200 space-y-1">
+                <div className="p-3 rounded-xl bg-[#041845]/50 border border-[#0844a4]/60 text-[10.5px] text-sky-100 space-y-1">
                   <span className="font-bold block text-white">Benefits of 1-Click PWA:</span>
                   <ul className="list-disc list-inside space-y-0.5 text-slate-300 text-[10px]">
                     <li>No Play Store or APK parsing required</li>
@@ -4097,7 +4097,7 @@ export default function CallingManager({
                       <path fill="#0F172A" d="M10 10h30v30h-30zM15 15h20v20h-20zM20 20h10v10h-10zM60 10h30v30h-30zM65 15h20v20h-20zM70 20h10v10h-10zM10 60h30v30h-30zM15 65h20v20h-20zM20 70h10v10h-10zM45 10h10v10h-10zM45 30h10v10h-10zM45 45h10v10h-10zM10 45h10v10h-10zM30 45h10v10h-10zM60 45h20v10h-20zM45 60h10v20h-10zM60 60h10v10h-10zM80 60h10v10h-10zM70 75h20v15h-20zM60 85h10v10h-10z" />
                     </svg>
                   </div>
-                  <span className="text-[8.5px] font-mono text-slate-800 font-bold mt-1 block">
+                  <span className="text-[8.5px] font-mono text-[#082458] font-bold mt-1 block">
                     SCAN WITH SMARTPHONE CAMERA
                   </span>
                 </div>
@@ -4115,9 +4115,9 @@ export default function CallingManager({
                       setCopiedLinkFeedback("Link copied! Send to agent via WhatsApp or SMS.");
                       setTimeout(() => setCopiedLinkFeedback(null), 3000);
                     }}
-                    className="flex-1 py-2 px-3 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 border border-slate-700 transition cursor-pointer"
+                    className="flex-1 py-2 px-3 bg-[#082458] hover:bg-[#0b347a] text-slate-200 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 border border-[#1e3a8a]/60 transition cursor-pointer"
                   >
-                    <Copy className="w-3.5 h-3.5 text-indigo-400" />
+                    <Copy className="w-3.5 h-3.5 text-[#16c2ff]" />
                     <span>Copy Mobile App Link</span>
                   </button>
 
@@ -4126,7 +4126,7 @@ export default function CallingManager({
                       const link = `${window.location.origin}/?mode=mobile-agent&agent=${showPairingModal.id}&token=${showPairingModal.pairingToken}`;
                       window.open(link, '_blank');
                     }}
-                    className="py-2 px-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 transition cursor-pointer"
+                    className="py-2 px-3 bg-[#0b74f0] hover:bg-[#005be0] text-white rounded-xl text-xs font-bold flex items-center gap-1.5 transition cursor-pointer"
                     title="Launch mobile app in a separate browser tab"
                   >
                     <ExternalLink className="w-3.5 h-3.5" />
@@ -4144,7 +4144,7 @@ export default function CallingManager({
 
             {/* TAB 3: iOS / IPHONE INSTRUCTIONS */}
             {pairingPlatformTab === 'ios' && (
-              <div className="p-3.5 bg-slate-950 rounded-2xl border border-slate-800 space-y-2.5 text-xs text-left text-slate-300">
+              <div className="p-3.5 bg-[#031338] rounded-2xl border border-[#1e3a8a]/50 space-y-2.5 text-xs text-left text-slate-300">
                 <span className="text-[10px] font-mono text-sky-400 font-bold uppercase tracking-wider block">
                   Installation for Apple iPhone / iPad:
                 </span>
@@ -4169,7 +4169,7 @@ export default function CallingManager({
             )}
 
             {/* Pairing Token Card */}
-            <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-between text-left">
+            <div className="p-3 bg-[#031338] rounded-xl border border-[#1e3a8a]/50 flex items-center justify-between text-left">
               <div>
                 <span className="text-[10px] text-slate-400 font-medium block">
                   Agent Pairing PIN (Enter in Mobile App):
@@ -4184,7 +4184,7 @@ export default function CallingManager({
                   setCopiedLinkFeedback(`PIN ${showPairingModal.pairingToken} copied!`);
                   setTimeout(() => setCopiedLinkFeedback(null), 2500);
                 }}
-                className="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10.5px] font-bold border border-slate-700 flex items-center gap-1 transition cursor-pointer"
+                className="px-2.5 py-1.5 rounded-lg bg-[#082458] hover:bg-[#0b347a] text-slate-300 text-[10.5px] font-bold border border-[#1e3a8a]/60 flex items-center gap-1 transition cursor-pointer"
               >
                 <Copy className="w-3 h-3 text-amber-400" />
                 <span>Copy PIN</span>
@@ -4199,7 +4199,7 @@ export default function CallingManager({
                   setShowPairingModal(null);
                   setShowMobileSimulator(true);
                 }}
-                className="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition cursor-pointer"
+                className="flex-1 py-2.5 bg-[#0b74f0] hover:bg-[#005be0] text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition cursor-pointer"
               >
                 <Smartphone className="w-3.5 h-3.5 text-sky-300" />
                 <span>Launch in Mobile Simulator</span>
@@ -4210,7 +4210,7 @@ export default function CallingManager({
                   setCopiedLinkFeedback(null);
                   setApkDownloadSuccess(false);
                 }}
-                className="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-bold transition cursor-pointer"
+                className="px-5 py-2.5 bg-[#082458] hover:bg-[#0b347a] text-slate-300 rounded-xl text-xs font-bold transition cursor-pointer"
               >
                 Close
               </button>
@@ -4222,17 +4222,17 @@ export default function CallingManager({
 
       {/* ==================== MODAL 5: PROVISION NEW CALL AGENT ==================== */}
       {showNewAgentModal && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn">
-          <div className="bg-slate-900 border border-slate-700 rounded-3xl p-6 shadow-2xl max-w-md w-full text-white space-y-4 relative">
+        <div className="fixed inset-0 z-50 bg-[#031338]/80 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn">
+          <div className="bg-[#041845] border border-[#1e3a8a]/60 rounded-3xl p-6 shadow-2xl max-w-md w-full text-white space-y-4 relative">
             <button
               onClick={() => setShowNewAgentModal(false)}
-              className="absolute top-4 right-4 p-1.5 text-slate-400 hover:text-white rounded-lg bg-slate-800 transition cursor-pointer"
+              className="absolute top-4 right-4 p-1.5 text-slate-400 hover:text-white rounded-lg bg-[#082458] transition cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
 
             <div>
-              <span className="text-[10px] font-mono text-indigo-400 uppercase tracking-widest font-bold">
+              <span className="text-[10px] font-mono text-[#16c2ff] uppercase tracking-widest font-bold">
                 Manager Control
               </span>
               <h3 className="text-base font-black text-white mt-0.5">
@@ -4251,7 +4251,7 @@ export default function CallingManager({
                   placeholder="e.g. Vikram Joshi"
                   value={newAgentName}
                   onChange={(e) => setNewAgentName(e.target.value)}
-                  className="w-full p-2.5 bg-slate-950 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-indigo-500"
+                  className="w-full p-2.5 bg-[#031338] border border-[#1e3a8a]/60 rounded-xl text-white focus:outline-none focus:border-[#0b74f0]"
                 />
               </div>
 
@@ -4262,7 +4262,7 @@ export default function CallingManager({
                   placeholder="e.g. vikram@expertcrm.com"
                   value={newAgentEmail}
                   onChange={(e) => setNewAgentEmail(e.target.value)}
-                  className="w-full p-2.5 bg-slate-950 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-indigo-500"
+                  className="w-full p-2.5 bg-[#031338] border border-[#1e3a8a]/60 rounded-xl text-white focus:outline-none focus:border-[#0b74f0]"
                 />
               </div>
 
@@ -4273,7 +4273,7 @@ export default function CallingManager({
                   placeholder="e.g. +91 98110 22334"
                   value={newAgentPhone}
                   onChange={(e) => setNewAgentPhone(e.target.value)}
-                  className="w-full p-2.5 bg-slate-950 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-indigo-500"
+                  className="w-full p-2.5 bg-[#031338] border border-[#1e3a8a]/60 rounded-xl text-white focus:outline-none focus:border-[#0b74f0]"
                 />
               </div>
 
@@ -4282,7 +4282,7 @@ export default function CallingManager({
                 <select
                   value={newAgentDevice}
                   onChange={(e) => setNewAgentDevice(e.target.value)}
-                  className="w-full p-2.5 bg-slate-950 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-indigo-500"
+                  className="w-full p-2.5 bg-[#031338] border border-[#1e3a8a]/60 rounded-xl text-white focus:outline-none focus:border-[#0b74f0]"
                 >
                   <option value="Samsung Galaxy S24 (Android 14)">Samsung Galaxy S24 (Android 14)</option>
                   <option value="Apple iPhone 15 Pro (iOS 17.5)">Apple iPhone 15 Pro (iOS 17.5)</option>
@@ -4337,13 +4337,13 @@ export default function CallingManager({
                   setNewAgentPhone('');
                   setShowPairingModal(createdAgent);
                 }}
-                className="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition cursor-pointer"
+                className="flex-1 py-2.5 bg-[#0b74f0] hover:bg-[#005be0] text-white rounded-xl text-xs font-bold transition cursor-pointer"
               >
                 Authorize & Generate Pairing Token
               </button>
               <button
                 onClick={() => setShowNewAgentModal(false)}
-                className="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-bold transition cursor-pointer"
+                className="px-4 py-2.5 bg-[#082458] hover:bg-[#0b347a] text-slate-300 rounded-xl text-xs font-bold transition cursor-pointer"
               >
                 Cancel
               </button>
